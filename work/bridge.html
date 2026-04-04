@@ -376,17 +376,23 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
 <body>
 <nav class="sidebar-nav" id="sidebar">
   <a href="#s-problem">The Problem</a>
+  <a href="#s-bluf">Bottom Line Upfront</a>
   <a href="#s-reality">The Painful Reality</a>
   <a href="#s-segmentation">Segmentation</a>
   <a href="#s-acquire">Bridge Acquire</a>
   <a href="#s-engage">Bridge Engage</a>
-  <a href="#s-network">The Network</a>
+  <a href="#s-network">Bridge Network</a>
+  <a href="#s-open-questions">Open Questions</a>
 </nav>
 
 <div class="page">
 
 <!-- ======== OPENING ======== -->
 <a href="#" class="back-link"><span class="ba">←</span> Rishabh Sethi</a>
+
+<div style="width:100%;aspect-ratio:2/1;border-radius:6px;overflow:hidden;margin-bottom:5rem;">
+  <img src="../images/bridge/Bridge_Cover.png" alt="Bridge Athletic" style="width:100%;height:100%;object-fit:cover;display:block;">
+</div>
 <div class="beat" id="s-problem">
   <p class="small-label">The Problem</p>
   <p class="headline">Expanding Bridge Athletic's product into a new market segment.</p>
@@ -401,6 +407,14 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
 </div>
 
 <!-- ======== RESEARCH WALL ======== -->
+<div class="beat" id="s-bluf">
+  <p class="small-label">Bottom Line Upfront</p>
+  <p class="large-statement">There's a non-trivial difference in what trainers need depending on where they are in their career.</p>
+  <p class="body-text">Early-career certified PTs struggle to stand out. Unqualified trainers undercut them on price, and clients often can't tell the difference until they've had a bad experience. <a href="#s-acquire"><strong>Bridge Acquire</strong></a> could solve this — giving certified PTs a credible, shareable proof of worth that makes the qualification gap visible before the first consultation.</p>
+  <p class="body-text">Established PTs have largely solved the acquisition problem through word of mouth. Their constraint is time. Admin, scheduling, and reporting eat 2–4 hours a day that could be billable hours or used to scale. <a href="#s-engage"><strong>Bridge Engage</strong></a> could give that time back — and in doing so, strengthen the trainer-client relationship that makes their business defensible in the first place.</p>
+  <p class="body-text">If Bridge Engage works, it creates the foundation for something larger. A platform that already owns the trainer-client communication layer could expand into a market network of allied health professionals collaborating around a single client's health. The reason this might not work: the network only has value if <a href="#s-network"><strong>Bridge Network</strong></a> has already made trainer identity and client relationships strong enough on the platform to anchor it. Without that foundation, it's just another directory.</p>
+</div>
+
 <div class="beat" id="s-reality">
   <p class="small-label">The Painful Reality</p>
   <p class="large-statement">The reality of being a personal trainer.</p>
@@ -612,14 +626,205 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
   </div>
 </div>
 
-<div class="beat">
-  <p class="body-text">Bridge Acquire gives certified PTs a professional profile — verified credentials, client reviews with outcomes, direct booking — accessible from their Instagram bio. Not a marketplace. A trust signal at the exact moment someone is deciding whether to reach out.</p>
-  <div class="img-pair">
-    <div class="case-img"><img src="Bridge_Acquire_-On_Instagram.png" alt="Instagram to Bridge profile flow"><p class="case-img-cap">Instagram bio → Bridge profile.</p></div>
-    <div class="case-img"><img src="Bridge_Acquire_-On_WhatsApp.png" alt="WhatsApp Bridge link share"><p class="case-img-cap">Referral via WhatsApp.</p></div>
+<!-- ── ACQUIRE CAROUSEL ── -->
+<style>
+#aq-carousel {
+  margin: 2.5rem 0 5rem;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--card-bg);
+}
+.aqc-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1.1rem;
+  border-bottom: 1px solid var(--rule);
+}
+.aqc-counter {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--light);
+}
+.aqc-dots { display: flex; gap: 5px; }
+.aqc-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--faint);
+  transition: background 0.25s;
+  cursor: pointer;
+}
+.aqc-dot.active { background: var(--ink); }
+.aqc-arrows { display: flex; gap: 4px; }
+.aqc-btn {
+  width: 26px; height: 26px;
+  border-radius: 4px;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  color: var(--mid);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s;
+  line-height: 1;
+}
+.aqc-btn:hover { background: var(--ink); color: var(--bg); }
+.aqc-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+.aqc-body-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1rem 1.25rem;
+  gap: 0.4rem;
+}
+/* Plain screenshots — no phone chrome or black frame */
+.aqc-viewport {
+  width: min(400px, 92vw);
+  max-width: 100%;
+}
+.aqc-screen-track {
+  border-radius: 12px;
+  overflow: hidden;
+  background: transparent;
+  width: 100%;
+  line-height: 0;
+}
+.aqc-screen-inner {
+  display: flex;
+  width: 500%;
+  align-items: stretch;
+  transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+.aqc-slide {
+  flex: 0 0 20%;
+  width: 20%;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: transparent;
+  line-height: 0;
+}
+.aqc-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.aqc-captions {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  height: 2.8em;
+}
+.aqc-cap {
+  position: absolute;
+  inset: 0;
+  font-size: 11px;
+  color: var(--light);
+  line-height: 1.55;
+  text-align: center;
+  opacity: 0;
+  transform: translateX(10px);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+  pointer-events: none;
+}
+.aqc-cap.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+.aqc-cap.exit-left { opacity: 0; transform: translateX(-10px); }
+</style>
+
+<div id="aq-carousel" class="beat">
+  <div class="aqc-bar">
+    <span class="aqc-counter" id="aqc-counter">01 / 05</span>
+    <div class="aqc-dots" id="aqc-dots">
+      <div class="aqc-dot active" data-i="0"></div>
+      <div class="aqc-dot" data-i="1"></div>
+      <div class="aqc-dot" data-i="2"></div>
+      <div class="aqc-dot" data-i="3"></div>
+      <div class="aqc-dot" data-i="4"></div>
+    </div>
+    <div class="aqc-arrows">
+      <button class="aqc-btn" id="aqc-prev" disabled aria-label="Previous">&#8592;</button>
+      <button class="aqc-btn" id="aqc-next" aria-label="Next">&#8594;</button>
+    </div>
   </div>
-  <div class="case-img" style="margin-top:0.75rem"><img src="Bridge_Acquire_-_Coverage.png" alt="Verified credentials on Bridge"><p class="case-img-cap">Verified credentials, experience, reviews. The proof that justifies the premium.</p></div>
+  <div class="aqc-body-area">
+    <div class="aqc-captions" id="aqc-captions">
+      <span class="aqc-cap active">Trainer's Instagram bio — the Bridge link is the entry point.</span>
+      <span class="aqc-cap">Coach replies to an inbound WhatsApp lead with one link. Profile handles the rest.</span>
+      <span class="aqc-cap">Above the fold: hero, verified badge, service types, two direct CTAs.</span>
+      <span class="aqc-cap">Certifications surfaced and verified by Bridge — the proof behind the price.</span>
+      <span class="aqc-cap">Work history rounds out the picture. Everything to decide, no back-and-forth needed.</span>
+    </div>
+    <div class="aqc-viewport">
+      <div class="aqc-screen-track">
+        <div class="aqc-screen-inner" id="aqc-track">
+          <div class="aqc-slide"><img src="../images/bridge/1.%20coach%20insta.png" alt="Instagram bio with Bridge link"></div>
+          <div class="aqc-slide"><img src="../images/bridge/2.%20whatsapp%20chat.png" alt="Coach shares Bridge link on WhatsApp"></div>
+          <div class="aqc-slide"><img src="../images/bridge/3.%20coach%20profile%201.png" alt="Bridge profile hero"></div>
+          <div class="aqc-slide"><img src="../images/bridge/4.%20coach%20profile%202.png" alt="Verified certifications"></div>
+          <div class="aqc-slide"><img src="../images/bridge/5.%20coach%20profile%203.png" alt="Work experience"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<script>
+(function(){
+  const total   = 5;
+  let cur       = 0;
+  const track   = document.getElementById('aqc-track');
+  const caps    = document.querySelectorAll('#aqc-captions .aqc-cap');
+  const dots    = document.querySelectorAll('#aqc-dots .aqc-dot');
+  const counter = document.getElementById('aqc-counter');
+  const btnPrev = document.getElementById('aqc-prev');
+  const btnNext = document.getElementById('aqc-next');
+
+  function go(next) {
+    if (next === cur) return;
+    const dir = next > cur ? 1 : -1;
+    caps[cur].classList.remove('active');
+    caps[cur].classList.add('exit-left');
+    cur = next;
+    requestAnimationFrame(() => {
+      caps[cur].style.transform = `translateX(${dir > 0 ? 10 : -10}px)`;
+      caps[cur].style.opacity = '0';
+      caps[cur].classList.add('active');
+      requestAnimationFrame(() => {
+        caps[cur].style.transform = '';
+        caps[cur].style.opacity = '';
+      });
+    });
+    setTimeout(() => {
+      document.querySelectorAll('#aqc-captions .aqc-cap.exit-left')
+        .forEach(el => el.classList.remove('exit-left'));
+    }, 320);
+    track.style.transform = `translateX(-${(cur * 100) / total}%)`;
+    dots.forEach((d,i) => d.classList.toggle('active', i === cur));
+    counter.textContent = String(cur+1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+    btnPrev.disabled = cur === 0;
+    btnNext.disabled = cur === total - 1;
+  }
+
+  btnPrev.addEventListener('click', () => go(cur - 1));
+  btnNext.addEventListener('click', () => go(cur + 1));
+  dots.forEach(d => d.addEventListener('click', () => go(+d.dataset.i)));
+
+  const el = document.getElementById('aq-carousel');
+  let tx = 0;
+  el.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  el.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 40) go(dx < 0 ? Math.min(cur+1,total-1) : Math.max(cur-1,0));
+  }, {passive:true});
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') go(Math.min(cur+1, total-1));
+    if (e.key === 'ArrowLeft')  go(Math.max(cur-1, 0));
+  });
+})();
+</script>
 
 
 
@@ -1105,9 +1310,83 @@ setTimeout(fitView, 80);
   </div>
 </div>
 
-<div class="beat">
-  <div class="case-img"><img src="Bridge_Engage.png" alt="Bridge Engage client and coach chat"><p class="case-img-cap">Left: client view — chat-first, meals in conversation. Right: coach view — assistant coach surfaces insights. Never speaks to the client directly.</p></div>
+<div id="be-carousel" class="beat" style="margin:2.5rem 0 5rem;border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:var(--card-bg);">
+  <div class="aqc-bar">
+    <span class="aqc-counter" id="be-counter">01 / 02</span>
+    <div class="aqc-dots" id="be-dots">
+      <div class="aqc-dot active" data-i="0"></div>
+      <div class="aqc-dot" data-i="1"></div>
+    </div>
+    <div class="aqc-arrows">
+      <button class="aqc-btn" id="be-prev" disabled aria-label="Previous">&#8592;</button>
+      <button class="aqc-btn" id="be-next" aria-label="Next">&#8594;</button>
+    </div>
+  </div>
+  <div class="aqc-body-area">
+    <div class="aqc-captions" id="be-captions" style="height:auto;min-height:3.5em;">
+      <span class="aqc-cap active">Client side: shows quick actions and how sharing might work with image recognition on food.</span>
+      <span class="aqc-cap">Coach side: shows the assistant coach in action. Suggested messages when selected would be pasted in the chat for the coach to edit before sending.</span>
+    </div>
+    <div class="aqc-viewport">
+      <div class="aqc-screen-track">
+        <div class="aqc-screen-inner" id="be-track" style="width:200%;">
+          <div class="aqc-slide" style="flex:0 0 50%;width:50%;"><img src="../images/bridge/6.BE_client.png" alt="Bridge Engage client view"></div>
+          <div class="aqc-slide" style="flex:0 0 50%;width:50%;"><img src="../images/bridge/7.BE_coach.png" alt="Bridge Engage coach view"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+<script>
+(function(){
+  const total   = 2;
+  let cur       = 0;
+  const track   = document.getElementById('be-track');
+  const caps    = document.querySelectorAll('#be-captions .aqc-cap');
+  const dots    = document.querySelectorAll('#be-dots .aqc-dot');
+  const counter = document.getElementById('be-counter');
+  const btnPrev = document.getElementById('be-prev');
+  const btnNext = document.getElementById('be-next');
+
+  function go(next) {
+    if (next === cur) return;
+    const dir = next > cur ? 1 : -1;
+    caps[cur].classList.remove('active');
+    caps[cur].classList.add('exit-left');
+    cur = next;
+    requestAnimationFrame(() => {
+      caps[cur].style.transform = `translateX(${dir > 0 ? 10 : -10}px)`;
+      caps[cur].style.opacity = '0';
+      caps[cur].classList.add('active');
+      requestAnimationFrame(() => {
+        caps[cur].style.transform = '';
+        caps[cur].style.opacity = '';
+      });
+    });
+    setTimeout(() => {
+      document.querySelectorAll('#be-captions .aqc-cap.exit-left')
+        .forEach(el => el.classList.remove('exit-left'));
+    }, 320);
+    track.style.transform = `translateX(-${(cur * 100) / total}%)`;
+    dots.forEach((d,i) => d.classList.toggle('active', i === cur));
+    counter.textContent = String(cur+1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+    btnPrev.disabled = cur === 0;
+    btnNext.disabled = cur === total - 1;
+  }
+
+  btnPrev.addEventListener('click', () => go(cur - 1));
+  btnNext.addEventListener('click', () => go(cur + 1));
+  dots.forEach(d => d.addEventListener('click', () => go(+d.dataset.i)));
+
+  const el = document.getElementById('be-carousel');
+  let tx = 0;
+  el.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  el.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 40) go(dx < 0 ? Math.min(cur+1,total-1) : Math.max(cur-1,0));
+  }, {passive:true});
+})();
+</script>
 
 <div class="beat">
   <p class="large-statement">The AI assistant that never talks to the client.</p>
@@ -1121,12 +1400,334 @@ setTimeout(fitView, 80);
 
 <!-- ======== NETWORK ======== -->
 <div class="beat" id="s-network">
-  <p class="small-label">The Network</p>
+  <p class="small-label">Bridge Network</p>
   <p class="large-statement">If Bridge Engage works, it unlocks something much larger.</p>
   <p class="body-text">Trainers' clients also work with nutritionists, physiotherapists, mental health professionals, doctors. Today, each works in their own silo.</p>
   <p class="body-text">If Bridge becomes the communication hub, it could expand into a <strong>market network</strong> — allied health professionals collaborating around a single client's health.</p>
-  <div class="case-img"><img src="Networked_System.jpg" alt="Bridge Network concept"><p class="case-img-cap">Non-competitive professionals collaborating around client health. Referrals flow freely because no one competes with each other.</p></div>
+  <!-- Interactive Network Map -->
+  <div class="eco-map" style="margin-top:2rem;">
+    <div id="net-interactive" style="position:relative; background:#FAFAFA; border:1px solid rgba(0,0,0,0.08); border-radius:6px; overflow:hidden; height:500px;">
+      <svg id="net-svg" style="width:100%;height:100%;display:block;cursor:grab;"></svg>
+
+      <!-- Sidebar panel -->
+      <div id="net-panel" style="
+        position:absolute;top:0;right:0;width:240px;height:100%;
+        background:#FFFFFF;
+        border-left:1px solid rgba(0,0,0,0.08);
+        padding:20px 16px 16px;
+        transform:translateX(100%);
+        transition:transform 0.32s cubic-bezier(0.16,1,0.3,1);
+        overflow-y:auto;
+        display:flex;flex-direction:column;gap:0;
+        font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+      ">
+        <button id="net-panel-close" style="
+          position:absolute;top:10px;right:10px;
+          width:22px;height:22px;border-radius:50%;
+          background:rgba(0,0,0,0.07);border:none;
+          font-size:12px;color:#6A6A6A;cursor:pointer;
+          display:flex;align-items:center;justify-content:center;
+        ">✕</button>
+        <div id="net-p-label" style="font-size:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#9A9A9A;margin-bottom:4px;"></div>
+        <div id="net-p-title" style="font-size:15px;font-weight:600;color:#111111;margin-bottom:12px;line-height:1.3;display:flex;align-items:center;gap:6px;">
+          <span id="net-p-dot" style="width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block;"></span>
+          <span id="net-p-name"></span>
+        </div>
+        <div id="net-p-desc" style="font-size:13px;color:#3A3A3A;line-height:1.7;margin-bottom:14px;"></div>
+        <div id="net-p-conns"></div>
+      </div>
+
+      <!-- Controls -->
+      <div style="position:absolute;bottom:14px;left:14px;display:flex;gap:5px;z-index:10;">
+        <button class="eco-ctrl" id="net-zin">+</button>
+        <button class="eco-ctrl" id="net-zout">−</button>
+        <button class="eco-ctrl" id="net-rst">⌂</button>
+      </div>
+
+      <p style="position:absolute;bottom:14px;right:14px;font-family:'Inter',-apple-system,sans-serif;font-size:10px;color:#A8ADB3;font-style:italic;">Click a node to explore</p>
+    </div>
+  </div>
+  <p class="rw-caption" style="margin-top:0.5rem;">Non-competitive professionals collaborating around client health. Referrals flow freely because no one competes with each other.</p>
+
+<script>
+(function() {
+
+const NET_NODES = [
+  { id:"PT",   label:"Personal\nTrainer",            group:"core",  r:46, stroke:"#8B5CF6", fill:"#C4A8FF" },
+  { id:"CL",   label:"Client",                       group:"core",  r:42, stroke:"#2563EB", fill:"#7EC8F0" },
+  { id:"BR",   label:"Bridge\nPlatform",             group:"bridge",r:38, stroke:"#1A1A1A", fill:"#2A2A2A", textFill:"#FFFFFF" },
+  { id:"AHP",  label:"Allied Health\nProfessionals", group:"ahp",   r:38, stroke:"#C98A30", fill:"#F5C87A" },
+  { id:"MHP",  label:"Mental Health\nProfessionals", group:"ahpleaf", r:26, stroke:"#D4A030", fill:"#FFE4B0" },
+  { id:"NUTR", label:"Nutritionists",                group:"ahpleaf", r:26, stroke:"#D4A030", fill:"#FFE4B0" },
+  { id:"PHYS", label:"Physio\ntherapists",           group:"ahpleaf", r:26, stroke:"#D4A030", fill:"#FFE4B0" },
+  { id:"DOC",  label:"Doctors",                      group:"ahpleaf", r:26, stroke:"#D4A030", fill:"#FFE4B0" },
+];
+
+const NET_EDGES = [
+  { s:"PT",  t:"BR",  type:"relationship", note:"Non-competitive, high trust source of leads · Bridge is the communication layer + source of truth for the PT's business" },
+  { s:"BR",  t:"CL",  type:"relationship", note:"Bridge is how clients discover, vet, and communicate with their trainer · other professional relationships" },
+  { s:"BR",  t:"AHP", note:"Bridge connects the PT's client to allied health professionals · Workflow automation enables warm referrals" },
+  { s:"PT",  t:"CL",  type:"relationship", note:"The core relationship that everything serves · Word of mouth is the primary growth engine" },
+  { s:"AHP", t:"MHP", note:"Warm referrals flow through Bridge · Non-competitive: no trainer doubles as a mental health professional" },
+  { s:"AHP", t:"NUTR",note:"Nutrition plans coordinated with training programs · Shared visibility on client progress" },
+  { s:"AHP", t:"PHYS",note:"Injury prevention and recovery protocols shared · Reduces trainer liability, improves client outcomes" },
+  { s:"AHP", t:"DOC", note:"Medical context available to PT when relevant · Doctors can flag contraindications for training" },
+];
+
+const NET_DESC = {
+  PT:   "The primary user. Bridge helps them acquire clients, run their business, and deliver a care experience that drives retention and referrals.",
+  CL:   "The person everything is built around. Their health outcomes depend on coordinated care — not siloed professionals.",
+  BR:   "Communication hub + source of truth + workflow automation + identity layer. The connective tissue between all parties.",
+  AHP:  "Professionals who already work with the same clients. Today they operate in silos. Bridge enables non-competitive collaboration.",
+  MHP:  "Mental health professionals. Burnout, stress, anxiety — all affect training outcomes. Warm referrals from PT to MHP increase client retention.",
+  NUTR: "Nutritionists. Diet is as important as training. Coordinated plans mean better results and stronger loyalty to both professionals.",
+  PHYS: "Physiotherapists. Injury recovery and prevention. When a client gets injured, the PT needs to know — and vice versa.",
+  DOC:  "Doctors. Medical clearance, chronic conditions, contraindications. Shared context means safer, more personalised training.",
+};
+
+const NET_GLABEL = {
+  core:"Core Actor", bridge:"Platform", ahp:"Allied Health Cluster", ahpleaf:"Health Professional"
+};
+
+// Positions in a 900×600 virtual canvas
+const NET_POS = {
+  PT:   [140, 200],
+  BR:   [450, 200],
+  CL:   [760, 200],
+  AHP:  [450, 410],
+  MHP:  [185, 530],
+  NUTR: [345, 560],
+  PHYS: [555, 560],
+  DOC:  [715, 530],
+};
+
+const netNodeMap = {};
+NET_NODES.forEach(n => { n.x = NET_POS[n.id]?.[0] ?? 450; n.y = NET_POS[n.id]?.[1] ?? 300; netNodeMap[n.id] = n; });
+
+const netSvg = d3.select("#net-svg");
+const netDefs = netSvg.append("defs");
+
+["default","rel","hl"].forEach((t,i) => {
+  const colors = ["rgba(0,0,0,0.25)","#2A8050","rgba(0,0,0,0.7)"];
+  netDefs.append("marker").attr("id","net-arr-"+t)
+    .attr("viewBox","0 -4 8 8").attr("refX",7).attr("refY",0)
+    .attr("markerWidth",5).attr("markerHeight",5).attr("orient","auto")
+    .append("path").attr("d","M0,-4L8,0L0,4").attr("fill",colors[i]);
+});
+
+const netRoot = netSvg.append("g");
+const netZoom = d3.zoom().scaleExtent([0.1,4]).on("zoom", e => netRoot.attr("transform", e.transform));
+netSvg.call(netZoom).on("dblclick.zoom", null);
+
+function netEdgePath(s,t) {
+  const dx=t.x-s.x, dy=t.y-s.y, dist=Math.sqrt(dx*dx+dy*dy);
+  if(!dist) return "";
+  const x1=s.x+dx/dist*s.r, y1=s.y+dy/dist*s.r;
+  const x2=t.x-dx/dist*(t.r+7), y2=t.y-dy/dist*(t.r+7);
+  const mx=(x1+x2)/2-dy/dist*20, my=(y1+y2)/2+dx/dist*20;
+  return `M${x1},${y1} Q${mx},${my} ${x2},${y2}`;
+}
+
+// Edge labels for the relationship arrow
+const netEdgeLabelData = [
+  { s:"PT", t:"CL", text:"Relationship" }
+];
+
+// Draw relationship label line first (bg)
+netRoot.append("line")
+  .attr("x1", netNodeMap["PT"].x + 46).attr("y1", netNodeMap["PT"].y - 28)
+  .attr("x2", netNodeMap["CL"].x - 42).attr("y2", netNodeMap["CL"].y - 28)
+  .attr("stroke","#2A8050").attr("stroke-width",2)
+  .attr("marker-end","url(#net-arr-rel)")
+  .attr("marker-start", () => {
+    // reuse arr-rel for bidirectional
+    return "url(#net-arr-rel)";
+  });
+
+// Label on that line
+netRoot.append("text")
+  .attr("x", (netNodeMap["PT"].x + netNodeMap["CL"].x)/2)
+  .attr("y", netNodeMap["PT"].y - 40)
+  .attr("text-anchor","middle")
+  .attr("font-family","'Inter',-apple-system,sans-serif")
+  .attr("font-size",12).attr("font-weight",600).attr("fill","#2A8050")
+  .text("Relationship");
+
+// Draw edges
+const netEdgeSel = netRoot.selectAll(".net-edge")
+  .data(NET_EDGES).enter().append("path")
+  .attr("class","net-edge")
+  .attr("fill","none")
+  .attr("stroke", d => d.type==="relationship" ? "rgba(0,0,0,0)" : "rgba(0,0,0,0.18)")
+  .attr("stroke-width", d => d.type==="relationship" ? 0 : 1.3)
+  .attr("stroke-dasharray","none")
+  .attr("marker-end", d => d.type==="relationship" ? "none" : "url(#net-arr-default)")
+  .attr("d", d => netEdgePath(netNodeMap[d.s], netNodeMap[d.t]))
+  .style("cursor","default");
+
+// Edge labels
+const netEdgeLabelMap = {
+  "PT-BR": "Non-competitive, high trust source of leads",
+  "BR-CL": "other professional relationships",
+  "BR-AHP": "Communication Platform + Source of Truth\n+ Workflow automation + Identity",
+};
+
+// draw edge labels
+Object.entries(netEdgeLabelMap).forEach(([key, text]) => {
+  const [sId, tId] = key.split("-");
+  const s = netNodeMap[sId], t = netNodeMap[tId];
+  const mx = (s.x + t.x)/2, my = (s.y + t.y)/2;
+  const lines = text.split("\n");
+  lines.forEach((line, i) => {
+    netRoot.append("text")
+      .attr("x", mx).attr("y", my + (i - (lines.length-1)/2) * 13)
+      .attr("text-anchor","middle")
+      .attr("font-family","'Inter',-apple-system,sans-serif")
+      .attr("font-size", 9.5).attr("fill","#6A6A6A")
+      .text(line);
+  });
+});
+
+// Draw nodes
+const netNodeSel = netRoot.selectAll(".net-node-g")
+  .data(NET_NODES).enter().append("g")
+  .attr("class","net-node-g")
+  .attr("transform", d => `translate(${d.x},${d.y})`)
+  .style("cursor","pointer")
+  .on("click", (e,d) => { e.stopPropagation(); netSelectNode(d); });
+
+netNodeSel.append("circle")
+  .attr("r", d => d.r)
+  .attr("fill", d => d.fill)
+  .attr("stroke", d => d.stroke)
+  .attr("stroke-width", d => d.group==="core"||d.group==="bridge" ? 2.5 : 1.5)
+  .style("transition","filter 0.18s")
+  .on("mouseover", function() { d3.select(this).style("filter","brightness(0.88)"); })
+  .on("mouseout",  function() { d3.select(this).style("filter","none"); });
+
+netNodeSel.each(function(d) {
+  const g = d3.select(this);
+  const lines = d.label.split("\n");
+  const lh = d.r < 28 ? 11 : 13;
+  const total = lines.length * lh;
+  lines.forEach((line,i) => {
+    g.append("text")
+      .attr("text-anchor","middle").attr("dominant-baseline","central")
+      .attr("font-family","'Inter',-apple-system,sans-serif")
+      .attr("font-size", d.r < 28 ? 10 : d.r < 38 ? 11 : 13)
+      .attr("font-weight", d.group==="core"||d.group==="bridge" ? 600 : 500)
+      .attr("fill", d.textFill || "#1A1A1A")
+      .attr("pointer-events","none")
+      .attr("y", -total/2 + i*lh + lh/2)
+      .text(line);
+  });
+});
+
+// ── PANEL / INTERACTION ──────────────────────────────────────────────────────
+let netActiveId = null;
+const netPanel = document.getElementById("net-panel");
+
+function netSelectNode(d) {
+  if(netActiveId === d.id) { netDeselect(); return; }
+  netActiveId = d.id;
+
+  const conn = new Set([d.id]);
+  NET_EDGES.forEach(e => { if(e.s===d.id) conn.add(e.t); if(e.t===d.id) conn.add(e.s); });
+
+  netNodeSel.style("opacity", n => conn.has(n.id) ? 1 : 0.12);
+  netEdgeSel
+    .attr("stroke", e => {
+      if(e.type==="relationship") return "rgba(0,0,0,0)";
+      if(e.s===d.id||e.t===d.id) return "rgba(0,0,0,0.55)";
+      return "rgba(0,0,0,0.04)";
+    })
+    .attr("stroke-width", e => (e.s===d.id||e.t===d.id) ? 2 : 1.3)
+    .attr("marker-end", e => {
+      if(e.type==="relationship") return "none";
+      if(e.s===d.id||e.t===d.id) return "url(#net-arr-hl)";
+      return "url(#net-arr-default)";
+    });
+
+  document.getElementById("net-p-dot").style.background = d.stroke;
+  document.getElementById("net-p-name").textContent = d.label.replace(/\n/g," ");
+  document.getElementById("net-p-label").textContent = NET_GLABEL[d.group]||d.group;
+  document.getElementById("net-p-desc").textContent = NET_DESC[d.id]||"";
+
+  const out=[], inc=[];
+  NET_EDGES.forEach(e => {
+    if(e.s===d.id && e.type!=="relationship") out.push(e);
+    if(e.t===d.id && e.type!=="relationship") inc.push(e);
+    if(e.type==="relationship" && (e.s===d.id||e.t===d.id)) out.push(e);
+  });
+
+  let ch="";
+  if(out.length){
+    ch+=`<div class="eco-sec-label">Connects to</div>`;
+    out.forEach(e=>{
+      const otherId = e.s===d.id ? e.t : e.s;
+      const n=netNodeMap[otherId];
+      if(!n) return;
+      const notes = e.note ? e.note.split(" · ").map(p=>p.trim()).filter(Boolean) : [];
+      ch+=`<div class="eco-conn-card" style="border-left-color:${n.stroke}" onclick="netJump('${n.id}')">
+        <div class="eco-conn-card-name">
+          <span class="eco-conn-dot" style="background:${n.fill};border:1.5px solid ${n.stroke}"></span>
+          ${n.label.replace(/\n/g," ")}
+        </div>
+        ${notes.length ? `<div class="eco-conn-card-notes">${notes.map(p=>`<div class="eco-conn-note-line">— ${p}</div>`).join("")}</div>` : ""}
+      </div>`;
+    });
+  }
+  document.getElementById("net-p-conns").innerHTML = ch;
+  netPanel.style.transform = "translateX(0)";
+
+  // pan to node
+  const t = d3.zoomTransform(netSvg.node());
+  const W = netSvg.node().clientWidth, H = netSvg.node().clientHeight;
+  netSvg.transition().duration(480).call(netZoom.transform,
+    d3.zoomIdentity.translate(W/2 - d.x*t.k, H/2 - d.y*t.k).scale(t.k)
+  );
+}
+
+function netDeselect(){
+  netActiveId=null;
+  netPanel.style.transform="translateX(100%)";
+  netNodeSel.style("opacity",1);
+  netEdgeSel
+    .attr("stroke", e => e.type==="relationship" ? "rgba(0,0,0,0)" : "rgba(0,0,0,0.18)")
+    .attr("stroke-width", e => e.type==="relationship" ? 0 : 1.3)
+    .attr("marker-end", e => e.type==="relationship" ? "none" : "url(#net-arr-default)");
+}
+
+window.netJump = function(id){ const n=netNodeMap[id]; if(n) netSelectNode(n); };
+document.getElementById("net-panel-close").onclick = netDeselect;
+netSvg.on("click", netDeselect);
+
+document.getElementById("net-zin").onclick  = () => netSvg.transition().duration(240).call(netZoom.scaleBy,1.45);
+document.getElementById("net-zout").onclick = () => netSvg.transition().duration(240).call(netZoom.scaleBy,0.69);
+document.getElementById("net-rst").onclick  = () => { netDeselect(); netFitView(); };
+
+function netFitView(){
+  const xs=NET_NODES.map(n=>n.x), ys=NET_NODES.map(n=>n.y);
+  const minX=Math.min(...xs)-80, maxX=Math.max(...xs)+80;
+  const minY=Math.min(...ys)-80, maxY=Math.max(...ys)+80;
+  const W=netSvg.node().clientWidth, H=netSvg.node().clientHeight;
+  const scale=Math.min(W/(maxX-minX),H/(maxY-minY))*0.88;
+  const tx=W/2-(minX+(maxX-minX)/2)*scale, ty=H/2-(minY+(maxY-minY)/2)*scale;
+  netSvg.transition().duration(650).call(netZoom.transform, d3.zoomIdentity.translate(tx,ty).scale(scale));
+}
+
+setTimeout(netFitView, 80);
+
+})();
+</script>
   <p class="body-text" style="margin-top:1.5rem">Not a feature addition. A network effect. A fundamentally different competitive position from anything existing players could bolt on.</p>
+</div>
+
+<div class="beat" id="s-open-questions">
+  <p class="small-label">Open Questions</p>
+  <p class="large-statement">What's been worked through — and what hasn't.</p>
+  <p class="body-text">Bridge Acquire and Bridge Engage each have a defined problem, a feature direction, and an early product roadmap. Bridge Network is a hypothesis that depends on both succeeding first — it doesn't stand on its own.</p>
+  <p class="body-text">What's still genuinely open: how big are the two segments, and are they big enough to build separate product lines around — or should one come first and the other follow? Whether the GTM goes direct to independent PTs or through gyms changes the acquisition cost, the pricing model, and arguably the product itself. And the one question that sits underneath all of it: is the trainer's willingness to pay strong enough to sustain a direct motion, or does Bridge need institutional distribution before going after independents?</p>
 </div>
 
 <div class="footer">
@@ -1339,7 +1940,7 @@ const rwObs = new IntersectionObserver(es => { es.forEach(e => { if (e.isInterse
 rwObs.observe(rwGrid);
 
 // === Sidebar scroll-spy ===
-const sectionIds = ['s-problem','s-reality','s-segmentation','s-acquire','s-engage','s-network'];
+const sectionIds = ['s-problem','s-bluf','s-reality','s-segmentation','s-acquire','s-engage','s-network','s-open-questions'];
 const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
 
 function updateSidebar() {
