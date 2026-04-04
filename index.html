@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rishabh Sethi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F5F5F3;
+  --surface: #FFFFFF;
+  --ink: #111111;
+  --mid: #555555;
+  --muted: #7A7F86;
+  --faint: #BBBBBB;
+  --rule: rgba(0,0,0,0.07);
+  --rule-hover: rgba(0,0,0,0.12);
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-hover: 0 4px 16px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: 'IBM Plex Mono', 'SF Mono', monospace;
+  --radius: 16px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--ink); color: var(--bg); }
+
+.page {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 4rem 2.5rem 6rem;
+}
+
+.name {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--muted);
+  margin-bottom: 5rem;
+  opacity: 0;
+  animation: fadeUp 0.6s ease forwards;
+}
+
+.hero {
+  margin-bottom: 4rem;
+  opacity: 0;
+  animation: fadeUp 0.6s ease 0.07s forwards;
+}
+
+.hero-title {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.hero-sub {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--mid);
+  max-width: 480px;
+}
+
+.feed-section {
+  margin-bottom: 5rem;
+  opacity: 0;
+  animation: fadeUp 0.6s ease 0.14s forwards;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-btn {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--faint);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s ease;
+}
+
+.filter-btn:hover { color: var(--mid); }
+.filter-btn.active { color: var(--ink); font-weight: 500; }
+
+/* ── MASONRY ── */
+.masonry {
+  columns: 3;
+  column-gap: 0.75rem;
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 0.75rem;
+}
+
+.masonry-item.hidden { display: none; }
+
+/* ── BASE CARD ── */
+.card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  box-shadow: var(--shadow);
+  width: 100%;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+  border-color: var(--rule-hover);
+}
+
+/* ── WORK CARD ── */
+/* Fixed dimensions: 200×300px image area */
+.work-card .card-image {
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Caption below image — IBM Plex Mono, 12px, -2% tracking, #7A7F86 */
+.work-card .card-caption {
+  padding: 0.7rem 0.85rem 0.8rem;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+/* Placeholder gradients — replace with background-image: url() */
+.img-blinctrip-strategy { background-image: url('images/work/blinctrip-strategy.jpg'); background-size: cover; background-position: center; }
+.img-blinctrip-video    { background: linear-gradient(160deg, #2A3F52 0%, #4A6A80 50%, #7A9DB0 100%); }
+.img-blinctrip-notif    { background: linear-gradient(160deg, #1E3448 0%, #3A5C78 50%, #6A8FA8 100%); }
+.img-calo { background-image: url('images/work/calo.jpg'); background-size: cover; background-position: center; }
+.img-bridge { background-image: url('images/work/bridge.jpg'); background-size: cover; background-position: center; }
+.img-abhee              { background: linear-gradient(160deg, #4A3A4E 0%, #7A6A82 50%, #A898AE 100%); }
+.img-experience         { background: linear-gradient(160deg, #5A4030 0%, #8A6A4E 50%, #BAA080 100%); }
+.img-irctc              { background: linear-gradient(160deg, #2E4450 0%, #4A6A7A 50%, #7A9AA8 100%); }
+
+/* ── THOUGHT CARD ── */
+.thought-card .card-body {
+  padding: 1rem 1.1rem 1.15rem;
+}
+
+.thought-title {
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.55rem;
+}
+
+.thought-excerpt {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  border: none;
+  height: 1px;
+  background: var(--rule);
+  margin: 4rem 0;
+}
+
+.divider-1 { opacity: 0; animation: fadeUp 0.6s ease 0.18s forwards; }
+.divider-2 { opacity: 0; animation: fadeUp 0.6s ease 0.26s forwards; }
+
+/* ── APPROACH ── */
+.approach-section {
+  margin-bottom: 4rem;
+  opacity: 0;
+  animation: fadeUp 0.6s ease 0.22s forwards;
+}
+
+.section-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 1.25rem;
+}
+
+.approach-body { max-width: 520px; }
+
+.approach-body p {
+  font-size: 13px;
+  color: var(--mid);
+  line-height: 1.85;
+  margin-bottom: 1rem;
+}
+
+.approach-body strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* ── CTA ── */
+.cta-section {
+  margin-bottom: 4rem;
+  opacity: 0;
+  animation: fadeUp 0.6s ease 0.3s forwards;
+}
+
+.cta-question {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 1.75rem;
+  letter-spacing: -0.01em;
+}
+
+.cta-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--rule);
+}
+
+.cta-row:last-child { border-bottom: 1px solid var(--rule); }
+
+.cta-label { font-size: 12px; color: var(--muted); }
+
+.cta-link {
+  font-size: 12px;
+  color: var(--mid);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.cta-link:hover { color: var(--ink); }
+
+.cta-arrow {
+  display: inline-block;
+  margin-left: 0.25rem;
+  transition: transform 0.15s ease;
+}
+
+.cta-link:hover .cta-arrow { transform: translateX(3px); }
+
+/* ── FOOTER ── */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 11px;
+  color: var(--faint);
+  padding-top: 2rem;
+  border-top: 1px solid var(--rule);
+  opacity: 0;
+  animation: fadeUp 0.6s ease 0.34s forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 620px) {
+  .page { padding: 3rem 1.5rem 4.5rem; }
+  .name { margin-bottom: 3.5rem; }
+  .hero { margin-bottom: 3rem; }
+  .hero-title { font-size: 22px; }
+  .masonry { columns: 2; }
+  .cta-row { flex-direction: column; gap: 0.3rem; padding: 0.85rem 0; }
+  .footer { flex-direction: column; gap: 0.3rem; }
+  .divider { margin: 3rem 0; }
+}
+
+@media (max-width: 360px) {
+  .hero-title { font-size: 19px; }
+  .masonry { columns: 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <p class="name">Rishabh Sethi</p>
+
+  <div class="hero">
+    <p class="hero-title">Building is fast now.<br>Being wrong is expensive.</p>
+    <p class="hero-sub">I help founders figure out what's worth building — so you find traction fast, or learn in weeks what would've cost you six months the hard way.</p>
+  </div>
+
+  <div class="feed-section">
+    <div class="filter-row">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="work">Work</button>
+      <button class="filter-btn" data-filter="thoughts">Thoughts</button>
+    </div>
+    <div class="masonry" id="masonry-grid"></div>
+  </div>
+
+  <hr class="divider divider-1">
+
+  <div class="approach-section">
+    <p class="section-label">How it works</p>
+    <div class="approach-body">
+      <p>I embed with you for <strong>2–3 months</strong>. The first stretch is pure discovery — your market, your users, the failure modes of what exists today. I don't show up with frameworks. I show up with questions and stay until the picture is sharp enough to bet on.</p>
+      <p>Then we build the <strong>minimum thing needed to test the thesis</strong> — fast, using every tool available. Not a prototype to impress investors. A product accurate enough to learn from.</p>
+      <p>The output is either <strong>traction</strong>, or <strong>clarity</strong> about why there isn't any — months before you would have found out on your own.</p>
+    </div>
+  </div>
+
+  <hr class="divider divider-2">
+
+  <div class="cta-section">
+    <p class="cta-question">What are you working on?</p>
+    <div class="cta-row">
+      <span class="cta-label">Email</span>
+      <a class="cta-link" href="/cdn-cgi/l/email-protection#f29a979e9e9db2809b819a93909a8197869a9bdc919d9f"><span class="__cf_email__" data-cfemail="375f525b5b5877455e445f56555f4452435f5e1954585a">[email&#160;protected]</span> <span class="cta-arrow">→</span></a>
+    </div>
+    <div class="cta-row">
+      <span class="cta-label">Schedule a conversation</span>
+      <a class="cta-link" href="https://calendly.com" target="_blank" rel="noopener">Calendly <span class="cta-arrow">→</span></a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>Rishabh Sethi · 2026</span>
+    <span>Dubai, UAE</span>
+  </div>
+
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ─────────────────────────────────────────────
+// WORK CARDS
+// caption: text shown below the image in IBM Plex Mono
+// To use a real image: set the CSS class to background-image: url('...'); background-size: cover;
+// ─────────────────────────────────────────────
+const WORK = [
+  { type:'work', image:'img-blinctrip-strategy', caption:'Zero to $1M/mo. Acquired.',              url:'work/blinctrip-strategy.html' },
+  { type:'work', image:'img-blinctrip-video',    caption:'The product story in 90 seconds.',        url:'work/blinctrip-launch-video.html' },
+  { type:'work', image:'img-blinctrip-notif',    caption:'Post-booking engagement at 2× industry.', url:'work/blinctrip-notification-engine.html' },
+  { type:'work', image:'img-calo',               caption:'Reframed the market entirely.',            url:'work/calo.html' },
+  { type:'work', image:'img-bridge',             caption:'Found the wedge no one saw.',             url:'work/bridge.html' },
+  { type:'work', image:'img-abhee',              caption:'One line about the insight.',             url:'work/abhee-aarna.html' },
+  { type:'work', image:'img-experience',         caption:'One line about the insight.',             url:'work/experience-economy.html' },
+  { type:'work', image:'img-irctc',              caption:'One line about the insight.',             url:'work/irctc.html' },
+];
+
+// ─────────────────────────────────────────────
+// THOUGHT CARDS
+// To add a post: append here + create thoughts/{slug}.html
+// ─────────────────────────────────────────────
+const THOUGHTS = [
+  {
+    type:'thoughts',
+    title: "The idea doesn't belong to you.",
+    excerpt: 'Was listening to a comic talk about his joke writing process and it was remarkable how similar creativity looks across fields.',
+    slug: 'idea-doesnt-belong-to-you'
+  },
+  {
+    type:'thoughts',
+    title: "If it can't offend, how can it enchant?",
+    excerpt: 'What everyone accepts, no one remembers. Specificity creates identity; conformity erases it.',
+    slug: 'if-it-cant-offend'
+  },
+  {
+    type:'thoughts',
+    title: 'Studio > Stage',
+    excerpt: "Over a long enough period of time, people will come to realize the value of presence as a competitive advantage. We're early.",
+    slug: 'studio-vs-stage'
+  },
+];
+
+function buildWorkCard(d) {
+  return `<a href="${d.url}" class="card work-card">
+    <div class="card-image ${d.image}"></div>
+    <p class="card-caption">${d.caption}</p>
+  </a>`;
+}
+
+function buildThoughtCard(d) {
+  return `<a href="thoughts/${d.slug}.html" class="card thought-card">
+    <div class="card-body">
+      <p class="thought-title">${d.title}</p>
+      <p class="thought-excerpt">${d.excerpt}</p>
+    </div>
+  </a>`;
+}
+
+// W W T W W T pattern
+const FEED = [];
+let wi = 0, ti = 0;
+while (wi < WORK.length || ti < THOUGHTS.length) {
+  if (wi < WORK.length) FEED.push(WORK[wi++]);
+  if (wi < WORK.length) FEED.push(WORK[wi++]);
+  if (ti < THOUGHTS.length) FEED.push(THOUGHTS[ti++]);
+}
+
+function renderGrid(filter) {
+  document.getElementById('masonry-grid').innerHTML = FEED.map(d => {
+    const html = d.type === 'work' ? buildWorkCard(d) : buildThoughtCard(d);
+    const hidden = (filter !== 'all' && d.type !== filter) ? ' hidden' : '';
+    return `<div class="masonry-item${hidden}" data-type="${d.type}">${html}</div>`;
+  }).join('');
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const f = btn.dataset.filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderGrid(f);
+  });
+});
+
+renderGrid('all');
+</script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The idea doesn't belong to you — Rishabh Sethi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #F5F5F3; --surface: #FFFFFF; --ink: #111111;
+  --mid: #555555; --muted: #7A7F86; --faint: #BBBBBB;
+  --rule: rgba(0,0,0,0.07);
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: 'IBM Plex Mono', 'SF Mono', monospace;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+::selection { background: var(--ink); color: var(--bg); }
+.page { max-width: 620px; margin: 0 auto; padding: 4rem 2.5rem 6rem; }
+
+.back-link {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-family: var(--mono); font-size: 11px; color: var(--muted);
+  text-decoration: none; margin-bottom: 4rem;
+  opacity: 0; animation: fadeUp 0.5s ease forwards;
+  transition: color 0.15s ease;
+}
+.back-link:hover { color: var(--ink); }
+
+.post-meta {
+  font-family: var(--mono); font-size: 11px; color: var(--faint);
+  letter-spacing: 0.04em; margin-bottom: 1.25rem;
+  opacity: 0; animation: fadeUp 0.5s ease 0.05s forwards;
+}
+
+.post-title {
+  font-size: 26px; font-weight: 600; line-height: 1.25;
+  letter-spacing: -0.02em; color: var(--ink);
+  margin-bottom: 2.5rem;
+  opacity: 0; animation: fadeUp 0.5s ease 0.1s forwards;
+}
+
+.post-body {
+  opacity: 0; animation: fadeUp 0.5s ease 0.15s forwards;
+}
+
+.post-body p {
+  font-size: 15px; color: var(--mid); line-height: 1.85;
+  margin-bottom: 1.4rem;
+}
+.post-body p:last-child { margin-bottom: 0; }
+.post-body strong { font-weight: 500; color: var(--ink); }
+
+.divider {
+  border: none; height: 1px; background: var(--rule);
+  margin: 3rem 0;
+  opacity: 0; animation: fadeUp 0.5s ease 0.2s forwards;
+}
+
+.footer {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 11px; color: var(--faint);
+  opacity: 0; animation: fadeUp 0.5s ease 0.25s forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 620px) {
+  .page { padding: 3rem 1.5rem 4.5rem; }
+  .post-title { font-size: 21px; }
+  .footer { flex-direction: column; gap: 0.3rem; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a class="back-link" href="../index.html">← Rishabh Sethi</a>
+
+  <p class="post-meta">Thoughts</p>
+
+  <h1 class="post-title">The idea doesn't belong to you.</h1>
+
+  <div class="post-body">
+    <p>Was listening to a comic talk about his joke writing process and it was remarkable how similar creativity looks across fields.</p>
+    <p>He described the feeling of a joke arriving — not being constructed, but <strong>arriving</strong>. Like something that existed somewhere and passed through him on its way into the world. His job wasn't to invent it. It was to be available when it showed up, and disciplined enough to catch it.</p>
+    <p>Chris Martin said something similar about songs. That the melody for a particular track came to him almost fully formed, and he felt less like a composer and more like someone who happened to be holding a pen.</p>
+    <p>This isn't mysticism. It's a useful operating model.</p>
+    <p>If the idea belongs to you, you'll protect it. You'll be precious about it. You'll hesitate to share it because sharing feels like giving something away. You'll feel deflated when someone else has a similar one, because yours has been stolen.</p>
+    <p>If the idea doesn't belong to you — if you're a temporary custodian of something that was going to exist anyway — then your only job is to <strong>not be the reason it doesn't get made.</strong></p>
+    <p>The creative work is still hard. The craft is still yours. But the ownership is looser, and that looseness is a gift. It makes you less defensive, more collaborative, more willing to kill the version that isn't working and let a better one come through.</p>
+    <p>The best builders I've watched work this way, even if they don't describe it in these terms. They're not attached to their original idea. They're attached to the problem.</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="footer">
+    <span>Rishabh Sethi · 2026</span>
+    <span>Dubai, UAE</span>
+  </div>
+
+</div>
+</body>
+</html>

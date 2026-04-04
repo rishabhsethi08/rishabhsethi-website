@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bridge Athletic — Rishabh Sethi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@0,400;0,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #FFFFFF; --ink: #111111; --mid: #3A3A3A; --muted: #6A6A6A;
+  --light: #9A9A9A; --faint: #DEDEDE; --rule: rgba(0,0,0,0.07);
+  --rule-strong: rgba(0,0,0,0.12); --card-bg: rgba(0,0,0,0.025);
+  --accent: #3A6B5C; --accent-faint: rgba(58,107,92,0.07);
+  --mono: 'IBM Plex Mono', 'SF Mono', monospace;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --purple: #DAC0FF; --blue: #ABD3FF; --yellow: #FFF0A7;
+}
+html { scroll-behavior: smooth; scroll-padding-top: 100px; overflow-x: hidden; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+::selection { background: var(--ink); color: var(--bg); }
+.page { max-width: 720px; margin: 0 auto; padding: 4.5rem 2.5rem 6rem; }
+
+.back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: var(--light); text-transform: uppercase; text-decoration: none; margin-bottom: 6rem; transition: color 0.2s; }
+.back-link:hover { color: var(--mid); }
+.back-link:hover .ba { transform: translateX(-3px); }
+.ba { display: inline-block; transition: transform 0.2s; }
+
+/* BEATS */
+.beat { margin-bottom: 5rem; opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.beat.vis { opacity: 1; transform: translateY(0); }
+
+/* TYPE — Spatial-style hierarchy */
+.headline { font-size: 28px; font-weight: 600; line-height: 1.3; color: var(--ink); max-width: 520px; letter-spacing: -0.03em; }
+.body-text { font-size: 15px; color: var(--mid); line-height: 1.75; max-width: 520px; margin-top: 1.1rem; }
+.body-text + .body-text { margin-top: 0.8rem; }
+.body-text strong { font-weight: 600; color: var(--ink); }
+.small-label { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.07em; color: var(--light); text-transform: uppercase; display: block; margin-bottom: 0.9rem; }
+.large-statement { font-size: 22px; font-weight: 600; line-height: 1.4; color: var(--ink); max-width: 520px; letter-spacing: -0.02em; }
+
+.context-strip { display: flex; gap: 2.5rem; flex-wrap: wrap; padding: 1.4rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-top: 2rem; }
+.context-item .small-label { margin-bottom: 0.25rem; }
+.context-value { font-family: var(--mono); font-size: 12px; color: var(--mid); }
+.divider { border: none; height: 1px; background: var(--rule); margin: 0; }
+
+.evidence { background: var(--card-bg); border: 1px solid var(--rule); border-radius: 6px; padding: 1.25rem 1.5rem; margin-top: 1.5rem; max-width: 520px; }
+.evidence p { font-size: 14px; font-style: italic; color: var(--mid); line-height: 1.75; }
+.evidence .src { font-style: normal; font-size: 11px; color: var(--light); margin-top: 0.5rem; display: block; }
+
+.insight-line { border-left: 2px solid var(--accent); padding-left: 1.25rem; margin-top: 1.5rem; max-width: 520px; }
+.insight-line p { font-size: 14px; color: var(--ink); line-height: 1.75; }
+
+.rw-caption { font-size: 11px; color: var(--light); margin-top: 0.75rem; font-style: italic; max-width: 520px; }
+
+.beat > .evidence:last-child,
+.beat > .insight-line:last-child,
+.beat > .rw-caption:last-child,
+.beat > .fork:last-child,
+.beat > .case-img:last-child,
+.beat > .img-pair:last-child,
+.beat > .chain:last-child,
+.beat > .career-flow:last-child,
+.beat > .eco-map:last-child { margin-bottom: 0; }
+
+/* === RESEARCH WALL — STICKY NOTE === */
+.rw-grid { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: flex-start; }
+
+.rw-theme-card {
+  background: var(--purple); border-radius: 5px; padding: 0.6rem 0.9rem;
+  font-size: 13px; font-weight: 500; color: var(--ink); cursor: pointer;
+  user-select: none; position: relative;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.2s, background 0.2s;
+}
+.rw-theme-card.vis { opacity: 1; transform: translateY(0); }
+.rw-theme-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.1); background: #CEB0F7; transform: translateY(-1px); }
+.rw-theme-card.active { background: #C4A4F5; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+
+.rw-injected-row {
+  width: 100%; display: flex; flex-wrap: wrap; gap: 0.4rem;
+  padding: 0.6rem 0.2rem 0.4rem;
+  overflow: hidden;
+  max-height: 0; opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+}
+.rw-injected-row.open { max-height: 800px; opacity: 1; }
+
+.rw-sub-card {
+  background: var(--blue); border-radius: 4px; padding: 0.5rem 0.75rem;
+  font-size: 12px; color: var(--ink); cursor: pointer; user-select: none;
+  transition: box-shadow 0.2s;
+}
+.rw-sub-card:hover { box-shadow: 0 2px 6px rgba(0,0,0,0.06); background: #98C6FF; }
+.rw-sub-card.active { background: #85BAFF; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+
+.rw-quote-card {
+  background: var(--yellow); border-radius: 4px; padding: 0.5rem 0.75rem;
+  font-size: 12px; color: var(--ink); font-style: italic;
+  max-width: 280px; line-height: 1.6;
+}
+
+/* === CAREER FUNNEL === */
+.career-flow { margin-top: 2rem; max-width: 100%; }
+.career-stage {
+  border: 1px solid var(--rule); border-radius: 6px; margin-bottom: 0.5rem;
+  background: var(--card-bg); overflow: hidden;
+  opacity: 0; transform: translateX(-12px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.career-stage.vis { opacity: 1; transform: translateX(0); }
+
+.career-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.7rem 1rem; cursor: pointer; user-select: none;
+  transition: background 0.2s;
+}
+.career-header:hover { background: rgba(255,255,255,0.3); }
+.career-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+.career-tag { font-size: 11px; color: var(--muted); margin-left: 0.5rem; }
+.career-toggle { font-size: 13px; color: var(--light); transition: transform 0.25s; }
+.career-stage.open .career-toggle { transform: rotate(45deg); }
+
+.career-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+.career-stage.open .career-body { max-height: 250px; }
+.career-body-inner { padding: 0 1rem 0.9rem; }
+.career-body-inner p { font-size: 13px; color: var(--muted); line-height: 1.75; }
+.career-dropout { font-size: 11px; color: var(--light); font-style: italic; margin-top: 0.4rem; display: block; }
+
+.career-bar {
+  height: 3px; background: var(--ink); border-radius: 2px; margin: 0 1rem 0.5rem;
+  transition: width 0.5s ease;
+}
+
+.career-fork-container {
+  display: flex; gap: 0.5rem; margin-top: 0.25rem;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.career-fork-container.vis { opacity: 1; transform: translateY(0); }
+.career-fork-box {
+  flex: 1; background: var(--card-bg); border: 1px solid var(--rule);
+  border-radius: 6px; padding: 0.65rem 0.9rem;
+}
+.career-fork-box .cff-label { font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.career-fork-box .cff-desc { font-size: 12px; color: var(--light); margin-top: 0.15rem; line-height: 1.5; }
+.career-fork-arrow { text-align: center; font-size: 11px; color: var(--faint); padding: 0.3rem 0; letter-spacing: 0.2em; }
+
+/* === STRATEGY CHAIN === */
+.chain { margin-top: 2rem; max-width: 520px; }
+.chain-header { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.08em; color: var(--light); text-transform: uppercase; margin-bottom: 1rem; }
+.chain-step { position: relative; padding-left: 1.5rem; padding-bottom: 1.5rem; border-left: 1px solid var(--rule); }
+.chain-step:last-child { border-left: 1px solid transparent; padding-bottom: 0; }
+.chain-dot { position: absolute; left: -4px; top: 0.15rem; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.chain-step p { font-size: 14px; color: var(--mid); line-height: 1.85; }
+.chain-step strong { font-weight: 600; color: var(--ink); }
+.chain-arrow { font-size: 11px; color: var(--faint); margin-top: 0.5rem; display: block; }
+.chain-outcome {
+  margin-top: 0.75rem; padding: 0.7rem 1rem; border-radius: 5px;
+  background: var(--accent-faint); border: 1px solid rgba(58,107,92,0.12);
+}
+.chain-outcome p { font-size: 13px; color: var(--accent); line-height: 1.7; font-weight: 500; }
+
+/* === INTERACTIVE ECO MAP === */
+.eco-map { margin-top: 2rem; max-width: 100%; }
+.eco-svg-wrap {
+  background: var(--card-bg); border: 1px solid var(--rule); border-radius: 6px;
+  padding: 1.5rem; overflow: hidden;
+}
+.eco-svg-wrap svg { width: 100%; height: auto; }
+.eco-svg-wrap svg text { font-family: var(--sans); }
+.eco-node { cursor: pointer; transition: opacity 0.3s; }
+.eco-svg-wrap.has-focus .eco-node { opacity: 0.15; }
+.eco-svg-wrap.has-focus .eco-node.active { opacity: 1; }
+.eco-caption { font-size: 11px; color: var(--light); padding: 0.6rem 1rem; letter-spacing: 0.02em; line-height: 1.5; background: var(--card-bg); border-top: 1px solid var(--rule); }
+.eco-hint { font-size: 11px; color: var(--light); margin-top: 0.5rem; font-style: italic; }
+
+/* === FORK === */
+.fork { margin-top: 2rem; max-width: 520px; background: var(--card-bg); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.fork-label { padding: 0.8rem 1.2rem; border-bottom: 1px solid var(--rule); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: var(--light); text-transform: uppercase; }
+.fork-paths { display: grid; grid-template-columns: 1fr 1fr; }
+.fork-path { padding: 1rem 1.2rem; }
+.fork-path:first-child { border-right: 1px solid var(--rule); }
+.fork-path-title { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+.fork-path p { font-size: 13px; color: var(--mid); line-height: 1.75; }
+.fork-path.chosen { background: var(--accent-faint); }
+.fork-path.chosen .fork-path-title { color: var(--accent); }
+
+/* === IMAGES === */
+.case-img { margin-top: 2rem; border-radius: 6px; overflow: hidden; border: 1px solid var(--rule); max-width: 100%; }
+.case-img img { width: 100%; display: block; }
+.case-img-cap { font-size: 11px; color: var(--light); padding: 0.6rem 1rem; background: var(--card-bg); line-height: 1.5; }
+.img-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 2rem; max-width: 100%; }
+.img-pair .case-img { margin-top: 0; }
+
+/* FOOTER */
+.footer { display: flex; justify-content: space-between; align-items: baseline; font-size: 11px; color: var(--faint); letter-spacing: 0.04em; padding-top: 2rem; border-top: 1px solid var(--rule); margin-top: 6rem; }
+
+/* === SIDEBAR NAV === */
+.sidebar-nav {
+  position: fixed; top: 50%; left: 2rem;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 0.5rem;
+  z-index: 100;
+}
+.sidebar-nav a {
+  font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--light); text-decoration: none;
+  transition: color 0.2s, transform 0.2s;
+  white-space: nowrap;
+}
+.sidebar-nav a:hover { color: var(--mid); transform: translateX(2px); }
+.sidebar-nav a.active { color: var(--ink); }
+.sidebar-nav a.active::before { content: '—'; margin-right: 0.4rem; }
+
+@media (max-width: 1200px) {
+  .sidebar-nav { display: none; }
+}
+
+@media (max-width: 640px) {
+  .page { padding: 3rem 1.5rem 4rem; }
+  .back-link { margin-bottom: 4rem; }
+  .headline { font-size: 22px; max-width: 100%; }
+  .body-text, .insight-line, .evidence, .fork, .chain, .career-flow, .eco-map, .case-img, .img-pair { max-width: 100%; }
+  .large-statement { font-size: 18px; max-width: 100%; }
+  .context-strip { gap: 1.5rem; }
+  .fork-paths { grid-template-columns: 1fr; }
+  .fork-path:first-child { border-right: none; border-bottom: 1px solid var(--rule); }
+  .img-pair { grid-template-columns: 1fr; }
+  .beat { margin-bottom: 4rem; }
+  .footer { flex-direction: column; gap: 0.3rem; }
+  .career-fork-container { flex-direction: column; }
+  .seg-chart { max-width: 100%; }
+  .seg-bar-name { font-size: 10px; }
+  .seg-bar-tag  { display: none; }
+  .seg-col-id   { font-size: 9px; padding: 3px 4px; }
+  .seg-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .seg-decision-grid--2 { grid-template-columns: 1fr; }
+  .seg-decision-grid--3 { grid-template-columns: 1fr; }
+  .seg-diff-grid { grid-template-columns: 1fr; }
+}
+
+/* === SEGMENTATION — BEAT 1: BAR CHART === */
+.seg-chart { margin-top: 2rem; max-width: 520px; overflow: hidden; }
+.seg-bars { display: flex; align-items: flex-end; gap: 6px; }
+.seg-col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.seg-bar {
+  border-radius: 4px 4px 0 0;
+  padding: 10px 8px 8px;
+  display: flex; flex-direction: column; gap: 3px;
+  overflow: hidden; border-bottom: none;
+}
+.seg-bar-name { font-size: 11px; font-weight: 600; line-height: 1.3; }
+.seg-bar-tag  { font-size: 10px; font-weight: 400; opacity: 0.75; line-height: 1.3; }
+.seg-bar--gray   { background: #E8E8E8; border: 1px solid #AAAAAA; color: #3A3A3A; border-bottom: none; }
+.seg-bar--purple { background: #DDD0FF; border: 1px solid #7C3AED; color: #4a2a9a; border-bottom: none; }
+.seg-bar--teal   { background: #C8E8F0; border: 1px solid #4A90A4; color: #1a5a6a; border-bottom: none; }
+.seg-bar--amber  { background: #FFE8C0; border: 1px solid #B07830; color: #7a4a10; border-bottom: none; }
+.seg-bar--coral  { background: #EDD0EE; border: 1px solid #9B3BA0; color: #5a1a60; border-bottom: none; }
+.seg-bar--blue   { background: #C4D8FF; border: 1px solid #2563EB; color: #1a3a8a; border-bottom: none; }
+.seg-col-id {
+  padding: 4px 8px 5px; font-size: 10px; font-weight: 600;
+  text-align: center; letter-spacing: 0.04em;
+  border-left: 1px solid; border-right: 1px solid; border-bottom: 1px solid;
+  border-radius: 0 0 4px 4px;
+}
+.seg-id--gray   { background: #E8E8E8; border-color: #AAAAAA; color: #3A3A3A; }
+.seg-id--purple { background: #DDD0FF; border-color: #7C3AED; color: #4a2a9a; }
+.seg-id--teal   { background: #C8E8F0; border-color: #4A90A4; color: #1a5a6a; }
+.seg-id--amber  { background: #FFE8C0; border-color: #B07830; color: #7a4a10; }
+.seg-id--coral  { background: #EDD0EE; border-color: #9B3BA0; color: #5a1a60; }
+.seg-id--blue   { background: #C4D8FF; border-color: #2563EB; color: #1a3a8a; }
+.seg-baseline { height: 1px; background: var(--rule-strong); margin-top: 0; }
+.seg-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; color: var(--light); text-transform: uppercase; margin-top: 0.5rem; }
+
+/* === SEGMENTATION — BEAT 1: SEGMENT CARDS === */
+.seg-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 2rem; max-width: 520px; }
+.seg-card { border: 1px solid var(--rule-strong); border-radius: 5px; background: var(--card-bg); overflow: hidden; }
+.seg-card-header { padding: 8px 10px; border-bottom: 1px solid var(--rule); }
+.seg-card-num { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; }
+.seg-card-name { font-size: 12px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+.seg-card-body { padding: 8px 10px; display: flex; flex-direction: column; gap: 7px; }
+.seg-card-reality { font-size: 11px; color: var(--muted); line-height: 1.55; }
+.seg-need-label { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--light); margin-bottom: 2px; }
+.seg-need-text { font-size: 11px; font-weight: 500; line-height: 1.4; }
+.sh--gray   { background: #E8E8E8; } .sh--purple { background: #DDD0FF; }
+.sh--teal   { background: #C8E8F0; } .sh--amber  { background: #FFE8C0; }
+.sh--coral  { background: #EDD0EE; } .sh--blue   { background: #C4D8FF; }
+.sn--gray   { color: #3A3A3A; }     .sn--purple { color: #4a2a9a; }
+.sn--teal   { color: #1a5a6a; }     .sn--amber  { color: #7a4a10; }
+.sn--coral  { color: #5a1a60; }     .sn--blue   { color: #1a3a8a; }
+
+/* === SEGMENTATION — BEAT 2: TARGETING === */
+.seg-section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--light); margin-top: 2rem; margin-bottom: 0.6rem; max-width: 520px; }
+.seg-decision-grid { display: grid; gap: 8px; max-width: 520px; }
+.seg-decision-grid--2 { grid-template-columns: 1fr 1fr; }
+.seg-decision-grid--3 { grid-template-columns: 1fr 1fr 1fr; }
+.seg-decision-card {
+  border-radius: 5px; overflow: hidden;
+  border: 1px solid var(--rule-strong);
+  background: var(--card-bg);
+}
+.seg-decision-card.target { border-color: #1D9E75; border-width: 1.5px; }
+.seg-decision-card.muted  { opacity: 0.45; }
+.seg-dc-header {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--rule);
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 6px;
+}
+.seg-dc-id   { font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+.seg-dc-name { font-size: 12px; font-weight: 600; color: var(--ink); margin-top: 2px; line-height: 1.3; }
+.seg-verdict {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 3px 7px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; margin-top: 1px;
+}
+.sv--target { background: rgba(29,158,117,0.12); color: #085041; }
+.sv--skip   { background: rgba(180,120,20,0.1);  color: #7a4a10; }
+.sv--out    { background: rgba(0,0,0,0.05);       color: var(--muted); }
+.seg-dc-body { padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; }
+.seg-dc-rlabel { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--light); }
+.seg-dc-rtext  { font-size: 11px; color: var(--muted); line-height: 1.55; }
+
+/* === SEGMENTATION — BEAT 3: DIFFERENTIATION === */
+.seg-diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0; max-width: 520px; }
+.seg-diff-panel {
+  border-radius: 5px; overflow: hidden;
+  border: 1.5px solid;
+  background: var(--bg);
+}
+.sdp--purple { border-color: #7C3AED; }
+.sdp--teal   { border-color: #4A90A4; }
+.seg-diff-header { padding: 10px 12px 8px; }
+.seg-diff-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 3px; }
+.seg-diff-title { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.35; }
+.seg-diff-product {
+  display: inline-block; margin-top: 5px;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 3px 7px; border-radius: 3px;
+}
+.sdpr--purple { background: #DDD0FF; color: #4a2a9a; }
+.sdpr--teal   { background: #C8E8F0; color: #1a5a6a; }
+.seg-diff-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--rule); }
+.seg-comp-block { background: var(--card-bg); border-radius: 4px; padding: 7px 9px; }
+.seg-comp-label { font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--light); margin-bottom: 3px; }
+.seg-comp-text  { font-size: 11px; color: var(--muted); line-height: 1.55; }
+.seg-diff-line  { border-left: 2px solid #1D9E75; padding-left: 9px; border-radius: 0; }
+.seg-diff-line p { font-size: 11px; font-weight: 500; color: var(--ink); line-height: 1.6; }
+.seg-moat-block { border-radius: 4px; padding: 7px 9px; }
+.seg-moat--purple { background: rgba(155,125,210,0.12); }
+.seg-moat--teal   { background: rgba(58,107,92,0.09); }
+.seg-moat-label { font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 3px; }
+.seg-moat-text  { font-size: 11px; line-height: 1.55; }
+.sml--purple { color: #4a2a9a; } .smt--purple { color: #4a2a9a; }
+.sml--teal   { color: #085041; } .smt--teal   { color: #085041; }
+.seg-why-label { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--light); }
+.seg-why-text  { font-size: 11px; color: var(--muted); line-height: 1.55; }
+.seg-pedigree {
+  margin-top: 10px; max-width: 520px;
+  border: 1px solid var(--rule-strong); border-radius: 5px;
+  background: var(--card-bg); padding: 12px 14px;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.seg-ped-badge {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--ink); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.seg-ped-badge span { font-size: 9px; font-weight: 700; color: var(--bg); letter-spacing: 0.03em; text-align: center; line-height: 1.2; }
+.seg-ped-body { flex: 1; }
+.seg-ped-label { font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--light); margin-bottom: 3px; }
+.seg-ped-text  { font-size: 11px; color: var(--muted); line-height: 1.6; }
+.seg-ped-text strong { font-weight: 600; color: var(--ink); }
+</style>
+</head>
+<body>
+<nav class="sidebar-nav" id="sidebar">
+  <a href="#s-problem">The Problem</a>
+  <a href="#s-reality">The Painful Reality</a>
+  <a href="#s-segmentation">Segmentation</a>
+  <a href="#s-acquire">Bridge Acquire</a>
+  <a href="#s-engage">Bridge Engage</a>
+  <a href="#s-network">The Network</a>
+</nav>
+
+<div class="page">
+
+<!-- ======== OPENING ======== -->
+<a href="#" class="back-link"><span class="ba">←</span> Rishabh Sethi</a>
+<div class="beat" id="s-problem">
+  <p class="small-label">The Problem</p>
+  <p class="headline">Expanding Bridge Athletic's product into a new market segment.</p>
+  <p class="body-text">Bridge Athletic has spent the past 10 years building a robust strength and conditioning platform used by elite sports teams — Chelsea Football Club, Manchester City, Golden State Warriors. They wanted to expand into personal training, and were looking to create a product roadmap for PTs.</p>
+  <p class="body-text">Personal training is a crowded market. Once a tool gets adopted, it tends to stick — data lock-in makes switching painful regardless of quality.</p>
+  <p class="body-text">To break in, a new product would have to be differentiated enough to pull coaches away from entrenched tools — or find a gap the incumbents hadn't addressed.</p>
+  <div class="context-strip">
+    <div class="context-item"><p class="small-label">Scope</p><p class="context-value">Product strategy, research, design</p></div>
+    <div class="context-item"><p class="small-label">Domain</p><p class="context-value">Fitness / health-tech SaaS</p></div>
+    <div class="context-item"><p class="small-label">Duration</p><p class="context-value">~6 weeks</p></div>
+  </div>
+</div>
+
+<!-- ======== RESEARCH WALL ======== -->
+<div class="beat" id="s-reality">
+  <p class="small-label">The Painful Reality</p>
+  <p class="large-statement">The reality of being a personal trainer.</p>
+  <p class="body-text">Most trainers get into it because they love fitness and helping people. Then reality hits. Here's what research revealed:</p>
+  <div class="rw-grid" id="rwall"></div>
+  <p class="rw-caption">Click to see evidence.</p>
+</div>
+
+<!-- ======== SEGMENTATION ======== -->
+<div class="beat" id="s-segmentation">
+  <p class="small-label">Segmentation</p>
+  <p class="large-statement">Building for all = building for none.</p>
+  <p class="body-text">Most competitors made the same mistake: they segmented by delivery method, profession, or geography — or not at all — and tried to serve everyone. Tools for online and in-person coaching. For trainers, nutritionists, gyms, and mental health professionals. Core coaching <em>and</em> tax automation. Every sport. Every market.</p>
+  <p class="body-text">The result is bloated software that nobody loves but everyone is stuck in.</p>
+  <div class="evidence" style="margin-top:1.5rem">
+    <p><em>[App store review screenshots]</em></p>
+  </div>
+  <p class="body-text" style="margin-top:1.5rem">Research revealed a different segmentation axis. Not what <em>type</em> of trainer — but where they are in their career. A trainer's needs change structurally as they progress. It behaves like a funnel, not just a ladder. People exit at every stage.</p>
+
+  <div class="seg-chart" id="career-flow">
+    <div class="seg-bars">
+      <div class="seg-col">
+        <div class="seg-bar seg-bar--gray" style="height:240px;">
+          <span class="seg-bar-name">Non-certified</span>
+          <span class="seg-bar-tag">the majority</span>
+        </div>
+        <div class="seg-col-id seg-id--gray">L1</div>
+      </div>
+      <div class="seg-col">
+        <div class="seg-bar seg-bar--purple" style="height:185px;">
+          <span class="seg-bar-name">Recently certified</span>
+          <span class="seg-bar-tag">survival mode</span>
+        </div>
+        <div class="seg-col-id seg-id--purple">L2</div>
+      </div>
+      <div class="seg-col">
+        <div class="seg-bar seg-bar--teal" style="height:130px;">
+          <span class="seg-bar-name">Established</span>
+          <span class="seg-bar-tag">retention &amp; efficiency</span>
+        </div>
+        <div class="seg-col-id seg-id--teal">L3</div>
+      </div>
+      <div class="seg-col">
+        <div class="seg-bar seg-bar--amber" style="height:82px;">
+          <span class="seg-bar-name">Advanced</span>
+          <span class="seg-bar-tag">scaling the brand</span>
+        </div>
+        <div class="seg-col-id seg-id--amber">L4</div>
+      </div>
+      <div class="seg-col">
+        <div class="seg-bar seg-bar--coral" style="height:52px;">
+          <span class="seg-bar-name">Gym owner</span>
+        </div>
+        <div class="seg-col-id seg-id--coral">L5</div>
+      </div>
+      <div class="seg-col">
+        <div class="seg-bar seg-bar--blue" style="height:52px;">
+          <span class="seg-bar-name">Influencer</span>
+        </div>
+        <div class="seg-col-id seg-id--blue">L6</div>
+      </div>
+    </div>
+    <div class="seg-baseline"></div>
+    <p class="seg-label">career progression →</p>
+  </div>
+
+  <div class="career-flow" style="margin-top:1.5rem;" id="seg-accordion">
+
+    <div class="career-stage" data-width="100">
+      <div class="career-bar" style="width:100%; background:#AAAAAA;"></div>
+      <div class="career-header" onclick="this.parentElement.classList.toggle('open')">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex:1;">
+          <div>
+            <span class="career-name">Non-certified trainers</span>
+            <span class="career-tag">— the majority</span>
+          </div>
+          <span style="font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,0.05);color:var(--muted);">Pass</span>
+        </div>
+        <span class="career-toggle">+</span>
+      </div>
+      <div class="career-body"><div class="career-body-inner">
+        <p>Anyone who looks fit can start. They undercut certified trainers on price. No formal training, no growth mindset. Some earn enough to question whether certification is worth it.</p>
+        <p style="margin-top:0.5rem;"><strong style="color:var(--ink);">Core need:</strong> Education and legitimisation.</p>
+        <span class="career-dropout">↳ Not targeting — their need is education, not a tech platform problem. Low willingness to pay.</span>
+      </div></div>
+    </div>
+
+    <div class="career-stage" data-width="75">
+      <div class="career-bar" style="width:75%; background:#7C3AED;"></div>
+      <div class="career-header" onclick="this.parentElement.classList.toggle('open')">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex:1;">
+          <div>
+            <span class="career-name">Recently certified</span>
+            <span class="career-tag">— survival mode</span>
+          </div>
+          <span style="font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(29,158,117,0.12);color:#085041;">Target</span>
+        </div>
+        <span class="career-toggle">+</span>
+      </div>
+      <div class="career-body"><div class="career-body-inner">
+        <p>Significant investment in certification. Starting out as solo entrepreneurs. Institutions teach science, not business. A meaningful number quit within 12 months.</p>
+        <p style="margin-top:0.5rem;"><strong style="color:var(--ink);">Core need:</strong> Survival — find clients, cut non-billable hours, establish cash flow.</p>
+        <span class="career-dropout">↳ Large cohort, high urgency, clear pain. Willing to pay for anything that helps them make it past year one.</span>
+      </div></div>
+    </div>
+
+    <div class="career-stage" data-width="45">
+      <div class="career-bar" style="width:45%; background:#4A90A4;"></div>
+      <div class="career-header" onclick="this.parentElement.classList.toggle('open')">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex:1;">
+          <div>
+            <span class="career-name">Established independent</span>
+            <span class="career-tag">— retention &amp; efficiency</span>
+          </div>
+          <span style="font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(29,158,117,0.12);color:#085041;">Target</span>
+        </div>
+        <span class="career-toggle">+</span>
+      </div>
+      <div class="career-body"><div class="career-body-inner">
+        <p>Strong network, decent referrals, approaching capacity. Running out of hours. Aware the industry is competitive — adapt or perish is real.</p>
+        <p style="margin-top:0.5rem;"><strong style="color:var(--ink);">Core need:</strong> Retention, differentiation, and efficiency.</p>
+        <span class="career-dropout">↳ High willingness to pay. Retention pain maps directly to the product thesis.</span>
+      </div></div>
+    </div>
+
+    <div class="career-stage" data-width="25">
+      <div class="career-bar" style="width:25%; background:#B07830;"></div>
+      <div class="career-header" onclick="this.parentElement.classList.toggle('open')">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex:1;">
+          <div>
+            <span class="career-name">Advanced independent</span>
+            <span class="career-tag">— scaling the brand</span>
+          </div>
+          <span style="font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(180,120,20,0.1);color:#7a4a10;">Later</span>
+        </div>
+        <span class="career-toggle">+</span>
+      </div>
+      <div class="career-body"><div class="career-body-inner">
+        <p>At capacity, more leads than time. Financially independent. Building a personal brand — looking to hire coaches, grow online, create new revenue streams.</p>
+        <p style="margin-top:0.5rem;"><strong style="color:var(--ink);">Core need:</strong> Scale without diluting personal brand.</p>
+        <span class="career-dropout">↳ Right person, right category — but complex enough to be its own product. Natural expansion once L2 and L3 are won.</span>
+      </div></div>
+    </div>
+
+    <div class="career-stage" data-width="15">
+      <div class="career-bar" style="width:15%; background:#9B3BA0;"></div>
+      <div class="career-header" onclick="this.parentElement.classList.toggle('open')">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex:1;">
+          <div>
+            <span class="career-name">Gym owner</span>
+          </div>
+          <span style="font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,0.05);color:var(--muted);">Pass</span>
+        </div>
+        <span class="career-toggle">+</span>
+      </div>
+      <div class="career-body"><div class="career-body-inner">
+        <p>Turned their brand into a fitness centre. No longer a trainer — now a real estate operator. Incentivised by volume of clients, not quality of coaching.</p>
+        <p style="margin-top:0.5rem;"><strong style="color:var(--ink);">Core need:</strong> Grow revenue to cover rent, reduce operating costs.</p>
+        <span class="career-dropout">↳ Not targeting — different business category entirely. Real estate and volume management is outside what a coaching platform solves.</span>
+      </div></div>
+    </div>
+
+    <div class="career-stage" data-width="15">
+      <div class="career-bar" style="width:15%; background:#2563EB;"></div>
+      <div class="career-header" onclick="this.parentElement.classList.toggle('open')">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex:1;">
+          <div>
+            <span class="career-name">Influencer / content creator</span>
+          </div>
+          <span style="font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,0.05);color:var(--muted);">Pass</span>
+        </div>
+        <span class="career-toggle">+</span>
+      </div>
+      <div class="career-body"><div class="career-body-inner">
+        <p>Built an audience through content, not coaching. Revenue from sponsorships, affiliate marketing, online programs. Brand and charisma are the product.</p>
+        <p style="margin-top:0.5rem;"><strong style="color:var(--ink);">Core need:</strong> Stay relevant, grow audience, monetise following.</p>
+        <span class="career-dropout">↳ Not targeting — a media and audience business, not a coaching business. Content creation is outside what a coaching platform does well.</span>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<!-- ======== BRIDGE ACQUIRE ======== -->
+<div class="beat" id="s-acquire" style="margin-bottom:2rem;">
+  <p class="small-label">Bridge Acquire</p>
+  <p class="large-statement">Early-career trainers don't have a skills problem. They have a sales problem.</p>
+  <div class="evidence"><p>"Personal trainers would rather just train people. Selling themselves is a major issue and the reason some trainers quit."</p><span class="src">— Secondary research</span></div>
+</div>
+
+<div class="beat" style="margin-bottom:2rem;">
+  <p class="body-text">Recently certified trainers are early-stage solo entrepreneurs running out of runway. Institutions taught them anatomy and programming — not sales. The first 12 months are make or break.</p>
+  <p class="body-text">They're encountering a trust and differentiation problem. A potential client scrolling Instagram has no way to tell a qualified, experienced trainer from someone who just looks fit. Most competitors in this space have built scheduling tools or marketplaces. None of them solved the trust problem at the moment it actually matters: before the first conversation.</p>
+  <div class="insight-line"><p><strong>Borrowed Trust Signal —</strong> Bridge Athletic is used by your favourite players at Golden State Warriors, Chelsea FC, Manchester City FC and more.</p></div>
+  <p class="rw-caption">No other competitor can manufacture this trust signal.</p>
+</div>
+
+<div class="beat" style="margin-bottom:2rem;">
+  <p class="body-text">I mapped the entire acquisition funnel — from the moment someone decides they need a trainer, through Instagram, WhatsApp, to the sale.</p>
+  <p class="body-text">The critical moment: <strong>when a potential client clicks the link in a trainer's Instagram bio.</strong> Today they land on a Linktree, Calendly, or their own poorly-designed personal website. None communicate proof this trainer is worth the premium.</p>
+  <div class="fork">
+    <p class="fork-label">The decision</p>
+    <div class="fork-paths">
+      <div class="fork-path"><p class="fork-path-title">Obvious move</p><p>Build a marketplace. Match clients to trainers. Take a cut. But a marketplace solves the wrong problem — PTs don't lack reach. And it introduces a cold-start trap: neither side has reason to join until the other is already there.</p></div>
+      <div class="fork-path chosen"><p class="fork-path-title">What I proposed</p><p>Arm trainers with a credibility layer: verified certs, client outcomes, scheduling — where the sale already happens: on social and messaging channels.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="beat">
+  <p class="body-text">Bridge Acquire gives certified PTs a professional profile — verified credentials, client reviews with outcomes, direct booking — accessible from their Instagram bio. Not a marketplace. A trust signal at the exact moment someone is deciding whether to reach out.</p>
+  <div class="img-pair">
+    <div class="case-img"><img src="Bridge_Acquire_-On_Instagram.png" alt="Instagram to Bridge profile flow"><p class="case-img-cap">Instagram bio → Bridge profile.</p></div>
+    <div class="case-img"><img src="Bridge_Acquire_-On_WhatsApp.png" alt="WhatsApp Bridge link share"><p class="case-img-cap">Referral via WhatsApp.</p></div>
+  </div>
+  <div class="case-img" style="margin-top:0.75rem"><img src="Bridge_Acquire_-_Coverage.png" alt="Verified credentials on Bridge"><p class="case-img-cap">Verified credentials, experience, reviews. The proof that justifies the premium.</p></div>
+</div>
+
+
+
+<!-- ======== BRIDGE ENGAGE ======== -->
+<div class="beat" id="s-engage" style="margin-bottom:2rem;">
+  <p class="small-label">Bridge Engage</p>
+  <p class="large-statement">Established trainers don't need more features. They need to nourish the relationship that drives everything.</p>
+  <div class="evidence"><p>"Using this app requires MORE work than the workouts themselves! The platform is so bad that I have to quit her program."</p><span class="src">— Client review, Everfit</span></div>
+  <div class="evidence"><p>"This is slowly making me hate my beloved trainer."</p><span class="src">— Client review, Trainerize</span></div>
+</div>
+
+<div class="beat">
+  <p class="body-text">This isn't a UX problem. It's a design philosophy problem. Every competitor built coach-first, feature-heavy platforms, then tacked on a client experience. The products bloated because the <strong>intention was the same across all of them.</strong></p>
+  <p class="body-text">When the intention is the same and no differentiating principles exist, you end up at the same solution. "Better UX" is not a strategy. A different design principle for a narrower audience — that's a strategy. And since competitors are architecturally committed to their current design, rebuilding from a different principle isn't a feature update — it's starting over. The gap compounds.</p>
+</div>
+
+<div class="beat" id="s-ecosystem">
+  <p class="small-label">The ecosystem</p>
+  <p class="large-statement">Every revenue stream, every referral, every tool — all of it depends on one thing.</p>
+  <p class="body-text">The relationship between trainer and client. Word of mouth is the primary growth engine. Referrals flow when clients experience genuine progress — not when the app is flashy. When the client feels <strong>cared for.</strong></p>
+  <p class="body-text">Build a product that nourishes that relationship and everything else follows. Build one that gets in the way and clients start blaming their trainer for the app.</p>
+
+  <!-- Interactive ecosystem map -->
+  <div class="eco-map" style="margin-top:2rem;">
+    <div id="eco-interactive" style="position:relative; background:#FAFAFA; border:1px solid rgba(0,0,0,0.08); border-radius:6px; overflow:hidden; height:560px;">
+      <svg id="eco-svg" style="width:100%;height:100%;display:block;cursor:grab;"></svg>
+
+      <!-- Sidebar panel -->
+      <div id="eco-panel" style="
+        position:absolute;top:0;right:0;width:240px;height:100%;
+        background:#FFFFFF;
+        border-left:1px solid rgba(0,0,0,0.08);
+        padding:20px 16px 16px;
+        transform:translateX(100%);
+        transition:transform 0.32s cubic-bezier(0.16,1,0.3,1);
+        overflow-y:auto;
+        display:flex;flex-direction:column;gap:0;
+        font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+      ">
+        <button id="eco-panel-close" style="
+          position:absolute;top:10px;right:10px;
+          width:22px;height:22px;border-radius:50%;
+          background:rgba(0,0,0,0.07);border:none;
+          font-size:12px;color:#6A6A6A;cursor:pointer;
+          display:flex;align-items:center;justify-content:center;
+        ">✕</button>
+        <div id="eco-p-label" style="font-size:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:#9A9A9A;margin-bottom:4px;"></div>
+        <div id="eco-p-title" style="font-size:15px;font-weight:600;color:#111111;margin-bottom:12px;line-height:1.3;display:flex;align-items:center;gap:6px;">
+          <span id="eco-p-dot" style="width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block;"></span>
+          <span id="eco-p-name"></span>
+        </div>
+        <div id="eco-p-desc" style="font-size:13px;color:#3A3A3A;line-height:1.7;margin-bottom:14px;"></div>
+        <div id="eco-p-conns"></div>
+        <div id="eco-p-notes"></div>
+      </div>
+
+      <!-- Controls -->
+      <div style="position:absolute;bottom:14px;left:14px;display:flex;gap:5px;z-index:10;">
+        <button class="eco-ctrl" id="eco-zin">+</button>
+        <button class="eco-ctrl" id="eco-zout">−</button>
+        <button class="eco-ctrl" id="eco-rst">⌂</button>
+      </div>
+
+      <!-- Edge tooltip -->
+      <div id="eco-tooltip" style="
+        position:absolute;pointer-events:none;opacity:0;
+        background:rgba(17,17,17,0.88);color:rgba(255,255,255,0.9);
+        font-family:'Inter',-apple-system,sans-serif;font-size:11px;
+        padding:5px 9px;border-radius:4px;line-height:1.55;
+        max-width:200px;transition:opacity 0.15s;z-index:20;
+      "></div>
+
+      <p style="position:absolute;bottom:14px;right:14px;font-family:'Inter',-apple-system,sans-serif;font-size:10px;color:#A8ADB3;font-style:italic;">Click a node to explore</p>
+    </div>
+  </div>
+</div>
+
+<style>
+.eco-ctrl {
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(0,0,0,0.1);
+  color: #3A3A3A; width:28px;height:28px;border-radius:5px;
+  font-size:14px;cursor:pointer;font-family:'Inter',-apple-system,sans-serif;
+  display:flex;align-items:center;justify-content:center;
+  transition:background 0.15s;
+}
+.eco-ctrl:hover { background:rgba(255,255,255,1); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+.eco-conn-card {
+  border-left: 2.5px solid #ccc;
+  padding: 6px 10px;
+  margin-bottom: 5px;
+  border-radius: 0 4px 4px 0;
+  background: rgba(0,0,0,0.02);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.eco-conn-card:hover { background: rgba(0,0,0,0.05); }
+.eco-conn-card-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-weight: 500;
+  color: #111111;
+  line-height: 1.4;
+}
+.eco-conn-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+.eco-conn-card-notes {
+  margin-top: 4px;
+  padding-left: 17px;
+}
+.eco-conn-note-line {
+  font-size: 11px;
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: #6A6A6A;
+  line-height: 1.6;
+}
+.eco-note-block {
+  border-left:2px solid #3A6B5C;padding:5px 8px;
+  border-radius:0 3px 3px 0;font-size:12px;
+  font-family:'Inter',-apple-system,sans-serif;
+  color:#3A3A3A;line-height:1.6;margin-bottom:5px;
+  background:rgba(58,107,92,0.05);
+}
+.eco-sec-label {
+  font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
+  color:#9A9A9A;margin:10px 0 5px;font-family:'IBM Plex Mono',monospace;
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+(function() {
+
+// ── NODES ────────────────────────────────────────────────────────────────────
+const NODES = [
+  { id:"PT",    label:"Personal\nTrainer",            group:"core",   r:46, stroke:"#8B5CF6", fill:"#C4A8FF" },
+  { id:"CL",    label:"Client",                       group:"core",   r:42, stroke:"#2563EB", fill:"#7EC8F0" },
+  { id:"TOOLS", label:"Tools",                        group:"tools",  r:30, stroke:"#7C3AED", fill:"#DDD0FF" },
+  { id:"CAL",   label:"Calendar",                     group:"tleaf",  r:18, stroke:"#9D6FF5", fill:"#EDE4FF" },
+  { id:"XLS",   label:"Excel",                        group:"tleaf",  r:18, stroke:"#9D6FF5", fill:"#EDE4FF" },
+  { id:"CALY",  label:"Calendly",                     group:"tleaf",  r:18, stroke:"#9D6FF5", fill:"#EDE4FF" },
+  { id:"LTR",   label:"Linktree",                     group:"tleaf",  r:18, stroke:"#9D6FF5", fill:"#EDE4FF" },
+  { id:"PWB",   label:"Personal\nWebsite",            group:"tleaf",  r:18, stroke:"#9D6FF5", fill:"#EDE4FF" },
+  { id:"TSFT",  label:"Training\nSoftware",           group:"tleaf",  r:20, stroke:"#9D6FF5", fill:"#EDE4FF" },
+  { id:"MED",   label:"Medical\nInstitutions",        group:"med",    r:30, stroke:"#4A90A4", fill:"#C8E8F0" },
+  { id:"HOSP",  label:"Hospitals",                    group:"mleaf",  r:18, stroke:"#6AAAB8", fill:"#DCF0F5" },
+  { id:"INS",   label:"Insurance\nProviders",         group:"mleaf",  r:18, stroke:"#6AAAB8", fill:"#DCF0F5" },
+  { id:"DIAG",  label:"Diagnostic\nCentres",          group:"mleaf",  r:20, stroke:"#6AAAB8", fill:"#DCF0F5" },
+  { id:"CERT",  label:"Certification\nbodies",        group:"cert",   r:24, stroke:"#9B3BA0", fill:"#EDD0EE" },
+  { id:"GYM",   label:"Commercial\nGyms",             group:"phys",   r:28, stroke:"#B07830", fill:"#FFE0B0" },
+  { id:"PTS",   label:"Physical\nTraining\nSpaces",   group:"phys",   r:30, stroke:"#B07830", fill:"#FFE8C0" },
+  { id:"FF",    label:"Fitness\nFranchises",          group:"pleaf",  r:18, stroke:"#C49050", fill:"#FFF0D0" },
+  { id:"PS",    label:"Personal\nStudios",            group:"pleaf",  r:18, stroke:"#C49050", fill:"#FFF0D0" },
+  { id:"RG",    label:"Residential\nGyms",            group:"pleaf",  r:18, stroke:"#C49050", fill:"#FFF0D0" },
+  { id:"SCH",   label:"Schools",                      group:"pleaf",  r:18, stroke:"#C49050", fill:"#FFF0D0" },
+  { id:"OSN",   label:"Online\nSocial\nNetwork",      group:"social", r:38, stroke:"#888888", fill:"#D8D8D8" },
+  { id:"BNWK",  label:"Business\nNetworks",           group:"social", r:24, stroke:"#AAAAAA", fill:"#E8E8E8" },
+  { id:"CTST",  label:"Client\nTestimonials",         group:"social", r:24, stroke:"#AAAAAA", fill:"#E8E8E8" },
+  { id:"TCON",  label:"Training\nContent",            group:"social", r:24, stroke:"#AAAAAA", fill:"#E8E8E8" },
+  { id:"NCF",   label:"Network of\nClose Friends",    group:"social", r:26, stroke:"#C49888", fill:"#FFE0CC" },
+  { id:"DEMO",  label:"Demographics",                 group:"cctx",   r:22, stroke:"#6090B8", fill:"#D8E8F4" },
+  { id:"FT",    label:"Fitness\nTrackers",            group:"cctx",   r:22, stroke:"#4A8A68", fill:"#C8E8D8" },
+  { id:"HAB",   label:"Habits",                       group:"hab",    r:30, stroke:"#2A8090", fill:"#B8E8E0" },
+  { id:"SWEAT", label:"Sweat",                        group:"hleaf",  r:16, stroke:"#4AAAB8", fill:"#CCF0F4" },
+  { id:"SLEEP", label:"Sleep",                        group:"hleaf",  r:16, stroke:"#4AAAB8", fill:"#CCF0F4" },
+  { id:"SSUP",  label:"Social\nSupport",              group:"hleaf",  r:16, stroke:"#4AAAB8", fill:"#CCF0F4" },
+  { id:"DIET",  label:"Diet",                         group:"hleaf",  r:16, stroke:"#4AAAB8", fill:"#CCF0F4" },
+  { id:"STRS",  label:"Stress",                       group:"hleaf",  r:16, stroke:"#4AAAB8", fill:"#CCF0F4" },
+  { id:"SUBS",  label:"Substances",                   group:"hleaf",  r:16, stroke:"#4AAAB8", fill:"#CCF0F4" },
+  { id:"TSUP",  label:"Training\nSupplies",           group:"sup",    r:28, stroke:"#4878A8", fill:"#C8DCF0" },
+  { id:"TG",    label:"Training\nGear",               group:"sleaf",  r:18, stroke:"#6A92B8", fill:"#DCEAF8" },
+  { id:"EQ",    label:"Equipment",                    group:"sleaf",  r:18, stroke:"#6A92B8", fill:"#DCEAF8" },
+  { id:"SPLE",  label:"Supplements",                  group:"sleaf",  r:18, stroke:"#6A92B8", fill:"#DCEAF8" },
+  { id:"AHP",   label:"Allied Health\nProfessionals", group:"ahp",    r:30, stroke:"#2A7850", fill:"#C0ECD8" },
+  { id:"MHP",   label:"Mental Health\nProfessionals", group:"aleaf",  r:20, stroke:"#4A9868", fill:"#D8F4E8" },
+  { id:"NUTR",  label:"Nutritionists",                group:"aleaf",  r:20, stroke:"#4A9868", fill:"#D8F4E8" },
+  { id:"PHYS",  label:"Physio-\ntherapists",          group:"aleaf",  r:20, stroke:"#4A9868", fill:"#D8F4E8" },
+  { id:"DOC",   label:"Doctors",                      group:"aleaf",  r:20, stroke:"#4A9868", fill:"#D8F4E8" },
+  { id:"STR",   label:"Struggling\nMoments",          group:"strg",   r:28, stroke:"#3A5898", fill:"#B0C4E8" },
+  { id:"HLP",   label:"Have a health\nproblem",       group:"sgleaf", r:20, stroke:"#5A78B8", fill:"#C8D8F4" },
+  { id:"BIG",   label:"Big life\nchange",             group:"sgleaf", r:20, stroke:"#5A78B8", fill:"#C8D8F4" },
+  { id:"MIR",   label:"Don't like\nthe mirror",       group:"sgleaf", r:18, stroke:"#5A78B8", fill:"#C8D8F4" },
+  { id:"ENR",   label:"No energy\nfor child",         group:"sgleaf", r:18, stroke:"#5A78B8", fill:"#C8D8F4" },
+  { id:"STR2",  label:"Can't lift\nheavy objects",    group:"sgleaf", r:18, stroke:"#5A78B8", fill:"#C8D8F4" },
+  { id:"FAT",   label:"Called fat\nby someone",       group:"sgleaf", r:18, stroke:"#5A78B8", fill:"#C8D8F4" },
+];
+
+const EDGES = [
+  { s:"PT",   t:"CL",   type:"relationship", note:"" },
+  { s:"PT",   t:"TOOLS",note:"" },
+  { s:"TOOLS",t:"CAL",  note:"" }, { s:"TOOLS",t:"XLS",  note:"" },
+  { s:"TOOLS",t:"CALY", note:"" }, { s:"TOOLS",t:"LTR",  note:"" },
+  { s:"TOOLS",t:"PWB",  note:"" }, { s:"TOOLS",t:"TSFT", note:"" },
+  { s:"PT",   t:"MED",  note:"" },
+  { s:"MED",  t:"HOSP", note:"" }, { s:"MED",t:"INS",note:"" }, { s:"MED",t:"DIAG",note:"" },
+  { s:"PT",   t:"CERT", note:"" },
+  { s:"PT",   t:"GYM",  note:"60/40 revenue split for PT contractors · Non-competitive, high-trust source of leads · Source of leads + space to train" },
+  { s:"PT",   t:"PTS",  note:"High CAPEX but route to scale the business · Lack of facilities can limit SAM · Highly location dependent — high-income neighbourhoods = more travel + non-billable hours" },
+  { s:"PTS",  t:"FF",   note:"" }, { s:"PTS",t:"PS",note:"" }, { s:"PTS",t:"RG",note:"" }, { s:"PTS",t:"SCH",note:"" },
+  { s:"PT",   t:"OSN",  note:"Post promotional content → get leads · Publish proof of worth · Offline networks are a valuable source of leads" },
+  { s:"PT",   t:"BNWK", note:"" }, { s:"PT",t:"CTST",note:"Post promotional content · get leads" }, { s:"PT",t:"TCON",note:"Source of leads" },
+  { s:"OSN",  t:"CL",   note:"PT looks for clients with online following · Source of referrals + brand exposure + credibility" },
+  { s:"CTST", t:"CL",   note:"Happy clients provide great reviews" },
+  { s:"TCON", t:"CL",   note:"\"I should join the gym\" → Gym memberships" },
+  { s:"BNWK", t:"CL",   note:"" },
+  { s:"CL",   t:"NCF",  type:"dashed", note:"\"Bring a friend along for the free class\" · Will tell friends about PT → strongest source of referrals" },
+  { s:"CL",   t:"HAB",  note:"" },
+  { s:"HAB",  t:"SWEAT",note:"" }, { s:"HAB",t:"SLEEP",note:"" }, { s:"HAB",t:"SSUP",note:"" },
+  { s:"HAB",  t:"DIET", note:"" }, { s:"HAB",t:"STRS",note:"" }, { s:"HAB",t:"SUBS",note:"" },
+  { s:"CL",   t:"DEMO", note:"" }, { s:"CL",t:"FT",note:"" },
+  { s:"CL",   t:"TSUP", note:"" },
+  { s:"TSUP", t:"TG",   note:"" }, { s:"TSUP",t:"EQ",note:"" }, { s:"TSUP",t:"SPLE",note:"" },
+  { s:"CL",   t:"AHP",  note:"" },
+  { s:"AHP",  t:"MHP",  note:"" }, { s:"AHP",t:"NUTR",note:"" }, { s:"AHP",t:"PHYS",note:"" }, { s:"AHP",t:"DOC",note:"" },
+  { s:"CL",   t:"STR",  note:"" },
+  { s:"STR",  t:"HLP",  note:"" }, { s:"STR",t:"BIG",note:"" }, { s:"STR",t:"MIR",note:"" },
+  { s:"STR",  t:"ENR",  note:"" }, { s:"STR",t:"STR2",note:"" }, { s:"STR",t:"FAT",note:"" },
+];
+
+const DESC = {
+  PT:   "The central actor. Their business depends on finding clients, retaining them, and delivering results. Everything in this map either feeds their income, enables their work, or shapes the client journey.",
+  CL:   "The other core actor. They arrive through specific triggers, come from particular demographics, and are surrounded by habits, social networks, and health professionals that shape their decision to hire a PT.",
+  TOOLS:"The operational stack: scheduling, tracking, marketing, and client management — letting a PT run a professional business without an admin team.",
+  MED:  "Referral partners. Clinics, hospitals, and insurers can route clients with specific health needs to qualified PTs.",
+  CERT: "Legitimize the PT's credentials. Required for insurance, gym partnerships, and client trust. Low barrier to entry creates a crowded market.",
+  GYM:  "Ready-made client pool + space. PTs typically operate as contractors on a 60/40 split. Non-competitive relationship, high-trust lead source.",
+  PTS:  "Where the work happens. The type of space shapes the PT's business model, scalability, and unit economics significantly.",
+  OSN:  "Highest-volume lead channel. Proof of results, educational content, and transformations compound into credibility and inbound leads.",
+  BNWK: "Business and professional networks. Offline referrals remain a high-trust, high-conversion lead source — especially for premium clients.",
+  NCF:  "A client's close friends are the single strongest referral source. 'Bring a friend for a free class' is the classic activation mechanic.",
+  CTST: "Client testimonials fuel social proof, power the content engine, and reduce friction for new prospects.",
+  TCON: "Training content builds an audience and creates the 'I should join a gym' impulse. Gateway to memberships and PT inquiries.",
+  HAB:  "Daily habits are both the battlefield and the outcome. Sweat, sleep, diet, stress, social support, substances — a PT's real job is shifting these sustainably.",
+  TSUP: "Adjacent spend clients make in parallel. Gear, equipment, and supplements are affiliate and referral opportunities for PTs.",
+  AHP:  "Both referral sources and collaborators. A PT with strong relationships here gets a steady stream of warm referrals.",
+  STR:  "The emotional triggers that convert a 'maybe someday' prospect into a paying client. Understanding these is the foundation of all effective PT marketing.",
+};
+
+const GLABEL = {
+  core:"Core Actor", tools:"Tools", tleaf:"Tool", med:"Medical Cluster", mleaf:"Medical",
+  cert:"Certification", phys:"Physical Space", pleaf:"Training Space",
+  social:"Network / Social", cctx:"Client Context", hab:"Habits", hleaf:"Habit Factor",
+  sup:"Training Supplies", sleaf:"Supply", ahp:"Allied Health", aleaf:"Health Professional",
+  strg:"Struggling Moments", sgleaf:"Trigger Moment",
+};
+
+// ── POSITIONS (virtual 1400×900) ────────────────────────────────────────────
+const POS = {
+  PT:[480,420], CL:[920,420],
+  TOOLS:[260,195], CAL:[110,90], XLS:[265,65], CALY:[80,185], LTR:[370,75], PWB:[100,270], TSFT:[195,320],
+  MED:[225,470], HOSP:[65,385], INS:[100,490], DIAG:[65,570],
+  CERT:[295,600], GYM:[650,610], PTS:[480,640],
+  FF:[310,760], PS:[460,770], RG:[375,870], SCH:[575,750],
+  OSN:[700,175], BNWK:[860,90], CTST:[555,255], TCON:[595,535],
+  NCF:[940,210], DEMO:[815,600], FT:[1055,315],
+  HAB:[1130,450], SWEAT:[1095,280], SLEEP:[1225,310], SSUP:[1275,450], DIET:[1235,565], STRS:[1115,585], SUBS:[1295,570],
+  TSUP:[1105,185], TG:[1050,70], EQ:[1195,75], SPLE:[1270,190],
+  AHP:[950,615], MHP:[815,720], NUTR:[895,810], PHYS:[1035,790], DOC:[1130,715],
+  STR:[755,530], HLP:[655,660], BIG:[795,650], MIR:[695,770], ENR:[835,770], STR2:[575,770], FAT:[645,870],
+};
+
+const nodeMap = {};
+NODES.forEach(n => { n.x = POS[n.id]?.[0]??700; n.y = POS[n.id]?.[1]??420; nodeMap[n.id] = n; });
+
+// ── D3 ───────────────────────────────────────────────────────────────────────
+const svg = d3.select("#eco-svg");
+const defs = svg.append("defs");
+["default","rel","hl"].forEach((t,i) => {
+  const colors = ["rgba(0,0,0,0.25)","#2A8050","rgba(0,0,0,0.7)"];
+  defs.append("marker").attr("id","eco-arr-"+t)
+    .attr("viewBox","0 -4 8 8").attr("refX",7).attr("refY",0)
+    .attr("markerWidth",5).attr("markerHeight",5).attr("orient","auto")
+    .append("path").attr("d","M0,-4L8,0L0,4").attr("fill",colors[i]);
+});
+
+const root = svg.append("g");
+const zoom = d3.zoom().scaleExtent([0.1,4]).on("zoom", e => root.attr("transform", e.transform));
+svg.call(zoom).on("dblclick.zoom", null);
+
+function edgePath(s,t) {
+  const dx=t.x-s.x, dy=t.y-s.y, dist=Math.sqrt(dx*dx+dy*dy);
+  if(!dist) return "";
+  const x1=s.x+dx/dist*s.r, y1=s.y+dy/dist*s.r;
+  const x2=t.x-dx/dist*(t.r+7), y2=t.y-dy/dist*(t.r+7);
+  const mx=(x1+x2)/2-dy/dist*28, my=(y1+y2)/2+dx/dist*28;
+  return `M${x1},${y1} Q${mx},${my} ${x2},${y2}`;
+}
+
+// Draw edges
+const edgeSel = root.selectAll(".eco-edge")
+  .data(EDGES).enter().append("path")
+  .attr("class","eco-edge")
+  .attr("fill","none")
+  .attr("stroke", d => d.type==="relationship" ? "#2A8050" : "rgba(0,0,0,0.18)")
+  .attr("stroke-width", d => d.type==="relationship" ? 2.5 : 1.3)
+  .attr("stroke-dasharray", d => d.type==="dashed" ? "5,4" : "none")
+  .attr("marker-end", d => d.type==="relationship" ? "url(#eco-arr-rel)" : "url(#eco-arr-default)")
+  .attr("d", d => edgePath(nodeMap[d.s], nodeMap[d.t]))
+  .style("cursor", "default");
+
+// Draw nodes
+const nodeSel = root.selectAll(".eco-node-g")
+  .data(NODES).enter().append("g")
+  .attr("class","eco-node-g")
+  .attr("transform", d => `translate(${d.x},${d.y})`)
+  .style("cursor","pointer")
+  .on("click", (e,d) => { e.stopPropagation(); selectNode(d); });
+
+nodeSel.append("circle")
+  .attr("r", d => d.r)
+  .attr("fill", d => d.fill)
+  .attr("stroke", d => d.stroke)
+  .attr("stroke-width", d => d.group==="core" ? 2.5 : 1.5)
+  .style("transition","filter 0.18s")
+  .on("mouseover", function() { d3.select(this).style("filter","brightness(0.88)"); })
+  .on("mouseout",  function() { d3.select(this).style("filter","none"); });
+
+nodeSel.each(function(d) {
+  const g = d3.select(this);
+  const lines = d.label.split("\n");
+  const lh = d.r < 20 ? 11 : 13;
+  const total = lines.length * lh;
+  lines.forEach((line,i) => {
+    g.append("text")
+      .attr("text-anchor","middle").attr("dominant-baseline","central")
+      .attr("font-family","'Inter',-apple-system,sans-serif")
+      .attr("font-size", d.r < 20 ? 9.5 : d.r < 28 ? 10.5 : d.r < 38 ? 11.5 : 13)
+      .attr("font-weight", d.group==="core" ? 600 : 500)
+      .attr("fill", "#1A1A1A")
+      .attr("pointer-events","none")
+      .attr("y", -total/2 + i*lh + lh/2)
+      .text(line);
+  });
+});
+
+// ── PANEL / INTERACTION ──────────────────────────────────────────────────────
+let activeId = null;
+const panel = document.getElementById("eco-panel");
+
+function selectNode(d) {
+  if(activeId === d.id) { deselect(); return; }
+  activeId = d.id;
+
+  const conn = new Set([d.id]);
+  EDGES.forEach(e => { if(e.s===d.id) conn.add(e.t); if(e.t===d.id) conn.add(e.s); });
+
+  nodeSel.style("opacity", n => conn.has(n.id) ? 1 : 0.12);
+  edgeSel
+    .attr("stroke", e => {
+      if(e.type==="relationship") return "#2A8050";
+      if(e.s===d.id||e.t===d.id) return "rgba(0,0,0,0.55)";
+      return "rgba(0,0,0,0.04)";
+    })
+    .attr("stroke-width", e => (e.s===d.id||e.t===d.id) ? 2 : 1.3)
+    .attr("marker-end", e => {
+      if(e.type==="relationship") return "url(#eco-arr-rel)";
+      if(e.s===d.id||e.t===d.id) return "url(#eco-arr-hl)";
+      return "url(#eco-arr-default)";
+    });
+
+  document.getElementById("eco-p-dot").style.background = d.stroke;
+  document.getElementById("eco-p-name").textContent = d.label.replace(/\n/g," ");
+  document.getElementById("eco-p-label").textContent = GLABEL[d.group]||d.group;
+  document.getElementById("eco-p-desc").textContent = DESC[d.id]||"";
+
+  const out=[],inc=[];
+  EDGES.forEach(e => { if(e.s===d.id) out.push(e); if(e.t===d.id) inc.push(e); });
+
+  let ch="";
+  if(out.length){
+    ch+=`<div class="eco-sec-label">Connects to</div>`;
+    out.forEach(e=>{
+      const n=nodeMap[e.t];
+      const notes = e.note ? e.note.split(" · ").map(p=>p.trim()).filter(Boolean) : [];
+      ch+=`<div class="eco-conn-card" style="border-left-color:${n.stroke}" onclick="ecoJump('${n.id}')">
+        <div class="eco-conn-card-name">
+          <span class="eco-conn-dot" style="background:${n.fill};border:1.5px solid ${n.stroke}"></span>
+          ${n.label.replace(/\n/g," ")}
+        </div>
+        ${notes.length ? `<div class="eco-conn-card-notes">${notes.map(p=>`<div class="eco-conn-note-line">— ${p}</div>`).join("")}</div>` : ""}
+      </div>`;
+    });
+  }
+  if(inc.length){
+    ch+=`<div class="eco-sec-label" style="margin-top:14px;">Receives from</div>`;
+    inc.forEach(e=>{
+      const n=nodeMap[e.s];
+      const notes = e.note ? e.note.split(" · ").map(p=>p.trim()).filter(Boolean) : [];
+      ch+=`<div class="eco-conn-card" style="border-left-color:${n.stroke}" onclick="ecoJump('${n.id}')">
+        <div class="eco-conn-card-name">
+          <span class="eco-conn-dot" style="background:${n.fill};border:1.5px solid ${n.stroke}"></span>
+          ${n.label.replace(/\n/g," ")}
+        </div>
+        ${notes.length ? `<div class="eco-conn-card-notes">${notes.map(p=>`<div class="eco-conn-note-line">— ${p}</div>`).join("")}</div>` : ""}
+      </div>`;
+    });
+  }
+  document.getElementById("eco-p-conns").innerHTML = ch;
+  document.getElementById("eco-p-notes").innerHTML = "";
+
+  panel.style.transform = "translateX(0)";
+
+  // pan to node
+  const t = d3.zoomTransform(svg.node());
+  const W = svg.node().clientWidth, H = svg.node().clientHeight;
+  svg.transition().duration(480).call(zoom.transform,
+    d3.zoomIdentity.translate(W/2 - d.x*t.k, H/2 - d.y*t.k).scale(t.k)
+  );
+}
+
+function deselect(){
+  activeId=null;
+  panel.style.transform="translateX(100%)";
+  nodeSel.style("opacity",1);
+  edgeSel
+    .attr("stroke", e => e.type==="relationship" ? "#2A8050" : "rgba(0,0,0,0.18)")
+    .attr("stroke-width", e => e.type==="relationship" ? 2.5 : 1.3)
+    .attr("marker-end", e => e.type==="relationship" ? "url(#eco-arr-rel)" : "url(#eco-arr-default)");
+}
+
+window.ecoJump = function(id){ const n=nodeMap[id]; if(n) selectNode(n); };
+document.getElementById("eco-panel-close").onclick = deselect;
+svg.on("click", deselect);
+
+// Controls
+document.getElementById("eco-zin").onclick  = () => svg.transition().duration(240).call(zoom.scaleBy,1.45);
+document.getElementById("eco-zout").onclick = () => svg.transition().duration(240).call(zoom.scaleBy,0.69);
+document.getElementById("eco-rst").onclick  = () => { deselect(); fitView(); };
+
+function fitView(){
+  const xs=NODES.map(n=>n.x), ys=NODES.map(n=>n.y);
+  const minX=Math.min(...xs)-70, maxX=Math.max(...xs)+70;
+  const minY=Math.min(...ys)-70, maxY=Math.max(...ys)+70;
+  const W=svg.node().clientWidth, H=svg.node().clientHeight;
+  const scale=Math.min(W/(maxX-minX),H/(maxY-minY))*0.9;
+  const tx=W/2-(minX+(maxX-minX)/2)*scale, ty=H/2-(minY+(maxY-minY)/2)*scale;
+  svg.transition().duration(650).call(zoom.transform, d3.zoomIdentity.translate(tx,ty).scale(scale));
+}
+
+// Init
+setTimeout(fitView, 80);
+
+})();
+</script>
+
+
+
+
+<div class="beat">
+  <p class="large-statement">The principle: the product exists to nourish the relationship.</p>
+  <p class="body-text">Every design decision flows from one question — does this make the client feel more cared for and the trainer more effective at demonstrating progress?</p>
+
+  <div class="chain">
+    <p class="chain-header">Who wins if you win</p>
+    <div class="chain-step">
+      <div class="chain-dot"></div>
+      <div>
+        <p><strong>Client feels cared for.</strong> The app opens to coach chat. Meals, workouts logged in conversation — creating a sense of sharing. Progress is visible, not buried in dashboards.</p>
+        <span class="chain-arrow">↓ therefore</span>
+      </div>
+    </div>
+    <div class="chain-step">
+      <div class="chain-dot"></div>
+      <div>
+        <p><strong>Trainer grows revenue.</strong> Engaged clients stay longer, refer friends, buy supplements, opt into online training when travelling. Retention improves. Differentiation is built into the product.</p>
+        <span class="chain-arrow">↓ therefore</span>
+      </div>
+    </div>
+    <div class="chain-step">
+      <div class="chain-dot"></div>
+      <div>
+        <p><strong>Bridge becomes irreplaceable.</strong> Not because of features. Because it's the layer where the relationship lives — the communication hub, the source of truth, the thing neither side wants to leave.</p>
+      </div>
+    </div>
+    <div class="chain-outcome"><p>The product doesn't serve the trainer. It serves the relationship. The trainer's success is a byproduct.</p></div>
+  </div>
+</div>
+
+<div class="beat">
+  <div class="case-img"><img src="Bridge_Engage.png" alt="Bridge Engage client and coach chat"><p class="case-img-cap">Left: client view — chat-first, meals in conversation. Right: coach view — assistant coach surfaces insights. Never speaks to the client directly.</p></div>
+</div>
+
+<div class="beat">
+  <p class="large-statement">The AI assistant that never talks to the client.</p>
+  <p class="body-text">The assistant coach — visible only to the trainer — surfaces insights, suggests messages, prepares pre-session briefs. It makes the coach more effective.</p>
+  <p class="body-text">But it <strong>never speaks directly to the client.</strong></p>
+  <p class="body-text">The relationship between coach and client is what makes progress happen. AI as intermediary would dilute the very thing that makes the product work.</p>
+  <div class="insight-line"><p>In a market where progress depends on one person feeling genuinely cared for by another, the role of technology is to make the caring more visible — not to automate it.</p></div>
+</div>
+
+
+
+<!-- ======== NETWORK ======== -->
+<div class="beat" id="s-network">
+  <p class="small-label">The Network</p>
+  <p class="large-statement">If Bridge Engage works, it unlocks something much larger.</p>
+  <p class="body-text">Trainers' clients also work with nutritionists, physiotherapists, mental health professionals, doctors. Today, each works in their own silo.</p>
+  <p class="body-text">If Bridge becomes the communication hub, it could expand into a <strong>market network</strong> — allied health professionals collaborating around a single client's health.</p>
+  <div class="case-img"><img src="Networked_System.jpg" alt="Bridge Network concept"><p class="case-img-cap">Non-competitive professionals collaborating around client health. Referrals flow freely because no one competes with each other.</p></div>
+  <p class="body-text" style="margin-top:1.5rem">Not a feature addition. A network effect. A fundamentally different competitive position from anything existing players could bolt on.</p>
+</div>
+
+<div class="footer">
+  <span>Rishabh Sethi · 2026</span>
+  <span>Dubai, UAE</span>
+</div>
+
+</div>
+
+<script>
+// === Beat scroll reveal ===
+const bObs = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }); }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.beat').forEach(el => bObs.observe(el));
+
+// === Research wall data (3-level: headline → theme → quotes) ===
+const rwData = [
+  {
+    theme: "It requires fortitude",
+    subs: [
+      { label: "The highs are high", quotes: [
+        '"There is no better feeling than helping someone achieve their goal — it\'s truly humbling to watch someone completely transform not just their body but their whole life."',
+        '"My marriage has been better lately."',
+        '"I got a promotion, must be all this extra energy and focus I have now."',
+        '"I\'m just in such a better mood when I get home at night, I really enjoy playing with my kids now."',
+      ]},
+      { label: "Nobody takes you seriously", quotes: [
+        '"I swear my father\'s eyes rolled back in his head. I\'d be back in engineering soon to earn a \'respectable\' living, I\'m sure he thought."',
+        '"Am I generally worried about being taken seriously by other people?"',
+      ]},
+      { label: "Your day has a hole in the middle", quotes: [
+        '"5-11am. 4-9pm. A huge gap in between. You learn to take naps."',
+        '"Am I prepared to deal with an often erratic work life?"',
+      ]},
+      { label: "You're always on", quotes: [
+        '"You cannot express fatigue whether it\'s 5am or your 10th client of the day. They are there to be motivated, not to hear about your bad day."',
+        '"Personal trainers are always on stage — it\'s such an image conscious profession, and thus a very stressful career."',
+        '"A dentist can\'t have bad teeth."',
+      ]},
+      { label: "You never stop learning", quotes: [
+        '"As a trainer, in order to keep your skills up to date, it is important to constantly educate yourself on new tendencies — even if you don\'t really like them."',
+        '"I love learning new things, but it can be hard to keep up with it all, especially if you have a packed training schedule."',
+      ]},
+    ]
+  },
+  {
+    theme: "They became trainers, not salespeople",
+    subs: [
+      { label: "It's the thing they hate most", quotes: [
+        '"Personal trainers would rather just train people. Selling themselves is a major issue and the reason some trainers quit."',
+        '"Trainers can\'t make a living without selling sessions and actually having clients show up."',
+        '"The sales aspect is the biggest business challenge. It is also the least enjoyable for me, but necessary to build a client base."',
+      ]},
+      { label: "Clients don't understand the price", quotes: [
+        '"Sometimes potential clients balk at the price, possibly because they\'re unaware of the countless hours we\'ve spent studying and practicing."',
+      ]},
+      { label: "Word of mouth is the whole game", quotes: [
+        '"This is a very word of mouth driven industry."',
+        '"As personal trainers, our services are not on the priority list — you need to find the right crowd, people with enough income and motivation to invest in their wellness."',
+      ]},
+      { label: "If you can't sell, you don't last", quotes: [
+        '"The turnover for trainers is pretty high if you cannot sell in the 90 day probation period."',
+        '"Trainers can\'t make a living without selling sessions and actually having clients show up. If I could focus just on fitness and helping people, that would be awesome."',
+      ]},
+    ]
+  },
+  {
+    theme: "The money doesn't add up",
+    subs: [
+      { label: "It takes years to feel stable", quotes: [
+        '"You\'re only as secure as the money in hand. If you\'re lucky you get long term clients that assuage that pain."',
+        '"There\'s added financial stress since you only get paid when you work."',
+        '"It\'s difficult to forecast your monthly income — one month you make £3000, the next you may only make £1000."',
+      ]},
+      { label: "You can only sell so many hours", quotes: [
+        '"Even if you stay booked all day, at the end of the day you are only able to make so much because you\'re a one-man show."',
+      ]},
+      { label: "Everyone's a trainer now", quotes: [
+        '"It\'s a very competitive industry and there are usually many other trainers for the clients to choose from."',
+        '"There are a ton of trainers and coaches and it\'s hard to distinguish yourself from the crowd."',
+        '"There are so many schools and courses that offer certifications — the quality is less and the quantity is more."',
+      ]},
+      { label: "Summer eats your calendar", quotes: [
+        '"When families take breaks they\'re gone for 2-3 weeks. That can mess up your financial planning."',
+        '"Factors such as the school year, traffic, holidays, sick time can all affect your bottom line."',
+      ]},
+    ]
+  },
+  {
+    theme: "There's an invisible tax",
+    subs: [
+      { label: "Every client is a paper trail", quotes: [
+        '"I ended up with pages and pages of forms for exercises, reps, measurements, testing results, history, waivers, diet."',
+        '"Nowadays we can keep track digitally, which reduces storage space. It doesn\'t, however, reduce the amount of information that has to be recorded, studied and interpreted."',
+      ]},
+      { label: "You're your own accountant", quotes: [
+        '"If you are self-employed, you are responsible for paying your own taxes — documenting expenses, payments, mileage."',
+      ]},
+      { label: "You're one injury away from a lawsuit", quotes: [
+        '"It is imperative for your sake and the client\'s sake to have good liability coverage."',
+        '"Trainers must renew their certification every 2 years. That can cost anywhere from $200–$500."',
+      ]},
+    ]
+  },
+  {
+    theme: "The gym owns you",
+    subs: [
+      { label: "They take a big cut", quotes: [
+        '"Sometimes a 60/40 split — and sometimes the trainer gets much less if management signed the client."',
+        '"If the trainer works independently, they\'re responsible for either the equipment, the overhead, or transportation."',
+      ]},
+      { label: "You train where they let you", quotes: [
+        '"If gyms in your area allow you a deal to access their space, that\'s great — if not, you will find many limitations."',
+      ]},
+      { label: "They control who finds you", quotes: [
+        '"One bonus to working through a gym is a pool of potential clients readily available."',
+        '"Independent trainers must invest in marketing — referral bonuses, social media, business cards, flyers."',
+      ]},
+    ]
+  },
+];
+
+// === Research wall interaction ===
+const rwGrid = document.getElementById('rwall');
+let activeThemeIdx = null;
+let activeSubIdx = null;
+
+function closeAll() {
+  rwGrid.querySelectorAll('.rw-injected-row').forEach(r => { r.classList.remove('open'); setTimeout(() => r.remove(), 400); });
+  rwGrid.querySelectorAll('.rw-theme-card').forEach(c => c.classList.remove('active'));
+  rwGrid.querySelectorAll('.rw-sub-card').forEach(c => c.classList.remove('active'));
+  activeThemeIdx = null;
+  activeSubIdx = null;
+}
+
+function injectRow(afterEl, content, cls) {
+  const row = document.createElement('div');
+  row.className = 'rw-injected-row ' + cls;
+  content.forEach(item => row.appendChild(item));
+  afterEl.insertAdjacentElement('afterend', row);
+  requestAnimationFrame(() => requestAnimationFrame(() => row.classList.add('open')));
+  return row;
+}
+
+rwData.forEach((item, ti) => {
+  const card = document.createElement('span');
+  card.className = 'rw-theme-card';
+  card.textContent = item.theme;
+  card.dataset.ti = ti;
+
+  card.addEventListener('click', () => {
+    // Clicking active purple → close everything
+    if (activeThemeIdx === ti) { closeAll(); return; }
+
+    // Close any existing injected rows
+    closeAll();
+
+    activeThemeIdx = ti;
+    card.classList.add('active');
+
+    // Build blue sub-cards
+    const subCards = item.subs.map((sub, si) => {
+      const el = document.createElement('span');
+      el.className = 'rw-sub-card';
+      el.textContent = sub.label;
+      el.dataset.si = si;
+
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+
+        // Clicking active blue → close quotes only
+        if (activeSubIdx === si) {
+          const qRow = rwGrid.querySelector('.rw-quotes-row');
+          if (qRow) { qRow.classList.remove('open'); setTimeout(() => qRow.remove(), 400); }
+          el.classList.remove('active');
+          activeSubIdx = null;
+          return;
+        }
+
+        // Close existing quote row
+        const existing = rwGrid.querySelector('.rw-quotes-row');
+        if (existing) { existing.classList.remove('open'); setTimeout(() => existing.remove(), 400); }
+        rwGrid.querySelectorAll('.rw-sub-card').forEach(c => c.classList.remove('active'));
+
+        activeSubIdx = si;
+        el.classList.add('active');
+
+        const quoteEls = sub.quotes.map(q => {
+          const qel = document.createElement('span');
+          qel.className = 'rw-quote-card';
+          qel.textContent = q;
+          return qel;
+        });
+
+        // Find the blue row to inject after
+        const blueRow = rwGrid.querySelector('.rw-blue-row');
+        if (blueRow) injectRow(blueRow, quoteEls, 'rw-quotes-row');
+      });
+
+      return el;
+    });
+
+    injectRow(card, subCards, 'rw-blue-row');
+  });
+
+  rwGrid.appendChild(card);
+});
+
+// Staggered reveal for theme cards
+const rwObs = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) { e.target.querySelectorAll('.rw-theme-card').forEach((c,i) => { setTimeout(() => c.classList.add('vis'), i * 80); }); rwObs.unobserve(e.target); } }); }, { threshold: 0.12 });
+rwObs.observe(rwGrid);
+
+// === Sidebar scroll-spy ===
+const sectionIds = ['s-problem','s-reality','s-segmentation','s-acquire','s-engage','s-network'];
+const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+
+function updateSidebar() {
+  let current = sectionIds[0];
+  sectionIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.5) current = id;
+  });
+  sidebarLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+}
+
+window.addEventListener('scroll', updateSidebar, { passive: true });
+updateSidebar();
+const cfObs = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) { e.target.querySelectorAll('.career-stage').forEach((s,i) => { setTimeout(() => s.classList.add('vis'), i * 180); }); const fk = document.getElementById('career-fork'); if (fk) setTimeout(() => fk.classList.add('vis'), 4 * 180 + 250); cfObs.unobserve(e.target); } }); }, { threshold: 0.1 });
+const cf = document.getElementById('career-flow'); if (cf) cfObs.observe(cf);
+
+// === Interactive ecosystem map ===
+const ecoWrap = document.getElementById('eco1');
+if (ecoWrap) {
+  const nodes = ecoWrap.querySelectorAll('.eco-node');
+  let activeGroup = null;
+
+  ecoWrap.addEventListener('click', (e) => {
+    const node = e.target.closest('.eco-node');
+    if (!node) {
+      ecoWrap.classList.remove('has-focus');
+      nodes.forEach(n => n.classList.remove('active'));
+      activeGroup = null;
+      return;
+    }
+    const group = node.dataset.group;
+    if (activeGroup === group) {
+      ecoWrap.classList.remove('has-focus');
+      nodes.forEach(n => n.classList.remove('active'));
+      activeGroup = null;
+      return;
+    }
+    activeGroup = group;
+    ecoWrap.classList.add('has-focus');
+    nodes.forEach(n => {
+      n.classList.toggle('active', n.dataset.group === group);
+    });
+  });
+}
+
+// === Seg accordion scroll reveal ===
+const segObs = new IntersectionObserver(es => {
+  es.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.career-stage').forEach((s, i) => {
+        setTimeout(() => s.classList.add('vis'), i * 120);
+      });
+      segObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+const segAcc = document.getElementById('seg-accordion');
+if (segAcc) segObs.observe(segAcc);
+</script>
+</body>
+</html>

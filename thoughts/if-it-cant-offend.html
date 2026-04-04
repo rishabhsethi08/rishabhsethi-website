@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>If it can't offend, how can it enchant? — Rishabh Sethi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #F5F5F3; --surface: #FFFFFF; --ink: #111111;
+  --mid: #555555; --muted: #7A7F86; --faint: #BBBBBB;
+  --rule: rgba(0,0,0,0.07);
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: 'IBM Plex Mono', 'SF Mono', monospace;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+::selection { background: var(--ink); color: var(--bg); }
+.page { max-width: 620px; margin: 0 auto; padding: 4rem 2.5rem 6rem; }
+
+.back-link {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-family: var(--mono); font-size: 11px; color: var(--muted);
+  text-decoration: none; margin-bottom: 4rem;
+  opacity: 0; animation: fadeUp 0.5s ease forwards;
+  transition: color 0.15s ease;
+}
+.back-link:hover { color: var(--ink); }
+
+.post-meta {
+  font-family: var(--mono); font-size: 11px; color: var(--faint);
+  letter-spacing: 0.04em; margin-bottom: 1.25rem;
+  opacity: 0; animation: fadeUp 0.5s ease 0.05s forwards;
+}
+
+.post-title {
+  font-size: 26px; font-weight: 600; line-height: 1.25;
+  letter-spacing: -0.02em; color: var(--ink);
+  margin-bottom: 2.5rem;
+  opacity: 0; animation: fadeUp 0.5s ease 0.1s forwards;
+}
+
+.post-body {
+  opacity: 0; animation: fadeUp 0.5s ease 0.15s forwards;
+}
+
+.post-body p {
+  font-size: 15px; color: var(--mid); line-height: 1.85;
+  margin-bottom: 1.4rem;
+}
+.post-body p:last-child { margin-bottom: 0; }
+.post-body strong { font-weight: 500; color: var(--ink); }
+
+.divider {
+  border: none; height: 1px; background: var(--rule);
+  margin: 3rem 0;
+  opacity: 0; animation: fadeUp 0.5s ease 0.2s forwards;
+}
+
+.footer {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 11px; color: var(--faint);
+  opacity: 0; animation: fadeUp 0.5s ease 0.25s forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 620px) {
+  .page { padding: 3rem 1.5rem 4.5rem; }
+  .post-title { font-size: 21px; }
+  .footer { flex-direction: column; gap: 0.3rem; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a class="back-link" href="../index.html">← Rishabh Sethi</a>
+
+  <p class="post-meta">Thoughts</p>
+
+  <h1 class="post-title">If it can't offend, how can it enchant?</h1>
+
+  <div class="post-body">
+    <p>What everyone accepts, no one remembers. Specificity creates identity; conformity erases it.</p>
+    <p>There's a version of every product, every brand, every piece of writing that has been <strong>smoothed until it offends nobody</strong>. Every sharp edge filed down in a meeting. Every strong claim softened into something technically true but emotionally inert. The result is something that's impossible to argue with and impossible to remember.</p>
+    <p>The problem isn't that the people making these decisions are bad at their jobs. The problem is that they're optimising for the wrong risk. They're afraid of the person who will be turned off. They're not accounting for the much larger cost — the vast majority who will feel nothing at all.</p>
+    <p>Enchantment requires a point of view. A point of view, by definition, excludes other points of view. The moment something stands for something specific, it stands against something else. That's not a bug. That's the mechanism.</p>
+    <p>The Calo insight — that food delivery wasn't really about speed, it was about guidance — only worked because it was specific enough to be wrong for some people. Plenty of users just want cheap calories fast. Calo said: not for you. That specificity is what made the positioning real.</p>
+    <p>The question worth asking of anything you're building, writing, or putting into the world: <strong>who would disagree with this?</strong> If the answer is nobody, you haven't said anything yet.</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="footer">
+    <span>Rishabh Sethi · 2026</span>
+    <span>Dubai, UAE</span>
+  </div>
+
+</div>
+</body>
+</html>
