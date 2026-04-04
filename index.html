@@ -176,19 +176,6 @@ body {
   background-repeat: no-repeat;
 }
 
-.work-card .card-image--photo {
-  background: none;
-}
-
-.work-card .card-image--photo img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-}
 
 .work-card:hover .card-image {
   box-shadow: var(--shadow-hover);
@@ -456,7 +443,7 @@ const THOUGHTS = [
 
 function buildWorkCard(d) {
   const media = d.photo
-    ? `<div class="card-image card-image--photo"><img src="${d.photo}" alt="" loading="lazy" decoding="async"></div>`
+    ? `<div class="card-image" style="background-image: url('${d.photo}')"></div>`
     : `<div class="card-image ${d.image}"></div>`;
   return `<a href="${d.url}" class="card work-card">
     ${media}
