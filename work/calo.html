@@ -3,89 +3,1015 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calo — Strategy — Rishabh Sethi</title>
+<title>Calo Now — Rishabh Sethi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@0,400;0,500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg: #F5F5F3; --surface: #FFFFFF; --ink: #111111;
-  --mid: #555555; --muted: #7A7F86; --faint: #BBBBBB;
-  --rule: rgba(0,0,0,0.07);
-  --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --bg: #FFFFFF; --ink: #111111; --mid: #3A3A3A; --muted: #6A6A6A;
+  --light: #9A9A9A; --faint: #DEDEDE; --rule: rgba(0,0,0,0.07);
+  --rule-strong: rgba(0,0,0,0.12); --card-bg: rgba(0,0,0,0.025);
+  --accent: #1D9E75; --accent-faint: rgba(29,158,117,0.07);
   --mono: 'IBM Plex Mono', 'SF Mono', monospace;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --green: #1D9E75; --green-faint: rgba(29,158,117,0.09);
+  --amber: #B87B2A; --amber-faint: rgba(184,123,42,0.09);
+  --purple: #7C3AED; --purple-faint: rgba(124,58,237,0.08);
 }
-html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+html { scroll-behavior: smooth; scroll-padding-top: 100px; overflow-x: hidden; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 ::selection { background: var(--ink); color: var(--bg); }
-.page { max-width: 620px; margin: 0 auto; padding: 4rem 2.5rem 6rem; }
-.back-link {
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  font-family: var(--mono); font-size: 11px; color: var(--muted);
-  text-decoration: none; margin-bottom: 4rem;
-  opacity: 0; animation: fadeUp 0.5s ease forwards;
-  transition: color 0.15s ease;
+.page { max-width: 720px; margin: 0 auto; padding: 4.5rem 2.5rem 6rem; }
+
+.back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: var(--light); text-transform: uppercase; text-decoration: none; margin-bottom: 6rem; transition: color 0.2s; }
+.back-link:hover { color: var(--mid); }
+.back-link:hover .ba { transform: translateX(-3px); }
+.ba { display: inline-block; transition: transform 0.2s; }
+
+/* BEATS */
+.beat { margin-bottom: 5rem; opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.beat.vis { opacity: 1; transform: translateY(0); }
+
+/* TYPE */
+.headline { font-size: 28px; font-weight: 600; line-height: 1.3; color: var(--ink); max-width: 520px; letter-spacing: -0.03em; }
+.body-text { font-size: 15px; color: var(--mid); line-height: 1.75; max-width: 520px; margin-top: 1.1rem; }
+.body-text + .body-text { margin-top: 0.8rem; }
+.body-text strong { font-weight: 600; color: var(--ink); }
+.small-label { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.07em; color: var(--light); text-transform: uppercase; display: block; margin-bottom: 0.9rem; }
+.large-statement { font-size: 22px; font-weight: 600; line-height: 1.4; color: var(--ink); max-width: 520px; letter-spacing: -0.02em; }
+
+.context-strip { display: flex; gap: 2.5rem; flex-wrap: wrap; padding: 1.4rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-top: 2rem; }
+.context-item .small-label { margin-bottom: 0.25rem; }
+.context-value { font-family: var(--mono); font-size: 12px; color: var(--mid); }
+
+.insight-line { border-left: 2px solid var(--accent); padding-left: 1.25rem; margin-top: 1.5rem; max-width: 520px; }
+.insight-line p { font-size: 14px; color: var(--ink); line-height: 1.75; }
+.insight-line p strong { font-weight: 600; }
+
+.callout { margin-top: 2rem; max-width: 520px; padding: 1.1rem 1.4rem; background: var(--card-bg); border: 1px solid var(--rule-strong); border-radius: 6px; }
+.callout p { font-size: 14px; color: var(--ink); line-height: 1.75; font-style: italic; }
+
+/* FORK */
+.fork { margin-top: 2rem; max-width: 520px; background: var(--card-bg); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.fork-label { padding: 0.8rem 1.2rem; border-bottom: 1px solid var(--rule); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: var(--light); text-transform: uppercase; }
+.fork-paths { display: grid; grid-template-columns: 1fr 1fr; }
+.fork-path { padding: 1rem 1.2rem; }
+.fork-path:first-child { border-right: 1px solid var(--rule); }
+.fork-path-title { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+.fork-path p { font-size: 13px; color: var(--mid); line-height: 1.75; }
+.fork-path.chosen { background: var(--accent-faint); }
+.fork-path.chosen .fork-path-title { color: var(--accent); }
+.fork-path.ruled-out { opacity: 0.5; }
+.fork-path.ruled-out .fork-path-title::after { content: ' ✕'; color: var(--light); }
+
+/* CHAIN */
+.chain { margin-top: 2rem; max-width: 520px; }
+.chain-header { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.08em; color: var(--light); text-transform: uppercase; margin-bottom: 1rem; }
+.chain-step { position: relative; padding-left: 1.5rem; padding-bottom: 1.5rem; border-left: 1px solid var(--rule); }
+.chain-step:last-child { border-left: 1px solid transparent; padding-bottom: 0; }
+.chain-dot { position: absolute; left: -4px; top: 0.15rem; width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+.chain-step p { font-size: 14px; color: var(--mid); line-height: 1.85; }
+.chain-step strong { font-weight: 600; color: var(--ink); }
+.chain-outcome { margin-top: 0.75rem; padding: 0.7rem 1rem; border-radius: 5px; background: var(--green-faint); border: 1px solid rgba(29,158,117,0.2); }
+.chain-outcome p { font-size: 13px; color: #085041; line-height: 1.7; font-weight: 500; }
+
+/* SIDEBAR NAV */
+.sidebar-nav { position: fixed; top: 50%; left: 2rem; transform: translateY(-50%); display: flex; flex-direction: column; gap: 0.5rem; z-index: 100; }
+.sidebar-nav a { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--light); text-decoration: none; transition: color 0.2s, transform 0.2s; white-space: nowrap; }
+.sidebar-nav a:hover { color: var(--mid); transform: translateX(2px); }
+.sidebar-nav a.active { color: var(--ink); }
+.sidebar-nav a.active::before { content: '—'; margin-right: 0.4rem; }
+@media (max-width: 1200px) { .sidebar-nav { display: none; } }
+
+/* PHONE SCREENS */
+.phone-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 2rem; max-width: 520px; }
+.phone-screen { border-radius: 16px; overflow: hidden; border: 1px solid var(--rule-strong); background: var(--card-bg); aspect-ratio: 9/16; display: flex; align-items: center; justify-content: center; }
+.phone-screen img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.phone-caption { font-family: var(--mono); font-size: 10px; color: var(--light); margin-top: 0.6rem; text-align: center; letter-spacing: 0.04em; }
+
+/* MOAT GRID */
+.moat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 1.5rem; max-width: 520px; }
+.moat-card { border-radius: 5px; border: 1px solid var(--rule-strong); background: var(--card-bg); padding: 12px 14px; }
+.moat-label { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--light); margin-bottom: 5px; }
+.moat-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 6px; line-height: 1.35; }
+.moat-body  { font-size: 11px; color: var(--muted); line-height: 1.6; }
+.moat-card.highlight { border-color: var(--accent); background: var(--accent-faint); }
+.moat-card.highlight .moat-label { color: var(--accent); }
+
+/* COMPONENT CARDS */
+.comp-wrap { margin-top: 1.75rem; max-width: 580px; display: flex; flex-direction: column; gap: 6px; }
+.comp-intro { font-family: var(--mono); font-size: 10px; letter-spacing: 0.05em; color: var(--light); text-transform: uppercase; margin-bottom: 0.5rem; }
+.comp-card { border: 1px solid var(--rule-strong); border-radius: 8px; overflow: hidden; background: var(--card-bg); }
+.comp-name { font-size: 13px; font-weight: 600; color: var(--ink); padding: 9px 12px 8px; border-bottom: 1px solid var(--rule); }
+.comp-rows { display: flex; flex-direction: column; }
+.comp-row { display: grid; grid-template-columns: 80px 20px 1fr auto; align-items: start; gap: 6px; padding: 8px 12px; border-bottom: 1px solid var(--rule); }
+.comp-row:last-child { border-bottom: none; }
+.comp-seg { font-size: 9px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; white-space: nowrap; text-align: center; margin-top: 1px; }
+.seg-awcp-tag { background: var(--green-faint); color: #085041; }
+.seg-wlg-tag  { background: var(--amber-faint); color: #7a4e10; }
+.seg-wlo-tag  { background: var(--purple-faint); color: #4a1a9a; }
+.comp-arrow { font-size: 13px; font-weight: 700; flex-shrink: 0; line-height: 1.6; text-align: center; }
+.arrow-up        { color: #1D9E75; }
+.arrow-down      { color: var(--amber); }
+.arrow-down-hard { color: #C83C32; }
+.arrow-neutral   { color: var(--light); }
+.comp-main { display: flex; flex-direction: column; gap: 2px; }
+.comp-action { font-size: 12px; color: var(--mid); }
+.comp-scenario { font-size: 10px; color: var(--light); font-style: italic; }
+.comp-tags { display: flex; flex-direction: column; gap: 3px; align-items: flex-end; flex-shrink: 0; margin-top: 1px; }
+.comp-cal { font-size: 9px; font-weight: 600; letter-spacing: 0.03em; padding: 2px 6px; border-radius: 3px; white-space: nowrap; background: rgba(0,0,0,0.04); color: var(--muted); }
+.comp-why { font-size: 9px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; white-space: nowrap; }
+.why-awcp { background: var(--green-faint); color: #085041; }
+.why-wlg  { background: var(--amber-faint); color: #7a4e10; }
+.why-wlo  { background: var(--purple-faint); color: #4a1a9a; }
+@media (max-width: 640px) {
+  .comp-row { grid-template-columns: 72px 18px 1fr auto; gap: 4px; padding: 7px 10px; }
 }
-.back-link:hover { color: var(--ink); }
-.cover {
-  width: 100%; height: 260px; border-radius: 12px;
-  background: linear-gradient(160deg, #5A4A32 0%, #8A7A58 50%, #B8A878 100%);
-  margin-bottom: 2.5rem;
-  opacity: 0; animation: fadeUp 0.5s ease 0.05s forwards;
+.comp-note { font-size: 11px; color: var(--light); font-style: italic; margin-top: 0.5rem; line-height: 1.6; }
+
+/* COMPARISON PANELS */
+.cmp-wrap { margin-top: 1.75rem; max-width: 520px; display: flex; flex-direction: column; gap: 3px; }
+.cmp-panel { border-radius: 6px; border: 1px solid var(--rule-strong); overflow: hidden; }
+.cmp-panel.cmp-them { background: var(--card-bg); }
+.cmp-panel.cmp-us   { background: rgba(29,158,117,0.04); border-color: rgba(29,158,117,0.25); }
+.cmp-head { padding: 10px 14px 8px; border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; gap: 2px; }
+.cmp-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.cmp-them .cmp-eyebrow { color: var(--light); }
+.cmp-us   .cmp-eyebrow { color: #1D9E75; }
+.cmp-head-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+.cmp-body { padding: 10px 14px 12px; }
+.cmp-body p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+.cmp-chain { display: flex; flex-direction: column; gap: 0; }
+.cmp-chain-step { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; }
+.cmp-chain-step:not(:last-child) { border-bottom: 1px solid var(--rule); }
+.cmp-chain-dot { width: 7px; height: 7px; border-radius: 50%; background: #1D9E75; flex-shrink: 0; margin-top: 5px; }
+.cmp-chain-arrow { font-size: 11px; color: var(--light); flex-shrink: 0; margin-top: 3px; padding-left: 2px; }
+.cmp-chain-text { font-size: 13px; color: var(--mid); line-height: 1.6; }
+.cmp-chain-text strong { font-weight: 600; color: var(--ink); }
+.cmp-chain-sub { font-size: 11px; color: var(--muted); margin-top: 1px; line-height: 1.5; }
+
+/* PHASE GRID */
+.phase-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 2rem; max-width: 520px; }
+.phase-card { border: 1px solid var(--rule-strong); border-radius: 6px; overflow: hidden; background: var(--card-bg); }
+.phase-card-head { padding: 10px 12px 8px; border-bottom: 1px solid var(--rule); }
+.phase-num { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--light); margin-bottom: 3px; }
+.phase-title { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+.phase-target { font-family: var(--mono); font-size: 10px; color: var(--accent); margin-top: 4px; }
+.phase-card-body { padding: 10px 12px; }
+.phase-body-text { font-size: 11px; color: var(--muted); line-height: 1.6; }
+.phase-card.active-phase { border-color: var(--green); }
+.phase-card.active-phase .phase-num { color: var(--green); }
+.phase-card.active-phase .phase-target { color: var(--green); }
+.phase-card.phase-amber { border-color: var(--amber); }
+.phase-card.phase-amber .phase-num { color: var(--amber); }
+.phase-card.phase-amber .phase-target { color: var(--amber); }
+.phase-card.phase-purple { border-color: var(--purple); }
+.phase-card.phase-purple .phase-num { color: var(--purple); }
+.phase-card.phase-purple .phase-target { color: var(--purple); }
+
+/* SEGMENT ACCORDION */
+.seg-accordion { margin-top: 1.75rem; max-width: 520px; }
+.seg-stage {
+  border: 1px solid var(--rule); border-radius: 6px; margin-bottom: 0.5rem;
+  background: var(--card-bg); overflow: hidden;
+  opacity: 0; transform: translateX(-12px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
-.post-meta {
-  font-family: var(--mono); font-size: 11px; color: var(--faint);
-  letter-spacing: 0.04em; margin-bottom: 0.75rem;
-  opacity: 0; animation: fadeUp 0.5s ease 0.1s forwards;
+.seg-stage.vis { opacity: 1; transform: translateX(0); }
+.seg-stage.target { border-color: var(--green); border-width: 1.5px; }
+.seg-stage.skip  { border-color: rgba(200,60,50,0.3); }
+.seg-stage.overflow { border-color: rgba(184,123,42,0.4); }
+.seg-stage-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.7rem 1rem; cursor: pointer; user-select: none;
+  transition: background 0.2s;
 }
-.post-title {
-  font-size: 26px; font-weight: 600; line-height: 1.25;
-  letter-spacing: -0.02em; color: var(--ink); margin-bottom: 1rem;
-  opacity: 0; animation: fadeUp 0.5s ease 0.13s forwards;
-}
-.post-caption {
-  font-family: var(--mono); font-size: 13px; color: var(--muted);
-  line-height: 1.5; margin-bottom: 3rem;
-  opacity: 0; animation: fadeUp 0.5s ease 0.16s forwards;
-}
-.coming-soon {
-  padding: 2rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
-  font-size: 13px; color: var(--muted); line-height: 1.75;
-  opacity: 0; animation: fadeUp 0.5s ease 0.2s forwards;
-}
-.footer {
-  display: flex; justify-content: space-between; align-items: baseline;
-  font-size: 11px; color: var(--faint); padding-top: 2rem;
-  border-top: 1px solid var(--rule); margin-top: 6rem;
-  opacity: 0; animation: fadeUp 0.5s ease 0.25s forwards;
-}
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@media (max-width: 620px) {
-  .page { padding: 3rem 1.5rem 4.5rem; }
-  .post-title { font-size: 21px; }
-  .cover { height: 180px; }
+.seg-stage-header:hover { background: rgba(0,0,0,0.02); }
+.seg-stage-left { display: flex; align-items: center; gap: 0.75rem; flex: 1; }
+.seg-stage-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+.seg-stage-tag { font-size: 11px; color: var(--muted); margin-left: 0.3rem; }
+.seg-verdict-pill { font-size: 9px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; flex-shrink: 0; }
+.svp-target   { background: var(--green-faint); color: #085041; }
+.svp-skip     { background: rgba(200,60,50,0.08); color: #a03020; }
+.svp-overflow { background: var(--amber-faint); color: #7a4e10; }
+.seg-toggle { font-size: 13px; color: var(--light); transition: transform 0.25s; }
+.seg-stage.open .seg-toggle { transform: rotate(45deg); }
+.seg-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+.seg-stage.open .seg-body { max-height: 400px; }
+.seg-body-inner { padding: 0 1rem 0.9rem; border-top: 1px solid var(--rule); }
+.seg-body-inner p { font-size: 13px; color: var(--muted); line-height: 1.75; margin-top: 0.75rem; }
+.seg-body-inner strong { font-weight: 600; color: var(--ink); }
+.seg-body-note { font-size: 11px; color: var(--light); font-style: italic; margin-top: 0.5rem; display: block; }
+
+/* KICKER */
+.kicker { margin-top: 2rem; max-width: 520px; }
+.kicker p { font-size: 15px; color: var(--mid); line-height: 1.75; }
+.kicker p + p { margin-top: 0.8rem; }
+.kicker a { color: var(--ink); font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--rule-strong); transition: border-color 0.2s; }
+.kicker a:hover { border-color: var(--ink); }
+
+/* FOOTER */
+.cta-section { margin-top: 7.5rem; margin-bottom: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--rule); }
+.cta-question { font-size: 17px; font-weight: 500; color: var(--ink); margin-bottom: 1.75rem; letter-spacing: -0.01em; }
+.cta-row { display: flex; align-items: baseline; justify-content: space-between; padding: 0.75rem 0; border-top: 1px solid var(--rule); }
+.cta-row:last-child { border-bottom: 1px solid var(--rule); }
+.cta-label { font-size: 12px; color: var(--muted); }
+.cta-link { font-size: 12px; color: var(--mid); text-decoration: none; transition: color 0.15s ease; }
+.cta-link:hover { color: var(--ink); }
+.cta-arrow { display: inline-block; margin-left: 0.25rem; transition: transform 0.15s ease; }
+.cta-link:hover .cta-arrow { transform: translateX(3px); }
+.footer { display: flex; justify-content: space-between; align-items: baseline; font-size: 11px; color: var(--light); letter-spacing: 0.04em; padding-top: 2rem; border-top: 1px solid var(--rule); }
+
+/* LIGHTBOX */
+.lb-trigger { cursor: zoom-in; }
+.lb-trigger::after { content: '↗'; position: absolute; bottom: 0.5rem; right: 0.6rem; font-size: 11px; color: rgba(255,255,255,0.75); background: rgba(0,0,0,0.35); padding: 2px 5px; border-radius: 3px; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+.lb-trigger { position: relative; }
+.lb-trigger:hover::after { opacity: 1; }
+#lightbox { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.88); align-items: center; justify-content: center; padding: 2rem; }
+#lightbox.open { display: flex; }
+#lightbox img { max-width: min(90vw, 1000px); max-height: 90vh; border-radius: 6px; object-fit: contain; box-shadow: 0 8px 48px rgba(0,0,0,0.5); }
+#lb-close { position: fixed; top: 1.25rem; right: 1.5rem; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.12); border: none; color: #fff; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; transition: background 0.2s; }
+#lb-close:hover { background: rgba(255,255,255,0.25); }
+
+@media (max-width: 640px) {
+  .page { padding: 3rem 1.5rem 4rem; }
+  .back-link { margin-bottom: 4rem; }
+  .headline { font-size: 22px; max-width: 100%; }
+  .body-text, .insight-line, .fork, .chain, .callout, .kicker { max-width: 100%; }
+  .large-statement { font-size: 18px; max-width: 100%; }
+  .fork-paths { grid-template-columns: 1fr; }
+  .fork-path:first-child { border-right: none; border-bottom: 1px solid var(--rule); }
+  .phase-grid { grid-template-columns: 1fr; }
+  .seg-overview { grid-template-columns: 1fr; }
+  .moat-grid { grid-template-columns: 1fr; }
+  .phone-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .beat { margin-bottom: 4rem; }
+  .cta-row { flex-direction: column; gap: 0.3rem; padding: 0.85rem 0; }
   .footer { flex-direction: column; gap: 0.3rem; }
+  .context-strip { gap: 1.5rem; }
 }
 </style>
 </head>
 <body>
+
+<nav class="sidebar-nav" id="sidebar">
+  <a href="#s-hook">The Problem</a>
+  <a href="#s-brief">The Brief</a>
+  <a href="#s-reframe">The Reframe</a>
+  <a href="#s-product">The Product</a>
+  <a href="#s-menu">The Menu</a>
+  <a href="#s-rollout">Rollout</a>
+  <a href="#s-defensibility">Defensibility</a>
+  <a href="#s-threat">The Threat</a>
+  <a href="#s-outcome">The Outcome</a>
+</nav>
+
 <div class="page">
-  <a class="back-link" href="../index.html">← Rishabh Sethi</a>
-  <div class="cover"></div>
-  <p class="post-meta">Work</p>
-  <h1 class="post-title">Calo — Strategy</h1>
-  <p class="post-caption">Reframed the market entirely.</p>
-  <div class="coming-soon">
-    This case study is being written. Check back soon, or <a href="mailto:hello@rishabhsethi.com" style="color:var(--ink);">get in touch</a> if you'd like to hear about it directly.
+
+<a href="../index.html" class="back-link"><span class="ba">←</span> Rishabh Sethi</a>
+
+<div style="width:100%;aspect-ratio:2/1;border-radius:6px;overflow:hidden;margin-bottom:5rem;">
+  <img src="../images/calo/Calo_cover.png" alt="Calo" style="width:100%;height:100%;object-fit:cover;display:block;">
+</div>
+
+<!-- ======== BEAT 1: THE HOOK ======== -->
+<div class="beat" id="s-hook">
+  <p class="headline">The problem with healthy food delivery isn't the food or the delivery.</p>
+  <p class="body-text">It's the thirty seconds before you order, when you can't decide, and Shake Shack is right there.</p>
+</div>
+
+<!-- ======== BEAT 2: THE BRIEF ======== -->
+<div class="beat" id="s-brief">
+  <p class="small-label">The Brief</p>
+  <p class="body-text">Calo is a personalized meal subscription business operating across 5 countries, 18 cities, with 200 vans and 1,000 people. Vertically integrated — they own everything from ingredient sourcing to doorstep delivery. The mission: <em>make healthy easy</em>.</p>
+  <p class="body-text">They were exploring an on-demand layer. Get your personalized meals in 45 minutes. They called it Calo Now.</p>
+  <div class="context-strip">
+    <div class="context-item"><p class="small-label">Scope</p><p class="context-value">Product & GTM strategy</p></div>
+    <div class="context-item"><p class="small-label">Domain</p><p class="context-value">Food-tech / QSR</p></div>
+    <div class="context-item"><p class="small-label">Pilot market</p><p class="context-value">Riyadh, KSA</p></div>
   </div>
-  <div class="footer">
-    <span>Rishabh Sethi · 2026</span>
-    <span>Dubai, UAE</span>
+  <p class="body-text" style="margin-top:1.5rem">To find the insight you have to see the whole map at once — kitchen ops, component-based cooking, delivery logistics, demand density, customer segments, and the moment of ordering. None of it makes sense in isolation.</p>
+</div>
+
+<!-- ======== BEAT 3: THE REFRAME ======== -->
+<div class="beat" id="s-reframe">
+  <p class="small-label">The Reframe</p>
+  <p class="large-statement">Every competitor is fighting a convenience battle. The real gap is guidance.</p>
+
+  <p class="body-text">The job to be done isn't just "get me food." It's two things:</p>
+  <p class="body-text"><em>"I need to eat"</em> → <strong>"What should I eat?"</strong> + <strong>"How do I get it easily?"</strong></p>
+  <p class="body-text">Guidance + Convenience.</p>
+
+  <p class="body-text">Most on-demand players focus on convenience. It's table stakes — raises the floor for everyone. You can always go faster. 45 minutes becomes 30 becomes 10. There's clearly a ceiling to that.</p>
+
+  <p class="body-text">The real gap is guidance. And when you look at who needs it most, a pattern emerges.</p>
+
+  <!-- Segment image -->
+  <div class="lb-trigger" style="margin-top:1.75rem;max-width:520px;border-radius:8px;overflow:hidden;border:1px solid var(--rule);">
+    <img src="../images/calo/calo-segments.png" alt="Customer segments" style="width:100%;display:block;">
+  </div>
+
+  <p class="body-text" style="margin-top:1.5rem">Two segments stood out.</p>
+
+  <div class="seg-accordion" id="seg-accordion">
+
+    <div class="seg-stage target">
+      <div class="seg-stage-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="seg-stage-left">
+          <div>
+            <span class="seg-stage-name">Ambitious White-Collar</span>
+          </div>
+          <span class="seg-verdict-pill svp-target">Priority ↑</span>
+        </div>
+        <span class="seg-toggle">+</span>
+      </div>
+      <div class="seg-body"><div class="seg-body-inner">
+        <p>Decision fatigue is their critical need. These are people saving mental bandwidth for work — food decisions are a tax they don't want to pay. Calo's guidance differentiator maps directly onto it.</p>
+        <p><strong>Why they work operationally:</strong> High order frequency, high willingness to pay, low price sensitivity when the differentiator is real. And their base SKUs overlap heavily with the weight loss segment — the same kitchen serves both.</p>
+      </div></div>
+    </div>
+
+    <div class="seg-stage target">
+      <div class="seg-stage-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="seg-stage-left">
+          <div>
+            <span class="seg-stage-name">Weight Loss Seekers</span>
+          </div>
+          <span class="seg-verdict-pill svp-target">Priority ↑</span>
+        </div>
+        <span class="seg-toggle">+</span>
+      </div>
+      <div class="seg-body"><div class="seg-body-inner">
+        <p>Impulse control is critical. In the moment of temptation, too much choice is the enemy — a curated "safe choice" replaces willpower. Competitors offer no structured guidance at all.</p>
+        <p><strong>Why they work operationally:</strong> Higher willingness to pay for adherence. Demand skews toward snacks and dinner, which balances the AWCP lunch peak. Naturual SKU overlap means no kitchen complexity is added.</p>
+      </div></div>
+    </div>
+
+    <div class="seg-stage skip">
+      <div class="seg-stage-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="seg-stage-left">
+          <div>
+            <span class="seg-stage-name">Lifestyle-Focused White-Collar</span>
+          </div>
+          <span class="seg-verdict-pill svp-skip">Skip</span>
+        </div>
+        <span class="seg-toggle">+</span>
+      </div>
+      <div class="seg-body"><div class="seg-body-inner">
+        <p>Choice, taste, and affordability are their critical needs — and Calo is below table stakes on all three. These people want to browse, not be told what to eat. Talabat and HungerStation serve them well.</p>
+        <span class="seg-body-note">↳ Not targeting — guidance isn't what they're looking for.</span>
+      </div></div>
+    </div>
+
+    <div class="seg-stage skip">
+      <div class="seg-stage-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="seg-stage-left">
+          <div>
+            <span class="seg-stage-name">Wellness Journey</span>
+          </div>
+          <span class="seg-verdict-pill svp-skip">Skip</span>
+        </div>
+        <span class="seg-toggle">+</span>
+      </div>
+      <div class="seg-body"><div class="seg-body-inner">
+        <p>Lifestyle intervention has some overlap but needs different customizations (low sodium). Medical intervention needs clinical precision and full meal control — on-demand can't deliver that responsibly.</p>
+        <span class="seg-body-note">↳ Great fit for meal subscriptions, not on-demand.</span>
+      </div></div>
+    </div>
+
+    <div class="seg-stage overflow">
+      <div class="seg-stage-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="seg-stage-left">
+          <div>
+            <span class="seg-stage-name">Muscle Gain</span>
+          </div>
+          <span class="seg-verdict-pill svp-overflow">Overflow</span>
+        </div>
+        <span class="seg-toggle">+</span>
+      </div>
+      <div class="seg-body"><div class="seg-body-inner">
+        <p>Beginners show some natural overlap with weight loss (high protein, low carb) and would likely be an overflow target. But intermediate and advanced segments need macro precision that on-demand can't consistently deliver.</p>
+        <span class="seg-body-note">↳ Advanced muscle gain is a meal subscription story, not on-demand.</span>
+      </div></div>
+    </div>
+
+  </div>
+
+  <p class="body-text" style="margin-top:1.5rem">Different reasons. Same underlying need. And the same kitchen — maximum overlap in base SKUs, with customizations handling the variable needs of each segment.</p>
+
+  <div class="callout">
+    <p>"Calo Now has to solve for the moment of misery — deciding what to eat."</p>
   </div>
 </div>
+
+<!-- ======== BEAT 4: THE PRODUCT ======== -->
+<div class="beat" id="s-product">
+  <p class="small-label">The Product</p>
+  <p class="large-statement">If the problem is decision fatigue, the interface has one job: make the decision disappear.</p>
+
+  <p class="body-text">The entire product experience is designed to simplify your decision and help you eat healthy.</p>
+  <p class="body-text">It already knows your data — steps, calories, goals — but it doesn't know how your day has been. So it asks one question: how are you feeling today?</p>
+
+  <!-- Phone screens carousel -->
+  <style>
+  #calo-carousel {
+    margin: 2rem 0 0;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--card-bg);
+    max-width: 520px;
+  }
+  .cc-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.7rem 1.1rem; border-bottom: 1px solid var(--rule);
+  }
+  .cc-counter { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--light); }
+  .cc-dots { display: flex; gap: 5px; }
+  .cc-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--faint); transition: background 0.25s; cursor: pointer; }
+  .cc-dot.active { background: var(--ink); }
+  .cc-arrows { display: flex; gap: 4px; }
+  .cc-btn {
+    width: 26px; height: 26px; border-radius: 4px; border: 1px solid var(--rule);
+    background: var(--bg); color: var(--mid); font-size: 13px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s; line-height: 1;
+  }
+  .cc-btn:hover { background: var(--ink); color: var(--bg); }
+  .cc-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+  .cc-body {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 1.5rem 1rem 1.25rem; gap: 0.75rem;
+  }
+  .cc-viewport { width: min(400px, 90vw); max-width: 100%; }
+  .cc-track { border-radius: 16px; overflow: hidden; width: 100%; line-height: 0; }
+  .cc-inner {
+    display: flex; width: 400%;
+    transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+  .cc-slide { flex: 0 0 25%; width: 25%; overflow: hidden; line-height: 0; }
+  .cc-slide img { display: block; width: 100%; height: auto; }
+  .cc-captions { position: relative; width: 100%; max-width: 340px; height: 2.8em; }
+  .cc-cap {
+    position: absolute; inset: 0; font-size: 11px; color: var(--light);
+    line-height: 1.55; text-align: center; opacity: 0;
+    transform: translateX(10px);
+    transition: opacity 0.28s ease, transform 0.28s ease; pointer-events: none;
+  }
+  .cc-cap.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+  .cc-cap.exit-left { opacity: 0; transform: translateX(-10px); }
+  </style>
+
+  <div id="calo-carousel">
+    <div class="cc-bar">
+      <span class="cc-counter" id="cc-counter">01 / 04</span>
+      <div class="cc-dots" id="cc-dots">
+        <div class="cc-dot active" data-i="0"></div>
+        <div class="cc-dot" data-i="1"></div>
+        <div class="cc-dot" data-i="2"></div>
+        <div class="cc-dot" data-i="3"></div>
+      </div>
+      <div class="cc-arrows">
+        <button class="cc-btn" id="cc-prev" disabled aria-label="Previous">&#8592;</button>
+        <button class="cc-btn" id="cc-next" aria-label="Next">&#8594;</button>
+      </div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-captions" id="cc-captions">
+        <span class="cc-cap active">One question — how are your meals been today? That's the only input needed.</span>
+        <span class="cc-cap">Three options, specifically recommended for you. The answer is already at the top.</span>
+        <span class="cc-cap">Every customization explains why it's right for you right now. No calorie counting required.</span>
+        <span class="cc-cap">Down to the dressing — every swap shows the macro impact and the reason behind it.</span>
+      </div>
+      <div class="cc-viewport">
+        <div class="cc-track">
+          <div class="cc-inner" id="cc-track">
+            <div class="cc-slide"><img src="../images/calo/calo-screen-1.png" alt="How are you feeling today?"></div>
+            <div class="cc-slide"><img src="../images/calo/calo-screen-2.png" alt="For you, right now"></div>
+            <div class="cc-slide"><img src="../images/calo/calo-screen-3.png" alt="Customization with guidance"></div>
+            <div class="cc-slide"><img src="../images/calo/calo-screen-4.png" alt="One tap checkout"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    const total   = 4;
+    let cur       = 0;
+    const track   = document.getElementById('cc-track');
+    const caps    = document.querySelectorAll('#cc-captions .cc-cap');
+    const dots    = document.querySelectorAll('#cc-dots .cc-dot');
+    const counter = document.getElementById('cc-counter');
+    const btnPrev = document.getElementById('cc-prev');
+    const btnNext = document.getElementById('cc-next');
+
+    function go(next) {
+      if (next === cur) return;
+      const dir = next > cur ? 1 : -1;
+      caps[cur].classList.remove('active');
+      caps[cur].classList.add('exit-left');
+      cur = next;
+      requestAnimationFrame(() => {
+        caps[cur].style.transform = `translateX(${dir > 0 ? 10 : -10}px)`;
+        caps[cur].style.opacity = '0';
+        caps[cur].classList.add('active');
+        requestAnimationFrame(() => {
+          caps[cur].style.transform = '';
+          caps[cur].style.opacity = '';
+        });
+      });
+      setTimeout(() => {
+        document.querySelectorAll('#cc-captions .cc-cap.exit-left')
+          .forEach(el => el.classList.remove('exit-left'));
+      }, 320);
+      track.style.transform = `translateX(-${(cur * 100) / total}%)`;
+      dots.forEach((d,i) => d.classList.toggle('active', i === cur));
+      counter.textContent = String(cur+1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+      btnPrev.disabled = cur === 0;
+      btnNext.disabled = cur === total - 1;
+    }
+
+    btnPrev.addEventListener('click', () => { clearInterval(timer); go(cur - 1); });
+    btnNext.addEventListener('click', () => { clearInterval(timer); go(cur + 1); });
+    dots.forEach(d => d.addEventListener('click', () => { clearInterval(timer); go(+d.dataset.i); }));
+
+    const el = document.getElementById('calo-carousel');
+    let tx = 0;
+    el.addEventListener('touchstart', e => { tx = e.touches[0].clientX; clearInterval(timer); }, {passive:true});
+    el.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - tx;
+      if (Math.abs(dx) > 40) go(dx < 0 ? Math.min(cur+1,total-1) : Math.max(cur-1,0));
+    }, {passive:true});
+
+    const timer = setInterval(() => {
+      go(cur === total - 1 ? 0 : cur + 1);
+    }, 3000);
+  })();
+  </script>
+
+  <p class="body-text" style="margin-top:1.75rem">It then presents three options, specifically recommended for you around your goals. More choices below if you want them, but the answer is already at the top.</p>
+  <p class="body-text">Click in and you can order as is, or customize. Every customization comes with guidance — what's good for you and why. Total macro count visible before you order.</p>
+
+</div>
+
+<!-- ======== BEAT 5: THE MENU & MOAT ======== -->
+<div class="beat" id="s-menu">
+  <p class="small-label">The Menu & The Moat</p>
+  <p class="large-statement">Competitors can copy the interface. They can't copy what's underneath it.</p>
+
+  <p class="body-text">The menu isn't a list of dishes. It's one end of a system.</p>
+  <p class="body-text">Most restaurants build a static menu optimized for broad appeal. Calo Now's menu is built from a standardized component library — the same kitchen serving fundamentally different needs without multiplying complexity.</p>
+
+  <!-- Component-first menu viz -->
+  <div class="comp-wrap">
+    <p class="comp-intro">The same base. Calibrated differently for each segment and scenario.</p>
+
+    <div class="comp-card">
+      <p class="comp-name">Avocado Toast</p>
+      <div class="comp-rows">
+        <div class="comp-row">
+          <span class="comp-seg seg-awcp-tag">AWCP</span>
+          <span class="comp-arrow arrow-up">↑</span>
+          <div class="comp-main">
+            <span class="comp-action">Add seed mix, full avocado</span>
+            <span class="comp-scenario">Quick energy boost</span>
+          </div>
+          <div class="comp-tags">
+          <span class="comp-cal">🔥450 cal</span>
+          <span class="comp-why why-awcp">Energy</span>
+          </div>
+        </div>
+        <div class="comp-row">
+          <span class="comp-seg seg-wlg-tag">WL General</span>
+          <span class="comp-arrow arrow-down">↓</span>
+          <div class="comp-main">
+            <span class="comp-action">Reduce avocado</span>
+            <span class="comp-scenario">Light, controlled start</span>
+          </div>
+          <div class="comp-tags">
+          <span class="comp-cal">🔥300 cal</span>
+          <span class="comp-why why-wlg">Control</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <p class="comp-name">Scrambled Eggs with Spinach</p>
+      <div class="comp-rows">
+        <div class="comp-row">
+          <span class="comp-seg seg-awcp-tag">AWCP</span>
+          <span class="comp-arrow arrow-up">↑</span>
+          <div class="comp-main">
+            <span class="comp-action">Add whole eggs</span>
+            <span class="comp-scenario">Light start for focus</span>
+          </div>
+          <div class="comp-tags">
+          <span class="comp-cal">🔥300 cal</span>
+          <span class="comp-why why-awcp">Focus</span>
+          </div>
+        </div>
+        <div class="comp-row">
+          <span class="comp-seg seg-wlg-tag">WL General</span>
+          <span class="comp-arrow arrow-down">↓</span>
+          <div class="comp-main">
+            <span class="comp-action">Add veggies</span>
+            <span class="comp-scenario">Filling but calorie-conscious</span>
+          </div>
+          <div class="comp-tags">
+          <span class="comp-cal">🔥250 cal</span>
+          <span class="comp-why why-wlg">Volume</span>
+          </div>
+        </div>
+        <div class="comp-row">
+          <span class="comp-seg seg-wlo-tag">WL Obese</span>
+          <span class="comp-arrow arrow-down-hard">↓↓</span>
+          <div class="comp-main">
+            <span class="comp-action">No added oil</span>
+            <span class="comp-scenario">Functional start</span>
+          </div>
+          <div class="comp-tags">
+          <span class="comp-cal">🔥200 cal</span>
+          <span class="comp-why why-wlo">Strict</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <p class="comp-name">Chia Pudding</p>
+      <div class="comp-rows">
+        <div class="comp-row">
+          <span class="comp-seg seg-awcp-tag">AWCP</span>
+          <span class="comp-arrow arrow-up">↑</span>
+          <div class="comp-main">
+            <span class="comp-action">Add peanut butter and honey</span>
+            <span class="comp-scenario">Pre-workout fuel</span>
+          </div>
+          <div class="comp-tags">
+          <span class="comp-cal">🔥350 cal</span>
+          <span class="comp-why why-awcp">Fuel</span>
+          </div>
+        </div>
+        <div class="comp-row">
+          <span class="comp-seg seg-wlg-tag">WL General</span>
+          <span class="comp-arrow arrow-down">↓</span>
+          <div class="comp-main">
+            <span class="comp-action">Reduce toppings, add berries</span>
+            <span class="comp-scenario">Light, controlled start</span>
+          </div>
+          <div class="comp-tags">
+          <span class="comp-cal">🔥250 cal</span>
+          <span class="comp-why why-wlg">Satiety</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <p class="comp-name">Sweet Potato Hash</p>
+      <div class="comp-rows">
+        <div class="comp-row">
+          <span class="comp-seg seg-awcp-tag">AWCP</span>
+          <span class="comp-arrow arrow-up">↑</span>
+          <div class="comp-main">
+            <span class="comp-action">Add tofu, add kale</span>
+            <span class="comp-scenario">Pre-workout fuel</span>
+          </div>
+          <div class="comp-tags">
+          <span class="comp-cal">🔥400 cal</span>
+          <span class="comp-why why-awcp">Carbs + protein</span>
+          </div>
+        </div>
+        <div class="comp-row">
+          <span class="comp-seg seg-wlg-tag">WL General</span>
+          <span class="comp-arrow arrow-down">↓</span>
+          <div class="comp-main">
+            <span class="comp-action">Smaller portion</span>
+            <span class="comp-scenario">Filling but calorie-conscious</span>
+          </div>
+          <div class="comp-tags">
+          <span class="comp-cal">🔥250 cal</span>
+          <span class="comp-why why-wlg">Volume</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <p class="comp-name">Greek Yogurt & Berry Parfait</p>
+      <div class="comp-rows">
+        <div class="comp-row">
+          <span class="comp-seg seg-awcp-tag">AWCP</span>
+          <span class="comp-arrow arrow-up">↑</span>
+          <div class="comp-main">
+            <span class="comp-action">Add granola</span>
+            <span class="comp-scenario">Light start for focus</span>
+          </div>
+          <div class="comp-tags">
+          <span class="comp-cal">🔥300 cal</span>
+          <span class="comp-why why-awcp">Texture + energy</span>
+          </div>
+        </div>
+        <div class="comp-row">
+          <span class="comp-seg seg-wlg-tag">WL General</span>
+          <span class="comp-arrow arrow-down">↓</span>
+          <div class="comp-main">
+            <span class="comp-action">Add seeds instead</span>
+            <span class="comp-scenario">Filling but calorie-conscious</span>
+          </div>
+          <div class="comp-tags">
+          <span class="comp-cal">🔥300 cal</span>
+          <span class="comp-why why-wlg">Protein without carbs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <p class="comp-name">Whole-Grain Pancakes</p>
+      <div class="comp-rows">
+        <div class="comp-row">
+          <span class="comp-seg seg-awcp-tag">AWCP</span>
+          <span class="comp-arrow arrow-up">↑</span>
+          <div class="comp-main">
+            <span class="comp-action">Add Greek yogurt</span>
+            <span class="comp-scenario">Pre-workout fuel</span>
+          </div>
+          <div class="comp-tags">
+          <span class="comp-cal">🔥400 cal</span>
+          <span class="comp-why why-awcp">Sustained energy</span>
+          </div>
+        </div>
+        <div class="comp-row">
+          <span class="comp-seg seg-wlg-tag">WL General</span>
+          <span class="comp-arrow arrow-neutral">→</span>
+          <div class="comp-main">
+            <span class="comp-action">Add light syrup</span>
+            <span class="comp-scenario">Weekend treat</span>
+          </div>
+          <div class="comp-tags">
+          <span class="comp-cal">🔥350 cal</span>
+          <span class="comp-why why-wlg">Controlled indulgence</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="comp-note">Breakfast shown. Unique components serve only one segment — like Cottage Cheese Bowl for obese weight loss — where the need is specific enough to warrant it.</p>
+  </div>
+
+  <p class="body-text" style="margin-top:1.5rem">The same components that make a high-protein wrap for an ambitious professional at lunch make a controlled-calorie bowl for a weight loss seeker at dinner. Operationally, they're the same kitchen. From the customer's perspective, it's a completely personalized meal.</p>
+
+  <div class="cmp-wrap">
+    <div class="cmp-panel cmp-them">
+      <div class="cmp-head">
+        <span class="cmp-eyebrow">Everyone else</span>
+        <span class="cmp-head-title">Static menu for broad appeal</span>
+      </div>
+      <div class="cmp-body">
+        <p>Fixed options chosen for the widest possible audience. Personalization means a few filters. The menu doesn't know who you are, what you've eaten today, or how you're performing.</p>
+      </div>
+    </div>
+
+    <div class="cmp-panel cmp-us">
+      <div class="cmp-head">
+        <span class="cmp-eyebrow">Calo Now</span>
+        <span class="cmp-head-title">A system, not a menu</span>
+      </div>
+      <div class="cmp-body">
+        <div class="cmp-chain">
+          <div class="cmp-chain-step">
+            <span class="cmp-chain-dot"></span>
+            <div>
+              <p class="cmp-chain-text"><strong>Component-based kitchen</strong></p>
+              <p class="cmp-chain-sub">12 base SKUs × 21 customization options at breakfast alone. Same kitchen, completely different meals.</p>
+            </div>
+          </div>
+          <div class="cmp-chain-step">
+            <span class="cmp-chain-arrow">↓</span>
+            <div>
+              <p class="cmp-chain-text"><strong>Context-aware intelligence</strong></p>
+              <p class="cmp-chain-sub">Syncs with HealthKit, WHOOP, Garmin, Oura. High-strain day? Recovery meals surface first. The app opens and the decision is already half-made.</p>
+            </div>
+          </div>
+          <div class="cmp-chain-step">
+            <span class="cmp-chain-arrow">↓</span>
+            <div>
+              <p class="cmp-chain-text"><strong>The right meal, right now</strong></p>
+              <p class="cmp-chain-sub">Gets smarter with every order. Not just matching you to options — assembling the right one.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-line" style="margin-top:1.75rem">
+    <p>45 minutes is what they called it. 25-35 is where you actually need to be to compete — which is exactly why the location strategy isn't a logistics decision. <strong>It's a product decision.</strong></p>
+  </div>
+</div>
+
+<!-- ======== BEAT 6: ROLLOUT ======== -->
+<div class="beat" id="s-rollout">
+  <p class="small-label">Rollout</p>
+  <p class="large-statement">Three phases. Each one earns the right to the next.</p>
+
+  <p class="body-text">On-demand unit economics live and die on delivery distance and order density. The model: start hyperlocal, prove it works, then expand.</p>
+
+  <!-- Maps screenshot -->
+  <div class="lb-trigger" style="margin-top:1.75rem;max-width:520px;border-radius:8px;overflow:hidden;border:1px solid var(--rule);">
+    <img src="../images/calo/calo-map.png" alt="Riyadh delivery radius" style="width:100%;display:block;">
+  </div>
+
+  <p class="body-text" style="margin-top:1.5rem">Two Calo Cafés in Riyadh already fulfil orders via HungerStation in 25-35 minutes. Northern Ring Road serves Business Gate — tech firms, GCC enterprises. Prince Mohammed Bin Saad Road serves KAFD — banks, consultants. The infrastructure already exists. It's just not being used this way yet.</p>
+
+  <div class="phase-grid">
+    <div class="phase-card active-phase">
+      <div class="phase-card-head">
+        <p class="phase-num">Phase 1</p>
+        <p class="phase-title">Calo Café Pilot</p>
+        <p class="phase-target">Prove demand exists</p>
+      </div>
+      <div class="phase-card-body">
+        <p class="phase-body-text">Launch from the cafés. Replace HungerStation volume with Calo Now orders. Learn menu resonance, customer behaviour, ops gaps.</p>
+      </div>
+    </div>
+    <div class="phase-card phase-amber">
+      <div class="phase-card-head">
+        <p class="phase-num">Phase 2</p>
+        <p class="phase-title">First Dark Kitchen</p>
+        <p class="phase-target">$1M ARR · Perfect unit economics</p>
+      </div>
+      <div class="phase-card-body">
+        <p class="phase-body-text">Right in the business district. Hub-and-spoke model. Perfect unit economics here before adding more kitchens.</p>
+      </div>
+    </div>
+    <div class="phase-card phase-purple">
+      <div class="phase-card-head">
+        <p class="phase-num">Phase 3</p>
+        <p class="phase-title">Multiple Dark Kitchens</p>
+        <p class="phase-target">$10M ARR · Follow the playbook</p>
+      </div>
+      <div class="phase-card-body">
+        <p class="phase-body-text">Demonstrated demand, operational excellence, confident ROI. Each expansion replicates the same playbook.</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="body-text" style="margin-top:1.5rem">The model is capital intensive. The phasing is deliberate — each stage earns the right to the next before more capital goes in.</p>
+
+  <div class="chain" style="margin-top: 2rem">
+    <p class="chain-header">Demand generation — two tracks</p>
+    <div class="chain-step">
+      <span class="chain-dot"></span>
+      <p><strong>Through existing Calo subscriptions.</strong> Monitor signals — activity levels, strain, dietary patterns — and trigger contextual on-demand suggestions at the right moment. Target only subscribers within the 35-minute delivery radius.</p>
+    </div>
+    <div class="chain-step">
+      <span class="chain-dot"></span>
+      <p><strong>Off-platform, hyperlocal.</strong> QR codes in serviceable buildings. SMS/email to past Calo Café customers. Premium lobby displays in Business Gate and KAFD. Corporate partnerships with major tenants. Lunch skews AWCP, snacks and dinner skew weight loss.</p>
+    </div>
+    <div class="chain-step">
+      <span class="chain-dot"></span>
+      <div class="chain-outcome">
+        <p>PMF signal: targeted users ordering 1.5× more frequently than projected. 60%+ of new reviews specifically mention personalization. Organic growth materially above subscription baseline.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== BEAT 7: DEFENSIBILITY ======== -->
+<div class="beat" id="s-defensibility">
+  <p class="small-label">Defensibility</p>
+  <p class="large-statement">Competitors can copy the interface. They can't copy what's underneath it.</p>
+
+  <p class="body-text">The recommendation engine is replicable. A smart team could build it in six months. What they can't replicate is what makes it work — the vertically integrated kitchen system, the supplier relationships, the operational culture built over years across 18 cities.</p>
+
+  <p class="body-text">Calo Now isn't defensible because of the app. It's defensible because the app is just the surface of a much deeper system. Every competitor who tries to copy it has to build the machine first.</p>
+
+  <div class="insight-line" style="margin-top:1.5rem">
+    <p>There's a second-order benefit that's easy to miss. The network of dark kitchens built for Calo Now enables <strong>better subscription delivery</strong> — just-in-time personalized meals instead of a single batched daily drop. The on-demand infrastructure makes the core business better, not just larger.</p>
+  </div>
+</div>
+
+<!-- ======== BEAT 8: THE THREAT ======== -->
+<div class="beat" id="s-threat">
+  <p class="small-label">The Threat</p>
+  <p class="large-statement">The cannibalization concern is real. The conclusion is backwards.</p>
+  <p class="body-text">The instinctive worry: if on-demand is more flexible than a subscription, existing subscribers will downgrade. The high-margin core business erodes from within.</p>
+  <p class="body-text">The actual dynamic runs the other way.</p>
+
+  <div class="fork">
+    <p class="fork-label">Two ways to read cannibalization</p>
+    <div class="fork-paths">
+      <div class="fork-path ruled-out">
+        <p class="fork-path-title">Conventional read</p>
+        <p>On-demand competes with subscriptions on convenience. Subscribers churn to the more flexible model. Margin per customer falls.</p>
+      </div>
+      <div class="fork-path chosen">
+        <p class="fork-path-title">The actual dynamic</p>
+        <p>On-demand is the low-commitment onramp. New users currently wait 2 days to start a subscription. Calo Now eliminates that friction — and a successful on-demand experience makes the subscription pitch obvious: <em>"same personalization, better value, delivered daily."</em></p>
+      </div>
+    </div>
+  </div>
+
+  <p class="body-text" style="margin-top: 1.5rem">The one condition: on-demand pricing can't undercut subscriptions. Subscriptions own planned nutrition routines. On-demand handles high-stakes impulse moments. Most customers would need both.</p>
+</div>
+
+<!-- ======== BEAT 9: THE OUTCOME ======== -->
+<div class="beat" id="s-outcome">
+  <p class="small-label">The Outcome</p>
+  <p class="large-statement">Right thesis, wrong timing.</p>
+  <div class="kicker">
+    <p>The strategy document sat in a folder. The prototype too.</p>
+    <p>A few months later, a founder who'd built one of the most operationally complex companies in the world went public with the same thesis — that the future of food is personalized, component-based, delivered from dark kitchens.</p>
+    <p style="margin-top:1.25rem"><a href="https://atoms.co/vision" target="_blank" rel="noopener">Atoms, by Travis Kalanick →</a></p>
+  </div>
+</div>
+
+<!-- ======== FOOTER ======== -->
+<div class="cta-section">
+  <p class="cta-question">What are you working on?</p>
+  <div class="cta-row">
+    <span class="cta-label">Email</span>
+    <a class="cta-link" href="mailto:hello@rishabhsethi.com">hello@rishabhsethi.com <span class="cta-arrow">→</span></a>
+  </div>
+  <div class="cta-row">
+    <span class="cta-label">Schedule a conversation</span>
+    <a class="cta-link" href="https://calendly.com" target="_blank" rel="noopener">Calendly <span class="cta-arrow">→</span></a>
+  </div>
+</div>
+
+<div class="footer">
+  <span>Rishabh Sethi · 2026</span>
+  <span>Dubai, UAE</span>
+</div>
+
+</div><!-- /page -->
+
+<script>
+/* ── SEGMENT ACCORDION REVEAL ── */
+const segStages = document.querySelectorAll('.seg-stage');
+const segIO = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('vis'), i * 80);
+    }
+  });
+}, { threshold: 0.05 });
+segStages.forEach(s => segIO.observe(s));
+
+/* ── SCROLL REVEAL ── */
+const beats = document.querySelectorAll('.beat');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.06 });
+beats.forEach(b => io.observe(b));
+
+/* ── SIDEBAR ACTIVE ── */
+const sections = document.querySelectorAll('.beat[id]');
+const navLinks = document.querySelectorAll('.sidebar-nav a');
+const sio = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const link = document.querySelector(`.sidebar-nav a[href="#${e.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+sections.forEach(s => sio.observe(s));
+</script>
+
+
+<div id="lightbox">
+  <button id="lb-close" aria-label="Close">×</button>
+  <img id="lb-img" src="" alt="">
+</div>
+
+<script>
+(function(){
+  const lb     = document.getElementById('lightbox');
+  const lbImg  = document.getElementById('lb-img');
+  const lbClose= document.getElementById('lb-close');
+  document.querySelectorAll('.lb-trigger').forEach(function(el){
+    el.addEventListener('click', function(){
+      var img = this.querySelector('img');
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lb.classList.add('open');
+    });
+  });
+  lbClose.addEventListener('click', function(){ lb.classList.remove('open'); });
+  lb.addEventListener('click', function(e){ if(e.target === lb) lb.classList.remove('open'); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') lb.classList.remove('open'); });
+})();
+</script>
+
 </body>
 </html>

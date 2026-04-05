@@ -145,7 +145,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
 }
 .career-fork-box .cff-label { font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
 .career-fork-box .cff-desc { font-size: 12px; color: var(--light); margin-top: 0.15rem; line-height: 1.5; }
-.career-fork-arrow { text-align: center; font-size: 11px; color: var(--faint); padding: 0.3rem 0; letter-spacing: 0.2em; }
+.career-fork-arrow { text-align: center; font-size: 11px; color: var(--light); padding: 0.3rem 0; letter-spacing: 0.2em; }
 
 /* === STRATEGY CHAIN === */
 .chain { margin-top: 2rem; max-width: 520px; }
@@ -195,6 +195,15 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
 .img-pair .case-img { margin-top: 0; }
 
 /* FOOTER */
+.cta-section { margin-bottom: 4rem; }
+.cta-question { font-size: 17px; font-weight: 500; color: var(--ink); margin-bottom: 1.75rem; letter-spacing: -0.01em; }
+.cta-row { display: flex; align-items: baseline; justify-content: space-between; padding: 0.75rem 0; border-top: 1px solid var(--rule); }
+.cta-row:last-child { border-bottom: 1px solid var(--rule); }
+.cta-label { font-size: 12px; color: var(--muted); }
+.cta-link { font-size: 12px; color: var(--mid); text-decoration: none; transition: color 0.15s ease; }
+.cta-link:hover { color: var(--ink); }
+.cta-arrow { display: inline-block; margin-left: 0.25rem; transition: transform 0.15s ease; }
+.cta-link:hover .cta-arrow { transform: translateX(3px); }
 .footer { display: flex; justify-content: space-between; align-items: baseline; font-size: 11px; color: var(--faint); letter-spacing: 0.04em; padding-top: 2rem; border-top: 1px solid var(--rule); margin-top: 6rem; }
 
 /* === SIDEBAR NAV === */
@@ -229,6 +238,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
   .fork-path:first-child { border-right: none; border-bottom: 1px solid var(--rule); }
   .img-pair { grid-template-columns: 1fr; }
   .beat { margin-bottom: 4rem; }
+  .cta-row { flex-direction: column; gap: 0.3rem; padding: 0.85rem 0; }
   .footer { flex-direction: column; gap: 0.3rem; }
   .career-fork-container { flex-direction: column; }
   .seg-chart { max-width: 100%; }
@@ -1728,6 +1738,18 @@ setTimeout(netFitView, 80);
   <p class="large-statement">What's been worked through — and what hasn't.</p>
   <p class="body-text">Bridge Acquire and Bridge Engage each have a defined problem, a feature direction, and an early product roadmap. Bridge Network is a hypothesis that depends on both succeeding first — it doesn't stand on its own.</p>
   <p class="body-text">What's still genuinely open: how big are the two segments, and are they big enough to build separate product lines around — or should one come first and the other follow? Whether the GTM goes direct to independent PTs or through gyms changes the acquisition cost, the pricing model, and arguably the product itself. And the one question that sits underneath all of it: is the trainer's willingness to pay strong enough to sustain a direct motion, or does Bridge need institutional distribution before going after independents?</p>
+</div>
+
+<div class="cta-section">
+  <p class="cta-question">What are you working on?</p>
+  <div class="cta-row">
+    <span class="cta-label">Email</span>
+    <a class="cta-link" href="mailto:hello@rishabhsethi.com">hello@rishabhsethi.com <span class="cta-arrow">→</span></a>
+  </div>
+  <div class="cta-row">
+    <span class="cta-label">Schedule a conversation</span>
+    <a class="cta-link" href="https://calendly.com" target="_blank" rel="noopener">Calendly <span class="cta-arrow">→</span></a>
+  </div>
 </div>
 
 <div class="footer">
