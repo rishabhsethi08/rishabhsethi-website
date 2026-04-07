@@ -220,12 +220,6 @@ body {
   text-align: center;
 }
 
-/* Temporary: gradient backgrounds until each WORK item has `photo` (then delete these) */
-.img-blinctrip-video    { background-image: linear-gradient(160deg, #2A3F52 0%, #4A6A80 50%, #7A9DB0 100%); background-size: cover; background-position: center; }
-.img-blinctrip-notif    { background-image: linear-gradient(160deg, #1E3448 0%, #3A5C78 50%, #6A8FA8 100%); background-size: cover; background-position: center; }
-.img-abhee              { background-image: linear-gradient(160deg, #4A3A4E 0%, #7A6A82 50%, #A898AE 100%); background-size: cover; background-position: center; }
-.img-experience         { background-image: linear-gradient(160deg, #5A4030 0%, #8A6A4E 50%, #BAA080 100%); background-size: cover; background-position: center; }
-.img-irctc              { background-image: linear-gradient(160deg, #2E4450 0%, #4A6A7A 50%, #7A9AA8 100%); background-size: cover; background-position: center; }
 .img-instashop          { background-image: url('images/instashop.png'); background-size: cover; background-position: center; }
 
 
@@ -410,7 +404,7 @@ body {
     <p class="cta-question">What are you working on?</p>
     <div class="cta-row">
       <span class="cta-label">Email</span>
-      <a class="cta-link" href="/cdn-cgi/l/email-protection#f29a979e9e9db2809b819a93909a8197869a9bdc919d9f"><span class="__cf_email__" data-cfemail="375f525b5b5877455e445f56555f4452435f5e1954585a">[email&#160;protected]</span> <span class="cta-arrow">→</span></a>
+      <a class="cta-link" href="mailto:hello@rishabhsethi.com">hello@rishabhsethi.com <span class="cta-arrow">→</span></a>
     </div>
     <div class="cta-row">
       <span class="cta-label">Schedule a conversation</span>
@@ -425,19 +419,14 @@ body {
 
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // ─────────────────────────────────────────────
 // WORK CARDS — add `photo: 'images/…'` per item (960×1360). Omit photo → uses .image gradient until asset exists.
 // ─────────────────────────────────────────────
 const WORK = [
   { type:'work', image:'img-blinctrip-strategy', photo:'images/blinctrip-strategy.png', caption:'Zero to $1M/mo. Acquired.',              url:'work/building-blinctrip.html' },
-  { type:'work', image:'img-blinctrip-video',    caption:'The product story in 90 seconds.',        url:'work/blinctrip-launch-video.html' },
-  { type:'work', image:'img-blinctrip-notif',    caption:'Post-booking engagement at 2× industry.', url:'work/blinctrip-notification-engine.html' },
   { type:'work', image:'img-calo',               photo:'images/calo.png',               caption:'Reframed the market entirely.',            url:'work/calo.html' },
   { type:'work', image:'img-bridge',             photo:'images/bridge.png',             caption:'Found the wedge no one saw.',             url:'work/bridge.html' },
-  { type:'work', image:'img-abhee',              caption:'One line about the insight.',             url:'work/abhee-aarna.html' },
-  { type:'work', image:'img-experience',         caption:'One line about the insight.',             url:'work/experience-economy.html' },
-  { type:'work', image:'img-irctc',              caption:'One line about the insight.',             url:'work/irctc.html' },
 ];
 
 // ─────────────────────────────────────────────
@@ -489,12 +478,11 @@ function buildThoughtCard(d) {
   </a>`;
 }
 
-// W W T W W T pattern
+// W T W T … alternating pattern
 const FEED = [];
 let wi = 0, ti = 0;
 while (wi < WORK.length || ti < THOUGHTS.length) {
-  if (wi < WORK.length) FEED.push(WORK[wi++]);
-  if (wi < WORK.length) FEED.push(WORK[wi++]);
+  if (wi < WORK.length)   FEED.push(WORK[wi++]);
   if (ti < THOUGHTS.length) FEED.push(THOUGHTS[ti++]);
 }
 
