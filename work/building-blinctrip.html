@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building Blinctrip — Rishabh Sethi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@0,400;0,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #FFFFFF; --ink: #111111; --mid: #3A3A3A; --muted: #6A6A6A;
+  --light: #9A9A9A; --faint: #DEDEDE; --rule: rgba(0,0,0,0.07);
+  --rule-strong: rgba(0,0,0,0.12); --card-bg: rgba(0,0,0,0.025);
+  --accent: #4A6CF5; --accent-faint: rgba(74,108,245,0.07);
+  --mono: 'IBM Plex Mono', 'SF Mono', monospace;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --purple: #DAC0FF; --blue: #ABD3FF; --yellow: #FFF0A7;
+}
+html { scroll-behavior: smooth; scroll-padding-top: 100px; overflow-x: hidden; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+::selection { background: var(--ink); color: var(--bg); }
+.page { max-width: 720px; margin: 0 auto; padding: 4.5rem 2.5rem 6rem; }
+
+.back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: var(--light); text-transform: uppercase; text-decoration: none; margin-bottom: 6rem; transition: color 0.2s; }
+.back-link:hover { color: var(--mid); }
+.back-link:hover .ba { transform: translateX(-3px); }
+.ba { display: inline-block; transition: transform 0.2s; }
+
+/* BEATS */
+.beat { margin-bottom: 5rem; opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.beat.vis { opacity: 1; transform: translateY(0); }
+
+/* TYPE */
+.headline { font-size: 28px; font-weight: 600; line-height: 1.3; color: var(--ink); max-width: 520px; letter-spacing: -0.03em; }
+.body-text { font-size: 15px; color: var(--mid); line-height: 1.75; max-width: 520px; margin-top: 1.1rem; }
+.body-text + .body-text { margin-top: 0.8rem; }
+.body-text strong { font-weight: 600; color: var(--ink); }
+.small-label { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.07em; color: var(--light); text-transform: uppercase; display: block; margin-bottom: 0.9rem; }
+.large-statement { font-size: 22px; font-weight: 600; line-height: 1.4; color: var(--ink); max-width: 520px; letter-spacing: -0.02em; }
+
+.context-strip { display: flex; gap: 2.5rem; flex-wrap: wrap; padding: 1.4rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-top: 2rem; }
+.context-item .small-label { margin-bottom: 0.25rem; }
+.context-value { font-family: var(--mono); font-size: 12px; color: var(--mid); }
+
+.evidence { background: var(--card-bg); border: 1px solid var(--rule); border-radius: 6px; padding: 1.25rem 1.5rem; margin-top: 1.5rem; max-width: 520px; }
+.evidence p { font-size: 14px; font-style: italic; color: var(--mid); line-height: 1.75; }
+.evidence .src { font-style: normal; font-size: 11px; color: var(--light); margin-top: 0.5rem; display: block; }
+
+.insight-line { border-left: 2px solid var(--accent); padding-left: 1.25rem; margin-top: 1.5rem; max-width: 520px; }
+.insight-line p { font-size: 14px; color: var(--ink); line-height: 1.75; }
+.insight-line p strong { font-weight: 600; }
+
+.callout { margin-top: 1.5rem; max-width: 520px; padding: 1.1rem 1.4rem; background: var(--card-bg); border: 1px solid var(--rule-strong); border-radius: 6px; }
+.callout p { font-size: 14px; color: var(--ink); line-height: 1.75; font-style: italic; }
+
+/* SYNTHESIS PHOTOS */
+.synth-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 2rem; max-width: 520px; border-radius: 6px; overflow: hidden; }
+.synth-photo { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+.synth-caption { font-family: var(--mono); font-size: 10px; color: var(--light); margin-top: 0.65rem; max-width: 520px; }
+
+/* LIGHTBOX */
+.lb-trigger { cursor: zoom-in; position: relative; }
+.lb-trigger::after { content: '↗'; position: absolute; bottom: 0.5rem; right: 0.6rem; font-size: 11px; color: rgba(255,255,255,0.75); background: rgba(0,0,0,0.35); padding: 2px 5px; border-radius: 3px; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+.lb-trigger:hover::after { opacity: 1; }
+#lightbox { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.88); align-items: center; justify-content: center; padding: 2rem; }
+#lightbox.open { display: flex; }
+#lightbox img { max-width: min(90vw, 1000px); max-height: 90vh; border-radius: 6px; object-fit: contain; box-shadow: 0 8px 48px rgba(0,0,0,0.5); }
+#lb-close { position: fixed; top: 1.25rem; right: 1.5rem; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.12); border: none; color: #fff; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; transition: background 0.2s; }
+#lb-close:hover { background: rgba(255,255,255,0.25); }
+#lb-prev, #lb-next { position: fixed; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.12); border: none; color: #fff; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; z-index: 10000; }
+#lb-prev { left: 1.5rem; }
+#lb-next { right: 1.5rem; }
+#lb-prev:hover, #lb-next:hover { background: rgba(255,255,255,0.25); }
+
+/* FORK */
+.fork { margin-top: 2rem; max-width: 520px; background: var(--card-bg); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.fork-label { padding: 0.8rem 1.2rem; border-bottom: 1px solid var(--rule); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: var(--light); text-transform: uppercase; }
+.fork-paths { display: grid; grid-template-columns: 1fr 1fr; }
+.fork-path { padding: 1rem 1.2rem; }
+.fork-path:first-child { border-right: 1px solid var(--rule); }
+.fork-path-title { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+.fork-path p { font-size: 13px; color: var(--mid); line-height: 1.75; }
+.fork-path.chosen { background: var(--accent-faint); }
+.fork-path.chosen .fork-path-title { color: var(--accent); }
+.fork-path.ruled-out { opacity: 0.5; }
+.fork-path.ruled-out .fork-path-title::after { content: ' ✕'; color: var(--light); }
+
+/* EXPERIMENT CARDS */
+.exp-pair { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; max-width: 520px; }
+.exp-card { border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--card-bg); }
+.exp-head { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.1rem; border-bottom: 1px solid var(--rule); }
+.exp-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--light); }
+.exp-result-pill { font-family: var(--mono); font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 3px; background: var(--accent-faint); color: var(--accent); }
+.exp-body { padding: 0.85rem 1.1rem; }
+.exp-hypothesis { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 0.65rem; line-height: 1.4; }
+.exp-rows { display: grid; grid-template-columns: 76px 1fr; gap: 0.3rem 0.75rem; align-items: start; }
+.exp-row-label { font-size: 11px; color: var(--light); font-family: var(--mono); padding-top: 1px; line-height: 1.6; }
+.exp-row-val { font-size: 13px; color: var(--mid); line-height: 1.6; }
+.exp-row-val strong { color: var(--ink); font-weight: 600; }
+.exp-learnings { margin-top: 0.85rem; padding-top: 0.85rem; border-top: 1px solid var(--rule); }
+.exp-learn-label { font-family: var(--mono); font-size: 10px; color: var(--light); letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 0.4rem; }
+.exp-learn-items { font-size: 13px; color: var(--muted); line-height: 1.75; }
+
+/* CHAIN */
+.chain { margin-top: 2rem; max-width: 520px; }
+.chain-step { position: relative; padding-left: 1.5rem; padding-bottom: 1.5rem; border-left: 1px solid var(--rule); }
+.chain-step:last-child { border-left: 1px solid transparent; padding-bottom: 0; }
+.chain-dot { position: absolute; left: -4px; top: 0.2rem; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.chain-step p { font-size: 14px; color: var(--mid); line-height: 1.85; }
+.chain-step strong { font-weight: 600; color: var(--ink); }
+.chain-outcome { margin-top: 0.75rem; padding: 0.7rem 1rem; border-radius: 5px; background: var(--accent-faint); border: 1px solid rgba(74,108,245,0.18); }
+.chain-outcome p { font-size: 13px; color: #1E3A8A; line-height: 1.7; font-weight: 500; }
+
+/* DECISION TREE */
+.dtree { margin-top: 2rem; max-width: 520px; position: relative; padding-left: 1.25rem; }
+.dtree::before { content: ''; position: absolute; left: 4px; top: 10px; bottom: 28px; width: 1px; background: var(--faint); }
+.dtree-node { position: relative; padding-left: 1.5rem; padding-bottom: 2rem; }
+.dtree-node:last-child { padding-bottom: 0; }
+.dtree-dot { position: absolute; left: -6px; top: 4px; width: 11px; height: 11px; border-radius: 50%; background: var(--faint); border: 2px solid var(--bg); box-shadow: 0 0 0 1px var(--faint); }
+.dtree-dot.live { background: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.dtree-date { font-family: var(--mono); font-size: 10px; color: var(--light); letter-spacing: 0.06em; margin-bottom: 0.3rem; text-transform: uppercase; }
+.dtree-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 0.3rem; }
+.dtree-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
+.dtree-branches { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.75rem; margin-left: 0.1rem; }
+.dtree-branch { padding: 0.55rem 0.85rem; border-radius: 4px; border-left: 2px solid var(--rule); }
+.dtree-branch.kept { border-left-color: var(--accent); background: var(--accent-faint); }
+.dtree-branch.dropped { opacity: 0.45; }
+.dtree-branch-name { font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 0.15rem; }
+.dtree-branch.dropped .dtree-branch-name { text-decoration: line-through; color: var(--muted); }
+.dtree-branch-desc { font-size: 11px; color: var(--muted); line-height: 1.55; }
+
+/* DECISION TREE SVG */
+.dtree-svg-wrap { margin-top: 2rem; overflow-x: auto; position: relative; -webkit-overflow-scrolling: touch; }
+.dtree-svg-wrap svg { display: block; }
+.dtree-tip { position: absolute; background: var(--ink); color: var(--bg); font-family: var(--mono); font-size: 11px; padding: 4px 9px; border-radius: 3px; pointer-events: none; display: none; white-space: nowrap; z-index: 200; letter-spacing: 0.03em; }
+.dtree-info { margin-top: 1.25rem; max-width: 520px; padding: 1rem 1.25rem; background: var(--card-bg); border: 1px solid var(--rule); border-radius: 6px; transition: border-color 0.2s; }
+.dtree-info-label { font-family: var(--mono); font-size: 10px; color: var(--light); letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 0.3rem; }
+.dtree-info-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 0.35rem; }
+.dtree-info-desc { font-size: 13px; color: var(--mid); line-height: 1.75; }
+
+/* PLATFORM ROADMAP */
+.roadmap { margin-top: 1.75rem; max-width: 520px; display: flex; flex-direction: column; gap: 3px; }
+.rm-row { display: grid; grid-template-columns: 58px 1fr; border: 1px solid var(--rule); border-radius: 5px; overflow: hidden; background: var(--card-bg); }
+.rm-ver { padding: 0.65rem 0.7rem; border-right: 1px solid var(--rule); display: flex; align-items: center; justify-content: center; }
+.rm-ver-label { font-family: var(--mono); font-size: 10px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.4; text-align: center; }
+.rm-content { padding: 0.65rem 0.9rem; }
+.rm-name { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 0.2rem; }
+.rm-desc { font-size: 11px; color: var(--muted); line-height: 1.55; }
+
+/* METRIC GRID */
+.metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 2rem; max-width: 520px; background: var(--rule); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+.metric-cell { background: var(--bg); padding: 1.1rem 1.2rem; }
+.metric-cell.wide { grid-column: span 3; }
+.metric-num { font-size: 26px; font-weight: 600; color: var(--ink); letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 0.3rem; }
+.metric-label { font-size: 11px; color: var(--muted); line-height: 1.5; }
+.metric-note { font-size: 10px; color: var(--light); margin-top: 0.2rem; font-style: italic; }
+
+/* FOOTER */
+.cta-section { margin-top: 7.5rem; margin-bottom: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--rule); }
+.cta-question { font-size: 17px; font-weight: 500; color: var(--ink); margin-bottom: 1.75rem; letter-spacing: -0.01em; }
+.cta-row { display: flex; align-items: baseline; justify-content: space-between; padding: 0.75rem 0; border-top: 1px solid var(--rule); }
+.cta-label { font-family: var(--mono); font-size: 11px; color: var(--light); letter-spacing: 0.05em; }
+.cta-link { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.cta-link:hover { color: var(--ink); }
+.cta-arrow { display: inline-block; margin-left: 0.25rem; transition: transform 0.15s ease; }
+.cta-link:hover .cta-arrow { transform: translateX(3px); }
+.footer { display: flex; justify-content: space-between; align-items: baseline; font-size: 11px; color: var(--light); letter-spacing: 0.04em; padding-top: 2rem; border-top: 1px solid var(--rule); }
+
+/* RELATED LINK */
+.related-link { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border: 1px solid var(--rule); border-radius: 6px; text-decoration: none; color: inherit; margin-top: 1.5rem; max-width: 520px; transition: border-color 0.2s, background 0.2s; background: var(--card-bg); }
+.related-link:hover { border-color: var(--rule-strong); background: rgba(0,0,0,0.035); }
+.rl-label { font-family: var(--mono); font-size: 10px; color: var(--light); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.25rem; }
+.rl-title { font-size: 14px; font-weight: 500; color: var(--ink); }
+.rl-arrow { font-size: 16px; color: var(--light); transition: transform 0.2s, color 0.2s; flex-shrink: 0; margin-left: 1rem; }
+.related-link:hover .rl-arrow { transform: translateX(4px); color: var(--mid); }
+
+/* SIDEBAR NAV */
+.sidebar-nav { position: fixed; top: 50%; left: 2rem; transform: translateY(-50%); display: flex; flex-direction: column; gap: 0.5rem; z-index: 100; }
+.sidebar-nav a { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--light); text-decoration: none; transition: color 0.2s, transform 0.2s; white-space: nowrap; }
+.sidebar-nav a:hover { color: var(--mid); transform: translateX(2px); }
+.sidebar-nav a.active { color: var(--ink); }
+.sidebar-nav a.active::before { content: '—'; margin-right: 0.4rem; }
+@media (max-width: 1200px) { .sidebar-nav { display: none; } }
+
+@media (max-width: 640px) {
+  .metric-grid { grid-template-columns: repeat(2, 1fr); }
+  .metric-cell.wide { grid-column: span 2; }
+  .fork-paths { grid-template-columns: 1fr; }
+  .fork-path:first-child { border-right: none; border-bottom: 1px solid var(--rule); }
+  .exp-rows { grid-template-columns: 66px 1fr; }
+  .rm-row { grid-template-columns: 48px 1fr; }
+  .synth-grid { grid-template-columns: 1fr; }
+  .cta-row { flex-direction: column; gap: 0.3rem; padding: 0.85rem 0; }
+  .footer { flex-direction: column; gap: 0.3rem; }
+}
+
+/* HERO MEDIA */
+.hero-media { width:100%; aspect-ratio:16/9; border-radius:8px; overflow:hidden; margin-bottom:5rem; background:linear-gradient(160deg,#0F1117 0%,#1A1F3A 35%,#252B55 65%,#343D78 100%); position:relative; }
+.hero-media video { width:100%; height:100%; object-fit:cover; display:block; }
+.hero-media iframe { width:100%; height:100%; border:none; display:block; }
+
+/* STRATEGY PARTS */
+.strategy-parts { margin-top: 2rem; max-width: 520px; display: flex; flex-direction: column; gap: 0; }
+.strat-part { display: grid; grid-template-columns: 60px 1fr; border: 1px solid var(--rule); border-radius: 5px; overflow: hidden; background: var(--card-bg); }
+.strat-num { padding: 1rem 0.8rem; border-right: 1px solid var(--rule); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 1.1rem; gap: 0.2rem; }
+.strat-num-pre { font-family: var(--mono); font-size: 8px; font-weight: 500; color: var(--light); text-transform: uppercase; letter-spacing: 0.07em; }
+.strat-num-digit { font-family: var(--mono); font-size: 18px; font-weight: 500; color: var(--mid); line-height: 1; }
+.strat-connector { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0 0.4rem 1rem; }
+.strat-connector-arrow { font-size: 11px; color: var(--light); }
+.strat-connector-label { font-family: var(--mono); font-size: 10px; color: var(--light); letter-spacing: 0.07em; text-transform: uppercase; }
+.strat-body { padding: 1rem 1.2rem; }
+.strat-headline { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.5; margin-bottom: 0.4rem; }
+.strat-desc { font-size: 12px; color: var(--muted); line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<nav class="sidebar-nav" id="snav">
+  <a href="#s-problem">Thesis</a>
+  <a href="#s-bluf">BLUF</a>
+  <a href="#s-strategy">Strategy</a>
+  <a href="#s-research">Research</a>
+  <a href="#s-positioning">Positioning</a>
+  <a href="#s-v1">Version 1</a>
+  <a href="#s-pivot">The pivot</a>
+  <a href="#s-platform">Platform</a>
+  <a href="#s-ai">AI bet</a>
+  <a href="#s-results">Results</a>
+</nav>
+
+<div class="page">
+  <a href="../index.html" class="back-link"><span class="ba">←</span> Rishabh Sethi</a>
+
+  <!-- ======== HERO MEDIA ========
+       OPTION A — Local MP4: drop the file at images/blinctrip/blinctrip-launch.mp4
+                             (poster image at images/blinctrip/blinctrip-cover.png)
+       OPTION B — YouTube:   replace src="..." with the YouTube embed URL
+                             e.g. https://www.youtube.com/embed/YOUR_VIDEO_ID?rel=0
+       Gradient shows through as fallback until video is ready.
+  ======== -->
+  <div class="hero-media">
+    <video controls preload="metadata">
+      <source src="../images/building-blinctrip/Blinctrip video copy.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- ======== BEAT 1: FOUNDING THESIS ======== -->
+  <div class="beat" id="s-problem">
+    <p class="small-label">The Founding Thesis</p>
+    <p class="headline">The world doesn't need another way to book tickets.</p>
+    <p class="body-text">That was our starting constraint. I joined Blinctrip as Head of Product &amp; Design in January 2019, as part of the founding team. Twenty years after the first OTA, booking flights was a solved problem. Price comparison, loyalty integrations, seat selectors — all of it existed, and the incumbents had a decade of data advantage. We weren't going to out-OTA MakeMyTrip.</p>
+    <p class="body-text">That was the bet: the post-booking experience was broken, underinvested, and worth exploring.</p>
+    <div class="context-strip">
+      <div class="context-item"><p class="small-label">Role</p><p class="context-value">Head of Product &amp; Design</p></div>
+      <div class="context-item"><p class="small-label">Type</p><p class="context-value">Founding team</p></div>
+      <div class="context-item"><p class="small-label">Duration</p><p class="context-value">Jan 2019 – 2023</p></div>
+      <div class="context-item"><p class="small-label">Domain</p><p class="context-value">Travel tech · Consumer</p></div>
+    </div>
+  </div>
+
+  <!-- ======== BEAT 2: BLUF ======== -->
+  <div class="beat" id="s-bluf">
+    <p class="small-label">Bottom Line Upfront</p>
+    <p class="large-statement">Nobody owned what happened after you paid. We did.</p>
+    <p class="body-text">We built Blinctrip on the premise that travel stress — not pricing or inventory — was the unsolved problem worth owning. Every incumbent had abandoned their customers the moment the transaction completed. If we could solve for stress, we could build a great business.</p>
+    <p class="body-text">We placed two bets — Door-to-door search and Trip Management — both in service of the same premise: making a traveller feel looked after from the time they booked their ticket to the time they got back home. We built a unique travel platform that survived the pandemic and the liquidity crunch that followed, then rebuilt the product around an AI-first architecture before the rest of the industry knew that was the right call.</p>
+    <p class="body-text">The bet that defined the exit was made in early 2023: throwing out the rule-based notification engine and replacing it with an AI-driven system that reasoned about context rather than triggering on rules — a full year before agentic AI became a product category.</p>
+    <p class="body-text">Blinctrip was acquired for $30M by a NASDAQ-listed travel technology company. Before it was folded into the acquirer's product suite — it was generating $1.2M/month, had 49% users returning within 3 months and was rated 4.6 on the App Store. Blinctrip is dead, long live Blinctrip.</p>
+  </div>
+
+  <!-- ======== BEAT 2b: STRATEGY ======== -->
+  <div class="beat" id="s-strategy">
+    <p class="small-label">Strategy in three parts</p>
+    <p class="headline">Whoever owns the stress-free travel experience owns a very large business.</p>
+
+    <div class="strategy-parts">
+      <div class="strat-part">
+        <div class="strat-num">
+          <span class="strat-num-pre">Part</span>
+          <span class="strat-num-digit">1</span>
+        </div>
+        <div class="strat-body">
+          <p class="strat-headline">Urban active travellers are the most valuable customers in the travel industry. Becoming their preferred app is a very large business.</p>
+          <p class="strat-desc">Frequent travellers aged 22–40, work and leisure, top 24 cities — this audience represents the most powerful distribution platform in travel. They take more trips, plan further ahead, and spend more on ancillary services. Owning them means owning the highest-value, highest-context customers in the industry.</p>
+        </div>
+      </div>
+      <div class="strat-connector">
+        <span class="strat-connector-arrow">↓</span>
+        <span class="strat-connector-label">achieved by</span>
+      </div>
+      <div class="strat-part">
+        <div class="strat-num">
+          <span class="strat-num-pre">Part</span>
+          <span class="strat-num-digit">2</span>
+        </div>
+        <div class="strat-body">
+          <p class="strat-headline">Reducing travel stress makes us their preferred travel app.</p>
+          <p class="strat-desc">Stress in travel is caused by information asymmetry — the gate change you didn't know about, the cab timing you miscalculated, the bag belt you had to guess. Travellers don't remember price — they remember how a trip felt. Whoever eliminates that asymmetry consistently earns the habitual open rate that no loyalty programme can manufacture. It's also the most defensible moat in travel, because it requires depth of integration across the entire journey — not a single feature any competitor can copy.</p>
+        </div>
+      </div>
+      <div class="strat-connector">
+        <span class="strat-connector-arrow">↓</span>
+        <span class="strat-connector-label">which requires</span>
+      </div>
+      <div class="strat-part">
+        <div class="strat-num">
+          <span class="strat-num-pre">Part</span>
+          <span class="strat-num-digit">3</span>
+        </div>
+        <div class="strat-body">
+          <p class="strat-headline">Designing for the entire traveller lifecycle produces a 10x better experience — and earns the title of default travel app.</p>
+          <p class="strat-desc">A single international trip involves planning, booking, pre-trip preparation (documents, visas, check-in, timing), travel day (queues, gates, bags), and return. Reducing stress in one area doesn't produce a behavioural shift. If you build for only one segment, you will lose to the product that solves the whole journey. This is why the scope had to be the entire traveller lifecycle — and why a booking engine alone was never the answer.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== BEAT 3: RESEARCH ======== -->
+  <div class="beat" id="s-research">
+    <p class="small-label">Research</p>
+    <p class="headline">"I want someone to look after my journey."</p>
+    <p class="body-text">Before a line of code was written, I ran discovery sessions with 50 users across three groups — frequent business travellers, travel managers, and airline operations staff. Sessions were structured around the traveller journey: Planning, Booking, Pre-trip, Trip, Post-trip. The walls below show the output.</p>
+    <p class="body-text">The constraint going in: don't build what customers ask for. They describe symptoms. The job is to diagnose the condition underneath.</p>
+    <div class="synth-grid">
+      <div class="lb-trigger"><img class="synth-photo" src="../images/building-blinctrip/synthesis-1.jpg" alt="Research synthesis — journey stage wall" loading="lazy"></div>
+      <div class="lb-trigger"><img class="synth-photo" src="../images/building-blinctrip/synthesis-2.jpg" alt="Research synthesis — expert interviews" loading="lazy"></div>
+      <div class="lb-trigger"><img class="synth-photo" src="../images/building-blinctrip/synthesis-3.jpg" alt="Research synthesis — future of travel clustering" loading="lazy"></div>
+      <div class="lb-trigger"><img class="synth-photo" src="../images/building-blinctrip/synthesis-4.jpg" alt="Research synthesis — macro thoughts board" loading="lazy"></div>
+    </div>
+    <p class="synth-caption">Synthesis sessions, 2019 — 50 participants across travellers, travel managers, and airline staff.</p>
+    <div class="insight-line" style="margin-top:2rem">
+      <p>The signal was consistent across all three groups: travellers felt <strong>abandoned</strong> the moment they paid. The OTA had taken the transaction. Nobody owned what came next — and that gap was where almost all the stress lived.</p>
+    </div>
+  </div>
+
+  <!-- ======== BEAT 4: POSITIONING ======== -->
+  <div class="beat" id="s-positioning">
+    <p class="small-label">Positioning</p>
+    <p class="large-statement">Not an OTA. Not a trip manager. The intersection nobody had built.</p>
+    <p class="body-text">The competitive landscape divided cleanly into two camps. Booking platforms — MakeMyTrip, Goibibo, Cleartrip, EaseMyTrip — competed on price and inventory. They were volume businesses. Post-booking experience was a cost centre, not a value driver. There was no structural incentive to invest in it.</p>
+    <p class="body-text">Trip management tools — TripIt, Flighty, App in the Air — helped you track what you'd already booked. Useful, but niche. No booking capability meant no path to mainstream adoption.</p>
+    <p class="body-text">Blinctrip could sit at the intersection: booking capability that gets you in the door, and a post-booking experience that earns the relationship. Pricing at parity. Below par initially on hotel and bus inventory. Clearly above par on the one dimension high-frequency travellers were most dissatisfied with.</p>
+    <div class="fork">
+      <p class="fork-label">Competitive position</p>
+      <div class="fork-paths">
+        <div class="fork-path ruled-out">
+          <p class="fork-path-title">Pure OTA</p>
+          <p>Compete on price and inventory. No structural differentiation. Fighting MakeMyTrip for the same customer with less data, less volume, and no moat.</p>
+        </div>
+        <div class="fork-path chosen">
+          <p class="fork-path-title">Booking + Travel Management</p>
+          <p>Own the transaction and the relationship. At parity on price. Above par on post-booking. Build defensibility through engagement depth, not supply chain.</p>
+        </div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:1.5rem">
+      <p>"OTAs are in the e-commerce business. Blinctrip is in the platform business."</p>
+    </div>
+    <p class="body-text" style="margin-top:1.25rem">The entry strategy was deliberately indirect — a Trojan horse. Build the booking engine first, because booking is where travellers are. Use it to earn the initial relationship and create the itinerary that powers everything else. But the booking engine was never the business. It was the onramp. Every traveller who booked a flight became a traveller we could help for the entire trip.</p>
+  </div>
+
+  <!-- ======== BEAT 5: VERSION 1 ======== -->
+  <div class="beat" id="s-v1">
+    <p class="small-label">Version 1 — Checking Resonance</p>
+    <p class="large-statement">Two distinct assumptions. Tested separately.</p>
+    <p class="body-text">A thesis isn't a product. Before committing to the full platform vision, I structured two hypothesis-led MVPs — each with a specific question, a minimum build, and a single success metric. The goal wasn't to validate the entire strategy. It was to get real signal on the two riskiest assumptions before building further.</p>
+
+    <div class="exp-pair">
+      <div class="exp-card">
+        <div class="exp-head">
+          <span class="exp-label">Hypothesis 01</span>
+          <span class="exp-result-pill">26% D2D queries</span>
+        </div>
+        <div class="exp-body">
+          <p class="exp-hypothesis">Can we get adoption on the premise of "book a seamless journey" — door to door, not just airport to airport?</p>
+          <div class="exp-rows">
+            <span class="exp-row-label">MVP</span>
+            <span class="exp-row-val">Enable door-to-door search and display a complete itinerary — home to destination, including cabs, airports, and connections.</span>
+            <span class="exp-row-label">Measure</span>
+            <span class="exp-row-val">% of searches using D2D mode</span>
+            <span class="exp-row-label">Result</span>
+            <span class="exp-row-val"><strong>26% of all searches were door-to-door.</strong> Clear resonance with the premise.</span>
+          </div>
+          <div class="exp-learnings">
+            <p class="exp-learn-label">Learning</p>
+            <p class="exp-learn-items">Short-term booking metrics obscured the signal. Qualitative feedback was more predictive than the numbers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="lb-trigger" style="margin-top:1.25rem;max-width:520px;border-radius:8px;overflow:hidden;">
+      <img src="../images/building-blinctrip/v1-d2d.jpg" alt="D2D search and door-to-door itinerary — Blinctrip V1" style="width:100%;display:block;">
+    </div>
+
+    <div class="exp-pair" style="margin-top:2.5rem;">
+      <div class="exp-card">
+        <div class="exp-head">
+          <span class="exp-label">Hypothesis 02</span>
+          <span class="exp-result-pill">35% vs 20% repeat</span>
+        </div>
+        <div class="exp-body">
+          <p class="exp-hypothesis">If the post-booking experience is genuinely valuable, we'll see meaningfully higher repeat bookings on mobile — where the experience lives.</p>
+          <div class="exp-rows">
+            <span class="exp-row-label">MVP</span>
+            <span class="exp-row-val">D2D itinerary, real-time flight status, trip sharing, live notifications, travel checklist, document storage, helpline numbers.</span>
+            <span class="exp-row-label">Measure</span>
+            <span class="exp-row-val">Repeat bookings within 3 months: mobile app vs web</span>
+            <span class="exp-row-label">Result</span>
+            <span class="exp-row-val"><strong>Mobile app: 35% repeat. Web: 20%.</strong> Post-booking experience was driving retention.</span>
+          </div>
+          <div class="exp-learnings">
+            <p class="exp-learn-label">Learning</p>
+            <p class="exp-learn-items">The gap between 35% and 20% wasn't marginal. It was the thesis proving itself in the only metric that mattered.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="lb-trigger" style="margin-top:1.25rem;max-width:520px;border-radius:8px;overflow:hidden;">
+      <img src="../images/building-blinctrip/v1-trips.jpg" alt="Trip management view and proactive notifications — Blinctrip V1" style="width:100%;display:block;">
+    </div>
+  </div>
+
+  <!-- ======== BEAT 6: THE PIVOT ======== -->
+  <div class="beat" id="s-pivot">
+    <p class="small-label">The Decision Tree</p>
+    <p class="large-statement">The pandemic hit. D2D search lost traction. Trips kept growing. I made a call.</p>
+    <p class="body-text">We'd launched two parallel bets before the world shut down. Post-pandemic, the market had shifted structurally. D2D search depended on confidence in complex itineraries — confidence that travellers had temporarily lost. Trips held its traction. People still travelled; they wanted more control and information, not less.</p>
+    <p class="body-text">By June 2022, the data was unambiguous. The question wasn't whether to drop D2D — it was whether to pursue Trips as a feature or as the product. That was the harder call.</p>
+
+    <div class="lb-trigger" style="margin-top:2rem;max-width:520px;border-radius:8px;overflow:hidden;">
+      <img src="../images/building-blinctrip/decision-tree.jpg" alt="Decision tree — Blinctrip strategy paths" style="width:100%;display:block;">
+    </div>
+
+    <div class="dtree" style="margin-top:2rem;">
+      <div class="dtree-node">
+        <div class="dtree-dot live"></div>
+        <p class="dtree-date">Start build — Early 2019</p>
+        <p class="dtree-title">Two parallel bets</p>
+        <p class="dtree-desc">D2D Search (premise: seamless booking) and Trips (premise: post-booking ownership) launched simultaneously. Both had traction pre-pandemic.</p>
+      </div>
+      <div class="dtree-node">
+        <div class="dtree-dot"></div>
+        <p class="dtree-date">Jun 2021 — Post-pandemic</p>
+        <p class="dtree-title">Signal divergence</p>
+        <p class="dtree-desc">D2D Search traction declining as travel confidence remained fragile. Trips holding — travellers wanted more help with what they'd already booked, not more complex booking flows.</p>
+      </div>
+      <div class="dtree-node">
+        <div class="dtree-dot"></div>
+        <p class="dtree-date">Jun 2022</p>
+        <p class="dtree-title">The data forces the decision</p>
+        <div class="dtree-branches">
+          <div class="dtree-branch dropped">
+            <p class="dtree-branch-name">D2D Search — dropped &amp; defunded</p>
+            <p class="dtree-branch-desc">Not a wrong insight. Wrong timing, wrong funding environment to wait it out. The call was to cut it cleanly rather than let it bleed resources.</p>
+          </div>
+          <div class="dtree-branch kept">
+            <p class="dtree-branch-name">Trips → Platform bet</p>
+            <p class="dtree-branch-desc">Double down. Rework the conceptual model for scale. Turn Trips from a feature into the core product and the company's primary value driver.</p>
+          </div>
+        </div>
+      </div>
+      <div class="dtree-node">
+        <div class="dtree-dot live"></div>
+        <p class="dtree-date">Sep 2022</p>
+        <p class="dtree-title">Travel assistant repositioning</p>
+        <p class="dtree-desc">Shifted from "OTA with better trips" to "travel assistant that also books." The platform logic: pull together service provider data, destination context, and personal information — and use them to eliminate stress at every lifecycle stage.</p>
+      </div>
+      <div class="dtree-node">
+        <div class="dtree-dot live"></div>
+        <p class="dtree-date">Nov 2022 → Acquisition</p>
+        <p class="dtree-title">AI bet + acquisition path</p>
+        <p class="dtree-desc">Leisure travel driving growth. Roadmap extended into collaborative trip management and a critical AI bet on the notification engine — the decision that defined the exit.</p>
+      </div>
+    </div>
+
+    <div class="insight-line" style="margin-top:2rem">
+      <p>Killing D2D during a funding crunch was the hardest decision of the build. It's easy to kill a bet that's failing on bad fundamentals. It's harder to kill one that's failing on timing — knowing you might be right, but unable to afford to wait. <strong>We killed it. It was the right call.</strong></p>
+    </div>
+  </div>
+
+  <!-- ======== BEAT 7: PLATFORM ======== -->
+  <div class="beat" id="s-platform">
+    <p class="small-label">The Platform Bet</p>
+    <p class="large-statement">Turning Trips into a platform. 2 + 2 = 5.</p>
+    <p class="body-text">Think of it like Slack. Slack's product is messaging — but its business is the workspace that every team app plugs into. The itinerary is Blinctrip's equivalent of the workspace. Once a traveller's trip lives in Trips, every piece of information — flight status, cab timing, hotel check-in, documents, disruption alerts — plugs into that single source of truth. The traveller stops switching apps. The platform becomes the operating system for their journey.</p>
+    <p class="body-text">The platform thesis had six interdependent actions. Each was necessary; none was sufficient alone. The sequence mattered because each unlock created the foundation for the next one.</p>
+
+    <div class="chain">
+      <div class="chain-step">
+        <div class="chain-dot"></div>
+        <p><strong>Redesign Trips.</strong> The V1 model couldn't scale. Rework the conceptual model and build modular architecture — each component of a trip (flight, hotel, cab, document, notification) as an independent, composable unit that could evolve without breaking the whole.</p>
+      </div>
+      <div class="chain-step">
+        <div class="chain-dot"></div>
+        <p><strong>Improve engagement at stress peaks.</strong> Build high, sharp engagement moments at the points of highest traveller anxiety — pre-trip preparation, the journey itself, arrival — rather than spreading thin engagement across the whole lifecycle. Stress peaks are also attention peaks.</p>
+      </div>
+      <div class="chain-step">
+        <div class="chain-dot"></div>
+        <p><strong>Build frequency through stickiness.</strong> Each version introduced a new reason to return. Never miss a flight. Auto-import documents. Check in automatically. Share your trip. Get destination updates. Import all bookings from email. Habits compound.</p>
+      </div>
+      <div class="chain-step">
+        <div class="chain-dot"></div>
+        <p><strong>Redefine onboarding.</strong> Booking flows are funnels to Trips, not ends in themselves. Redefined "onboarded" as a user who has experienced Trips once. Every touch in the booking flow surfaced a Trips capability — saved home address, saved travellers, seat preferences — reducing time-to-value on the first post-booking experience.</p>
+      </div>
+      <div class="chain-step">
+        <div class="chain-dot"></div>
+        <p><strong>Embed into travellers' lives.</strong> Aggregate three data sources — service provider information (flights, hotels, cabs), destination information (weather, news, events), and personal information (calendar, email, location) — to generate proactive, context-aware guidance that no single source could produce alone.</p>
+      </div>
+      <div class="chain-step">
+        <div class="chain-dot"></div>
+        <p><strong>Onboard service partners.</strong> With a critical mass of high-value travellers on the platform, introduce targeted service integrations. The Trips platform made the audience visible and relevant for partners in ways a raw OTA couldn't.</p>
+        <div class="chain-outcome"><p>Each component reinforced the others. The platform moat grew with every new layer. That's what 2 + 2 = 5 looked like in practice.</p></div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:2rem">
+      <p><strong>The Super App Sidebar.</strong> Unlike mass-market super apps (PayTM, Amazon) that serve up a menu of everything, Blinctrip's model was contextual: different service integrations surfaced at different stages of the trip. Insurance before departure. Airport lounge access on travel day. Ground transport on arrival. The traveller only sees what's relevant to them, right now — which makes the integrations feel like help, not advertising. A flight booking earns 3–5% margin. The same traveller spending on ancillary services across a full trip is 2–5× more valuable. The platform model wasn't just a better product — it was a structurally better business.</p>
+    </div>
+
+    <p class="body-text" style="margin-top:1.75rem">Each version of the roadmap was named for the user problem it solved, not the feature it shipped. The distinction mattered — it kept the team oriented around outcomes during a period where feature pressure from stakeholders was constant.</p>
+
+    <div class="roadmap">
+      <div class="rm-row"><div class="rm-ver"><p class="rm-ver-label">V2</p></div><div class="rm-content"><p class="rm-name">All-new Trips</p><p class="rm-desc">Modular design · redesigned notification engine · live activity widgets · updated first-user experience</p></div></div>
+      <div class="rm-row"><div class="rm-ver"><p class="rm-ver-label">V2.1</p></div><div class="rm-content"><p class="rm-name">Never miss a flight again</p><p class="rm-desc">Accurate time-to-airport · boarding and security timing · live journey updates</p></div></div>
+      <div class="rm-row"><div class="rm-ver"><p class="rm-ver-label">V2.2</p></div><div class="rm-content"><p class="rm-name">Don't scramble for documents</p><p class="rm-desc">Auto-import boarding pass, ticket, invoices · redesigned document viewer</p></div></div>
+      <div class="rm-row"><div class="rm-ver"><p class="rm-ver-label">V2.3</p></div><div class="rm-content"><p class="rm-name">Check in automagically</p><p class="rm-desc">Seat preferences · airline integration · auto check-in on window open</p></div></div>
+      <div class="rm-row"><div class="rm-ver"><p class="rm-ver-label">V2.4</p></div><div class="rm-content"><p class="rm-name">Share your trip</p><p class="rm-desc">Trip updates on Blinctrip · WhatsApp for co-travellers · flight tracking for friends and family</p></div></div>
+      <div class="rm-row"><div class="rm-ver"><p class="rm-ver-label">V3</p></div><div class="rm-content"><p class="rm-name">Manage all your trips in one place</p><p class="rm-desc">Auto-import all bookings from email · flights, hotels, activities — wherever you booked them</p></div></div>
+      <div class="rm-row"><div class="rm-ver"><p class="rm-ver-label">V4</p></div><div class="rm-content"><p class="rm-name">Failure scenarios</p><p class="rm-desc">Alternate flights · rebooking flows · proactive disruption handling</p></div></div>
+      <div class="rm-row"><div class="rm-ver"><p class="rm-ver-label">V5</p></div><div class="rm-content"><p class="rm-name">Stakeholder sync</p><p class="rm-desc">Edge case handling · coupon engine · business traveller tools</p></div></div>
+    </div>
+  </div>
+
+  <!-- ======== BEAT 8: AI BET ======== -->
+  <div class="beat" id="s-ai">
+    <p class="small-label">The AI Bet — 2023</p>
+    <p class="headline">We rebuilt the notification engine as an AI-first system. Before LLM agents were a concept.</p>
+    <p class="body-text">In early 2023, I made the second significant call of the build: throw out the rule-based notification system and replace it with an AI-driven engine designed around lifecycle events and traveller context.</p>
+    <p class="body-text">The problem with rules in travel notifications is that the rules break constantly. "Notify 24 hours before departure" doesn't know the user has a 90-minute commute to the airport and it's raining. "Gate change — 41A" doesn't know the user is already standing at the wrong gate. Rules generate notifications. They can't generate the right action for a specific person in a specific situation.</p>
+    <p class="body-text">I designed an engine where the AI understood the complete trip context — every leg, every layover, every stated preference — and generated notifications as reasoning, not triggers. The system considered the traveller's current state, their historical behaviour, and the specific failure scenario in play before deciding what to surface and when.</p>
+    <div class="callout">
+      <p>"The goal wasn't more notifications. It was fewer, better ones — the kind that make a traveller feel looked after rather than tracked."</p>
+    </div>
+    <p class="body-text" style="margin-top:1.5rem">This was a full year before agentic AI systems became a mainstream product category. The notification engine became Blinctrip's highest-rated feature in user reviews, a core differentiator in the acquisition conversation, and a direct driver of the 49% return-booking rate that made the business case.</p>
+    <a href="blinctrip-notification-engine.html" class="related-link">
+      <div>
+        <p class="rl-label">Deep dive</p>
+        <p class="rl-title">How the AI notification engine was designed</p>
+      </div>
+      <span class="rl-arrow">→</span>
+    </a>
+  </div>
+
+  <!-- ======== BEAT 9: RESULTS ======== -->
+  <div class="beat" id="s-results">
+    <p class="small-label">Results</p>
+    <p class="large-statement">From zero. To $1.2M/month. Acquired for $30M.</p>
+    <p class="body-text">I built the product &amp; design function from scratch — a 7-person team across 4 cities and 2 time zones. 61% of bookings came organically. Post-booking engagement ran at 2x industry average throughout. The acquisition was by a NASDAQ-listed travel technology company.</p>
+
+    <div class="metric-grid">
+      <div class="metric-cell">
+        <p class="metric-num">$1.2M</p>
+        <p class="metric-label">Gross revenue / month</p>
+        <p class="metric-note">At time of acquisition</p>
+      </div>
+      <div class="metric-cell">
+        <p class="metric-num">4.8%</p>
+        <p class="metric-label">Booking conversion rate</p>
+        <p class="metric-note">2× industry average</p>
+      </div>
+      <div class="metric-cell">
+        <p class="metric-num">61%</p>
+        <p class="metric-label">Organic bookings</p>
+        <p class="metric-note">No paid acquisition</p>
+      </div>
+      <div class="metric-cell">
+        <p class="metric-num">49%</p>
+        <p class="metric-label">Users returning within 3 months</p>
+        <p class="metric-note">2× industry average</p>
+      </div>
+      <div class="metric-cell">
+        <p class="metric-num">4.6 / 5</p>
+        <p class="metric-label">App Store rating</p>
+        <p class="metric-note">From 2,000+ reviews</p>
+      </div>
+      <div class="metric-cell">
+        <p class="metric-num">$30M</p>
+        <p class="metric-label">Acquisition value</p>
+        <p class="metric-note">NASDAQ-listed acquirer</p>
+      </div>
+      <div class="metric-cell">
+        <p class="metric-num">65%</p>
+        <p class="metric-label">Product–market fit score</p>
+        <p class="metric-note">Sean Ellis benchmark · 40% = good</p>
+      </div>
+      <div class="metric-cell">
+        <p class="metric-num">667K</p>
+        <p class="metric-label">Registered users</p>
+        <p class="metric-note">By April 2022</p>
+      </div>
+      <div class="metric-cell">
+        <p class="metric-num">356%</p>
+        <p class="metric-label">Monthly segments growth</p>
+        <p class="metric-note">Active trip segments on platform</p>
+      </div>
+      <div class="metric-cell wide" style="padding: 0.9rem 1.2rem;">
+        <p class="metric-label" style="font-size:13px;color:var(--mid);line-height:1.7;">Led the critical pivot to an AI-first product strategy during a funding crunch — saving the company and enabling the exit. Supported CEO-level work including fundraising, product-market alignment, GTM strategy, and post-acquisition product integration.</p>
+      </div>
+    </div>
+  </div>
+
+<!-- ======== FOOTER ======== -->
+<div class="cta-section">
+  <p class="cta-question">What are you working on?</p>
+  <div class="cta-row">
+    <span class="cta-label">Email</span>
+    <a class="cta-link" href="mailto:hello@rishabhsethi.com">hello@rishabhsethi.com <span class="cta-arrow">→</span></a>
+  </div>
+  <div class="cta-row">
+    <span class="cta-label">Schedule a conversation</span>
+    <a class="cta-link" href="https://calendly.com" target="_blank" rel="noopener">Calendly <span class="cta-arrow">→</span></a>
+  </div>
+</div>
+
+<div class="footer">
+  <span>Rishabh Sethi · 2026</span>
+  <span>Dubai, UAE</span>
+</div>
+
+</div><!-- end .page -->
+
+<script>
+// ── BEAT SCROLL OBSERVER ──
+const beats = document.querySelectorAll('.beat');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.07 });
+beats.forEach(b => io.observe(b));
+
+// ── SIDEBAR HIGHLIGHT ──
+const sections = document.querySelectorAll('.beat[id]');
+const navLinks = document.querySelectorAll('.sidebar-nav a');
+const navObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const lnk = document.querySelector(`.sidebar-nav a[href="#${e.target.id}"]`);
+      if (lnk) lnk.classList.add('active');
+    }
+  });
+}, { threshold: 0.35 });
+sections.forEach(s => navObs.observe(s));
+
+
+</script>
+
+<div id="lightbox">
+  <button id="lb-close" aria-label="Close">×</button>
+  <button id="lb-prev" aria-label="Previous">‹</button>
+  <img id="lb-img" src="" alt="">
+  <button id="lb-next" aria-label="Next">›</button>
+</div>
+
+<script>
+(function(){
+  const lb      = document.getElementById('lightbox');
+  const lbImg   = document.getElementById('lb-img');
+  const lbClose = document.getElementById('lb-close');
+  const lbPrev  = document.getElementById('lb-prev');
+  const lbNext  = document.getElementById('lb-next');
+  const triggers = Array.from(document.querySelectorAll('.lb-trigger'));
+  let current = 0;
+
+  function show(index) {
+    current = (index + triggers.length) % triggers.length;
+    var img = triggers[current].querySelector('img');
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+  }
+
+  triggers.forEach(function(el, i){
+    el.addEventListener('click', function(){
+      show(i);
+      lb.classList.add('open');
+    });
+  });
+
+  lbClose.addEventListener('click', function(){ lb.classList.remove('open'); });
+  lb.addEventListener('click', function(e){ if(e.target === lb) lb.classList.remove('open'); });
+  lbPrev.addEventListener('click', function(e){ e.stopPropagation(); show(current - 1); });
+  lbNext.addEventListener('click', function(e){ e.stopPropagation(); show(current + 1); });
+
+  document.addEventListener('keydown', function(e){
+    if(!lb.classList.contains('open')) return;
+    if(e.key === 'Escape') lb.classList.remove('open');
+    if(e.key === 'ArrowLeft') show(current - 1);
+    if(e.key === 'ArrowRight') show(current + 1);
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  lb.addEventListener('touchstart', function(e){ touchStartX = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', function(e){
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if(Math.abs(diff) > 40) { diff > 0 ? show(current + 1) : show(current - 1); }
+  });
+})();
+</script>
+</body>
+</html>
