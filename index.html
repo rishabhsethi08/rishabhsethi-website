@@ -112,11 +112,30 @@ body {
 .filter-btn:hover { color: var(--mid); }
 .filter-btn.active { color: var(--ink); font-weight: 500; }
 
-/* ── FEED: three independent stacks (true column masonry). Items round-robined from FEED in JS. */
-.masonry {
+/* ── FEED: desktop = 3 stacks; mobile = 2 strips with alternating W/T (see renderGrid). */
+.masonry--desktop {
   display: flex;
   gap: 0.75rem;
   align-items: flex-start;
+}
+
+.masonry--mobile {
+  display: none;
+}
+
+/* Mobile: two vertical strips — order computed in JS so each strip alternates W/T (see renderGrid). */
+.masonry-strips {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.masonry-strip {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .masonry-col {
@@ -364,9 +383,16 @@ body {
   .name { margin-bottom: 3.5rem; }
   .hero { margin-bottom: 3rem; }
   .hero-title { font-size: 22px; }
-  .masonry { flex-wrap: wrap; row-gap: 1.5rem; }
-  .masonry-col { flex: 1 1 calc(50% - 0.375rem); max-width: calc(50% - 0.375rem); }
-  .masonry-col:nth-child(3) { flex: 1 1 100%; max-width: 100%; }
+  .masonry--desktop { display: none; }
+  .masonry--mobile {
+    display: block;
+  }
+  .masonry--mobile.masonry--mobile--grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 0.75rem;
+    align-items: start;
+  }
   .cta-row { flex-direction: column; gap: 0.3rem; padding: 0.85rem 0; }
   .footer { flex-direction: column; gap: 0.3rem; }
   .divider { margin: 3rem 0; }
@@ -374,9 +400,6 @@ body {
 
 @media (max-width: 360px) {
   .hero-title { font-size: 19px; }
-  .masonry { flex-direction: column; flex-wrap: nowrap; row-gap: 1.5rem; }
-  .masonry-col,
-  .masonry-col:nth-child(3) { flex: 1 1 auto; max-width: 100%; }
 }
 </style>
 </head>
@@ -397,7 +420,7 @@ body {
       <button class="filter-btn" data-filter="work">Work</button>
       <button class="filter-btn" data-filter="thoughts">Thoughts</button>
     </div>
-    <div class="masonry" id="masonry-grid"></div>
+    <div id="masonry-grid"></div>
   </div>
 
   <hr class="divider divider-1">
@@ -497,15 +520,38 @@ while (wi < WORK.length || ti < THOUGHTS.length) {
 }
 
 function renderGrid(filter) {
+  const itemHtml = (d) => {
+    const inner = d.type === 'work' ? buildWorkCard(d) : buildThoughtCard(d);
+    const hidden = (filter !== 'all' && d.type !== filter) ? ' hidden' : '';
+    return `<div class="masonry-item${hidden}" data-type="${d.type}">${inner}</div>`;
+  };
+
   const cols = [[], [], []];
   FEED.forEach((d, i) => {
-    const html = d.type === 'work' ? buildWorkCard(d) : buildThoughtCard(d);
-    const hidden = (filter !== 'all' && d.type !== filter) ? ' hidden' : '';
-    cols[i % 3].push(`<div class="masonry-item${hidden}" data-type="${d.type}">${html}</div>`);
+    cols[i % 3].push(itemHtml(d));
   });
-  document.getElementById('masonry-grid').innerHTML = cols.map((col) =>
-    `<div class="masonry-col">${col.join('')}</div>`
-  ).join('');
+  const desktop = cols.map((c) => `<div class="masonry-col">${c.join('')}</div>`).join('');
+
+  /* Mobile: two strips so each column alternates W/T down the strip (not grid row-major).
+     For interleaved FEED of 6, left = indices 0,3,2 → W,T,W · right = 1,4,5 → T,W,T */
+  let mobileInner;
+  let mobileExtraClass = '';
+  if (FEED.length === 6) {
+    const left = [0, 3, 2].map((i) => itemHtml(FEED[i])).join('');
+    const right = [1, 4, 5].map((i) => itemHtml(FEED[i])).join('');
+    mobileInner =
+      `<div class="masonry-strips">` +
+      `<div class="masonry-strip">${left}</div>` +
+      `<div class="masonry-strip">${right}</div>` +
+      `</div>`;
+  } else {
+    mobileInner = FEED.map(itemHtml).join('');
+    mobileExtraClass = ' masonry--mobile--grid';
+  }
+
+  document.getElementById('masonry-grid').innerHTML =
+    `<div class="masonry masonry--desktop">${desktop}</div>` +
+    `<div class="masonry masonry--mobile${mobileExtraClass}">${mobileInner}</div>`;
 }
 
 document.querySelectorAll('.filter-btn').forEach(btn => {
