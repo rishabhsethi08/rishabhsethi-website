@@ -394,6 +394,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
   <a href="#s-engage">Bridge Engage</a>
   <a href="#s-network">Bridge Network</a>
   <a href="#s-open-questions">Open Questions</a>
+  <a href="#s-acknowledgements">Acknowledgements</a>
 </nav>
 
 <div class="page">
@@ -1741,6 +1742,11 @@ setTimeout(netFitView, 80);
   <p class="body-text">What's still genuinely open: how big are the two segments, and are they big enough to build separate product lines around — or should one come first and the other follow? Whether the GTM goes direct to independent PTs or through gyms changes the acquisition cost, the pricing model, and arguably the product itself. And the one question that sits underneath all of it: is the trainer's willingness to pay strong enough to sustain a direct motion, or does Bridge need institutional distribution before going after independents?</p>
 </div>
 
+<div class="beat" id="s-acknowledgements">
+  <p class="small-label">Acknowledgements</p>
+  <p class="body-text">It was great working on this alongside <a href="https://www.linkedin.com/in/shreya-vyas/" target="_blank" rel="noopener noreferrer">Shreya Vyas (Design)</a> and <a href="https://www.linkedin.com/in/shail-bajpai-55015785/" target="_blank" rel="noopener noreferrer">Shail Bajpai (Engineering)</a>.</p>
+</div>
+
 <div class="cta-section">
   <p class="cta-question">What are you working on?</p>
   <div class="cta-row">
@@ -1959,7 +1965,7 @@ const rwObs = new IntersectionObserver(es => { es.forEach(e => { if (e.isInterse
 rwObs.observe(rwGrid);
 
 // === Sidebar scroll-spy ===
-const sectionIds = ['s-problem','s-bluf','s-reality','s-segmentation','s-acquire','s-engage','s-network','s-open-questions'];
+const sectionIds = ['s-problem','s-bluf','s-reality','s-segmentation','s-acquire','s-engage','s-network','s-open-questions','s-acknowledgements'];
 const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
 
 function updateSidebar() {
