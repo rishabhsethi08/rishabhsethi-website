@@ -41,7 +41,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
 .small-label { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.07em; color: var(--light); text-transform: uppercase; display: block; margin-bottom: 0.9rem; }
 .large-statement { font-size: 22px; font-weight: 600; line-height: 1.4; color: var(--ink); max-width: 520px; letter-spacing: -0.02em; }
 
-.context-strip { display: flex; gap: 2.5rem; flex-wrap: wrap; padding: 1.4rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-top: 2rem; }
+.context-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2.5rem; align-items: start; padding: 1.4rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-top: 2rem; }
 .context-item .small-label { margin-bottom: 0.25rem; }
 .context-value { font-family: var(--mono); font-size: 12px; color: var(--mid); }
 .divider { border: none; height: 1px; background: var(--rule); margin: 0; }
@@ -394,7 +394,6 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
   <a href="#s-engage">Bridge Engage</a>
   <a href="#s-network">Bridge Network</a>
   <a href="#s-open-questions">Open Questions</a>
-  <a href="#s-acknowledgements">Acknowledgements</a>
 </nav>
 
 <div class="page">
@@ -408,13 +407,14 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
 <div class="beat" id="s-problem">
   <p class="small-label">The Problem</p>
   <p class="headline">Expanding Bridge Athletic's product into a new market segment.</p>
-  <p class="body-text">Bridge Athletic has spent the past 10 years building a robust strength and conditioning platform used by elite sports teams — Chelsea Football Club, Manchester City, Golden State Warriors. They wanted to expand into personal training, and were looking to create a product roadmap for PTs.</p>
-  <p class="body-text">Personal training is a crowded market. Once a tool gets adopted, it tends to stick — data lock-in makes switching painful regardless of quality.</p>
-  <p class="body-text">To break in, a new product would have to be differentiated enough to pull coaches away from entrenched tools — or find a gap the incumbents hadn't addressed.</p>
+  <p class="body-text">Bridge Athletic has spent the past 10 years building a robust strength and conditioning platform used by elite sports teams: Chelsea Football Club, Manchester City, Golden State Warriors. They wanted to expand into personal training, and were looking to create a product roadmap for PTs.</p>
+  <p class="body-text">Personal training is a crowded market. Once a tool gets adopted, it tends to stick. Data lock-in makes switching painful regardless of quality.</p>
+  <p class="body-text">To break in, a new product would have to be differentiated enough to pull coaches away from entrenched tools or find a gap the incumbents hadn't addressed.</p>
   <div class="context-strip">
+    <div class="context-item"><p class="small-label">Context</p><p class="context-value">Interview case study</p></div>
     <div class="context-item"><p class="small-label">Scope</p><p class="context-value">Product strategy, research, design</p></div>
     <div class="context-item"><p class="small-label">Domain</p><p class="context-value">Fitness / health-tech SaaS</p></div>
-    <div class="context-item"><p class="small-label">Duration</p><p class="context-value">~6 weeks</p></div>
+    <div class="context-item"><p class="small-label">Duration</p><p class="context-value">4 weeks</p></div>
   </div>
 </div>
 
@@ -422,8 +422,8 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
 <div class="beat" id="s-bluf">
   <p class="small-label">Bottom Line Upfront</p>
   <p class="large-statement">There's a non-trivial difference in what trainers need depending on where they are in their career.</p>
-  <p class="body-text">Early-career certified PTs struggle to stand out. Unqualified trainers undercut them on price, and clients often can't tell the difference until they've had a bad experience. <a href="#s-acquire"><strong>Bridge Acquire</strong></a> could solve this — giving certified PTs a credible, shareable proof of worth that makes the qualification gap visible before the first consultation.</p>
-  <p class="body-text">Established PTs have largely solved the acquisition problem through word of mouth. Their constraint is time. Admin, scheduling, and reporting eat 2–4 hours a day that could be billable hours or used to scale. <a href="#s-engage"><strong>Bridge Engage</strong></a> could give that time back — and in doing so, strengthen the trainer-client relationship that makes their business defensible in the first place.</p>
+  <p class="body-text">Early-career certified PTs struggle to stand out. Unqualified trainers undercut them on price, and clients often can't tell the difference until they've had a bad experience. <a href="#s-acquire"><strong>Bridge Acquire</strong></a> could solve this, giving certified PTs a credible, shareable proof of worth that makes the qualification gap visible before the first consultation.</p>
+  <p class="body-text">Established PTs have largely solved the acquisition problem through word of mouth. Their constraint is time. Admin, scheduling, and reporting eat 2–4 hours a day that could be billable hours or used to scale. <a href="#s-engage"><strong>Bridge Engage</strong></a> could give that time back and, in doing so, strengthen the trainer-client relationship that makes their business defensible in the first place.</p>
   <p class="body-text">If Bridge Engage works, it creates the foundation for something larger. A platform that already owns the trainer-client communication layer could expand into a market network of allied health professionals collaborating around a single client's health. The reason this might not work: the network only has value if <a href="#s-network"><strong>Bridge Network</strong></a> has already made trainer identity and client relationships strong enough on the platform to anchor it. Without that foundation, it's just another directory.</p>
 </div>
 
@@ -439,12 +439,9 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
 <div class="beat" id="s-segmentation">
   <p class="small-label">Segmentation</p>
   <p class="large-statement">Building for all = building for none.</p>
-  <p class="body-text">Most competitors made the same mistake: they segmented by delivery method, profession, or geography — or not at all — and tried to serve everyone. Tools for online and in-person coaching. For trainers, nutritionists, gyms, and mental health professionals. Core coaching <em>and</em> tax automation. Every sport. Every market.</p>
+  <p class="body-text">Most competitors made the same mistake: they segmented by delivery method, profession, or geography (or not at all) and tried to serve everyone. Tools for online and in-person coaching. For trainers, nutritionists, gyms, and mental health professionals. Core coaching <em>and</em> tax automation. Every sport. Every market.</p>
   <p class="body-text">The result is bloated software that nobody loves but everyone is stuck in.</p>
-  <div class="evidence" style="margin-top:1.5rem">
-    <p><em>[App store review screenshots]</em></p>
-  </div>
-  <p class="body-text" style="margin-top:1.5rem">Research revealed a different segmentation axis. Not what <em>type</em> of trainer — but where they are in their career. A trainer's needs change structurally as they progress. It behaves like a funnel, not just a ladder. People exit at every stage.</p>
+  <p class="body-text" style="margin-top:1.5rem">Research revealed a different segmentation axis. Not what <em>type</em> of trainer, but where they are in their career. A trainer's needs change structurally as they progress. It behaves like a funnel, not just a ladder. People exit at every stage.</p>
 
   <div class="seg-chart" id="career-flow">
     <div class="seg-bars">
@@ -501,7 +498,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
         <div style="display:flex;align-items:center;gap:0.75rem;flex:1;">
           <div>
             <span class="career-name">Non-certified trainers</span>
-            <span class="career-tag">— the majority</span>
+            <span class="career-tag">· the majority</span>
           </div>
           <span style="font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(0,0,0,0.05);color:var(--muted);">Pass</span>
         </div>
@@ -510,7 +507,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
       <div class="career-body"><div class="career-body-inner">
         <p>Anyone who looks fit can start. They undercut certified trainers on price. No formal training, no growth mindset. Some earn enough to question whether certification is worth it.</p>
         <p style="margin-top:0.5rem;"><strong style="color:var(--ink);">Core need:</strong> Education and legitimisation.</p>
-        <span class="career-dropout">↳ Not targeting — their need is education, not a tech platform problem. Low willingness to pay.</span>
+        <span class="career-dropout">↳ Not targeting: their need is education, not a tech platform problem. Low willingness to pay.</span>
       </div></div>
     </div>
 
@@ -520,7 +517,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
         <div style="display:flex;align-items:center;gap:0.75rem;flex:1;">
           <div>
             <span class="career-name">Recently certified</span>
-            <span class="career-tag">— survival mode</span>
+            <span class="career-tag">· survival mode</span>
           </div>
           <span style="font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(29,158,117,0.12);color:#085041;">Target</span>
         </div>
@@ -528,7 +525,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
       </div>
       <div class="career-body"><div class="career-body-inner">
         <p>Significant investment in certification. Starting out as solo entrepreneurs. Institutions teach science, not business. A meaningful number quit within 12 months.</p>
-        <p style="margin-top:0.5rem;"><strong style="color:var(--ink);">Core need:</strong> Survival — find clients, cut non-billable hours, establish cash flow.</p>
+        <p style="margin-top:0.5rem;"><strong style="color:var(--ink);">Core need:</strong> Survival: find clients, cut non-billable hours, establish cash flow.</p>
         <span class="career-dropout">↳ Large cohort, high urgency, clear pain. Willing to pay for anything that helps them make it past year one.</span>
       </div></div>
     </div>
@@ -539,14 +536,14 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
         <div style="display:flex;align-items:center;gap:0.75rem;flex:1;">
           <div>
             <span class="career-name">Established independent</span>
-            <span class="career-tag">— retention &amp; efficiency</span>
+            <span class="career-tag">· retention &amp; efficiency</span>
           </div>
           <span style="font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(29,158,117,0.12);color:#085041;">Target</span>
         </div>
         <span class="career-toggle">+</span>
       </div>
       <div class="career-body"><div class="career-body-inner">
-        <p>Strong network, decent referrals, approaching capacity. Running out of hours. Aware the industry is competitive — adapt or perish is real.</p>
+        <p>Strong network, decent referrals, approaching capacity. Running out of hours. Aware the industry is competitive. Adapt or perish is real.</p>
         <p style="margin-top:0.5rem;"><strong style="color:var(--ink);">Core need:</strong> Retention, differentiation, and efficiency.</p>
         <span class="career-dropout">↳ High willingness to pay. Retention pain maps directly to the product thesis.</span>
       </div></div>
@@ -558,16 +555,16 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
         <div style="display:flex;align-items:center;gap:0.75rem;flex:1;">
           <div>
             <span class="career-name">Advanced independent</span>
-            <span class="career-tag">— scaling the brand</span>
+            <span class="career-tag">· scaling the brand</span>
           </div>
           <span style="font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(180,120,20,0.1);color:#7a4a10;">Later</span>
         </div>
         <span class="career-toggle">+</span>
       </div>
       <div class="career-body"><div class="career-body-inner">
-        <p>At capacity, more leads than time. Financially independent. Building a personal brand — looking to hire coaches, grow online, create new revenue streams.</p>
+        <p>At capacity, more leads than time. Financially independent. Building a personal brand, looking to hire coaches, grow online, create new revenue streams.</p>
         <p style="margin-top:0.5rem;"><strong style="color:var(--ink);">Core need:</strong> Scale without diluting personal brand.</p>
-        <span class="career-dropout">↳ Right person, right category — but complex enough to be its own product. Natural expansion once L2 and L3 are won.</span>
+        <span class="career-dropout">↳ Right person, right category, but complex enough to be its own product. Natural expansion once L2 and L3 are won.</span>
       </div></div>
     </div>
 
@@ -583,9 +580,9 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
         <span class="career-toggle">+</span>
       </div>
       <div class="career-body"><div class="career-body-inner">
-        <p>Turned their brand into a fitness centre. No longer a trainer — now a real estate operator. Incentivised by volume of clients, not quality of coaching.</p>
+        <p>Turned their brand into a fitness centre. No longer a trainer. Now a real estate operator. Incentivised by volume of clients, not quality of coaching.</p>
         <p style="margin-top:0.5rem;"><strong style="color:var(--ink);">Core need:</strong> Grow revenue to cover rent, reduce operating costs.</p>
-        <span class="career-dropout">↳ Not targeting — different business category entirely. Real estate and volume management is outside what a coaching platform solves.</span>
+        <span class="career-dropout">↳ Not targeting: different business category entirely. Real estate and volume management is outside what a coaching platform solves.</span>
       </div></div>
     </div>
 
@@ -603,7 +600,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
       <div class="career-body"><div class="career-body-inner">
         <p>Built an audience through content, not coaching. Revenue from sponsorships, affiliate marketing, online programs. Brand and charisma are the product.</p>
         <p style="margin-top:0.5rem;"><strong style="color:var(--ink);">Core need:</strong> Stay relevant, grow audience, monetise following.</p>
-        <span class="career-dropout">↳ Not targeting — a media and audience business, not a coaching business. Content creation is outside what a coaching platform does well.</span>
+        <span class="career-dropout">↳ Not targeting: a media and audience business, not a coaching business. Content creation is outside what a coaching platform does well.</span>
       </div></div>
     </div>
 
@@ -620,20 +617,20 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
 </div>
 
 <div class="beat" style="margin-bottom:2rem;">
-  <p class="body-text">Recently certified trainers are early-stage solo entrepreneurs running out of runway. Institutions taught them anatomy and programming — not sales. The first 12 months are make or break.</p>
+  <p class="body-text">Recently certified trainers are early-stage solo entrepreneurs running out of runway. Institutions taught them anatomy and programming, not sales. The first 12 months are make or break.</p>
   <p class="body-text">They're encountering a trust and differentiation problem. A potential client scrolling Instagram has no way to tell a qualified, experienced trainer from someone who just looks fit. Most competitors in this space have built scheduling tools or marketplaces. None of them solved the trust problem at the moment it actually matters: before the first conversation.</p>
-  <div class="insight-line"><p><strong>Borrowed Trust Signal —</strong> Bridge Athletic is used by your favourite players at Golden State Warriors, Chelsea FC, Manchester City FC and more.</p></div>
+  <div class="insight-line"><p><strong>Borrowed Trust Signal:</strong> Bridge Athletic is used by your favourite players at Golden State Warriors, Chelsea FC, Manchester City FC and more.</p></div>
   <p class="rw-caption">No other competitor can manufacture this trust signal.</p>
 </div>
 
 <div class="beat" style="margin-bottom:2rem;">
-  <p class="body-text">I mapped the entire acquisition funnel — from the moment someone decides they need a trainer, through Instagram, WhatsApp, to the sale.</p>
+  <p class="body-text">I mapped the entire acquisition funnel, from the moment someone decides they need a trainer, through Instagram, WhatsApp, to the sale.</p>
   <p class="body-text">The critical moment: <strong>when a potential client clicks the link in a trainer's Instagram bio.</strong> Today they land on a Linktree, Calendly, or their own poorly-designed personal website. None communicate proof this trainer is worth the premium.</p>
   <div class="fork">
     <p class="fork-label">The decision</p>
     <div class="fork-paths">
-      <div class="fork-path"><p class="fork-path-title">Obvious move</p><p>Build a marketplace. Match clients to trainers. Take a cut. But a marketplace solves the wrong problem — PTs don't lack reach. And it introduces a cold-start trap: neither side has reason to join until the other is already there.</p></div>
-      <div class="fork-path chosen"><p class="fork-path-title">What I proposed</p><p>Arm trainers with a credibility layer: verified certs, client outcomes, scheduling — where the sale already happens: on social and messaging channels.</p></div>
+      <div class="fork-path"><p class="fork-path-title">Obvious move</p><p>Build a marketplace. Match clients to trainers. Take a cut. But a marketplace solves the wrong problem: PTs don't lack reach. And it introduces a cold-start trap: neither side has reason to join until the other is already there.</p></div>
+      <div class="fork-path chosen"><p class="fork-path-title">What I proposed</p><p>Arm trainers with a credibility layer: verified certs, client outcomes, scheduling, where the sale already happens: on social and messaging channels.</p></div>
     </div>
   </div>
 </div>
@@ -762,10 +759,10 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
   </div>
   <div class="aqc-body-area">
     <div class="aqc-captions" id="aqc-captions">
-      <span class="aqc-cap active">Trainer's Instagram bio — the Bridge link is the entry point.</span>
+      <span class="aqc-cap active">Trainer's Instagram bio: the Bridge link is the entry point.</span>
       <span class="aqc-cap">Coach replies to an inbound WhatsApp lead with one link. Profile handles the rest.</span>
       <span class="aqc-cap">Above the fold: hero, verified badge, service types, two direct CTAs.</span>
-      <span class="aqc-cap">Certifications surfaced and verified by Bridge — the proof behind the price.</span>
+      <span class="aqc-cap">Certifications surfaced and verified by Bridge: the proof behind the price.</span>
       <span class="aqc-cap">Work history rounds out the picture. Everything to decide, no back-and-forth needed.</span>
     </div>
     <div class="aqc-viewport">
@@ -850,13 +847,13 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-
 
 <div class="beat">
   <p class="body-text">This isn't a UX problem. It's a design philosophy problem. Every competitor built coach-first, feature-heavy platforms, then tacked on a client experience. The products bloated because the <strong>intention was the same across all of them.</strong></p>
-  <p class="body-text">When the intention is the same and no differentiating principles exist, you end up at the same solution. "Better UX" is not a strategy. A different design principle for a narrower audience — that's a strategy. And since competitors are architecturally committed to their current design, rebuilding from a different principle isn't a feature update — it's starting over. The gap compounds.</p>
+  <p class="body-text">When the intention is the same and no differentiating principles exist, you end up at the same solution. "Better UX" is not a strategy. A different design principle for a narrower audience — that's a strategy. And since competitors are architecturally committed to their current design, rebuilding from a different principle isn't a feature update. It's starting over. The gap compounds.</p>
 </div>
 
 <div class="beat" id="s-ecosystem">
   <p class="small-label">The ecosystem</p>
   <p class="large-statement">Every revenue stream, every referral, every tool — all of it depends on one thing.</p>
-  <p class="body-text">The relationship between trainer and client. Word of mouth is the primary growth engine. Referrals flow when clients experience genuine progress — not when the app is flashy. When the client feels <strong>cared for.</strong></p>
+  <p class="body-text">The relationship between trainer and client. Word of mouth is the primary growth engine. Referrals flow when clients experience genuine progress, not when the app is flashy. When the client feels <strong>cared for.</strong></p>
   <p class="body-text">Build a product that nourishes that relationship and everything else follows. Build one that gets in the way and clients start blaming their trainer for the app.</p>
 
   <!-- Interactive ecosystem map -->
@@ -1041,7 +1038,7 @@ const EDGES = [
   { s:"MED",  t:"HOSP", note:"" }, { s:"MED",t:"INS",note:"" }, { s:"MED",t:"DIAG",note:"" },
   { s:"PT",   t:"CERT", note:"" },
   { s:"PT",   t:"GYM",  note:"60/40 revenue split for PT contractors · Non-competitive, high-trust source of leads · Source of leads + space to train" },
-  { s:"PT",   t:"PTS",  note:"High CAPEX but route to scale the business · Lack of facilities can limit SAM · Highly location dependent — high-income neighbourhoods = more travel + non-billable hours" },
+  { s:"PT",   t:"PTS",  note:"High CAPEX but route to scale the business · Lack of facilities can limit SAM · Highly location dependent: high-income neighbourhoods = more travel + non-billable hours" },
   { s:"PTS",  t:"FF",   note:"" }, { s:"PTS",t:"PS",note:"" }, { s:"PTS",t:"RG",note:"" }, { s:"PTS",t:"SCH",note:"" },
   { s:"PT",   t:"OSN",  note:"Post promotional content → get leads · Publish proof of worth · Offline networks are a valuable source of leads" },
   { s:"PT",   t:"BNWK", note:"" }, { s:"PT",t:"CTST",note:"Post promotional content · get leads" }, { s:"PT",t:"TCON",note:"Source of leads" },
@@ -1066,17 +1063,17 @@ const EDGES = [
 const DESC = {
   PT:   "The central actor. Their business depends on finding clients, retaining them, and delivering results. Everything in this map either feeds their income, enables their work, or shapes the client journey.",
   CL:   "The other core actor. They arrive through specific triggers, come from particular demographics, and are surrounded by habits, social networks, and health professionals that shape their decision to hire a PT.",
-  TOOLS:"The operational stack: scheduling, tracking, marketing, and client management — letting a PT run a professional business without an admin team.",
+  TOOLS:"The operational stack: scheduling, tracking, marketing, and client management, letting a PT run a professional business without an admin team.",
   MED:  "Referral partners. Clinics, hospitals, and insurers can route clients with specific health needs to qualified PTs.",
   CERT: "Legitimize the PT's credentials. Required for insurance, gym partnerships, and client trust. Low barrier to entry creates a crowded market.",
   GYM:  "Ready-made client pool + space. PTs typically operate as contractors on a 60/40 split. Non-competitive relationship, high-trust lead source.",
   PTS:  "Where the work happens. The type of space shapes the PT's business model, scalability, and unit economics significantly.",
   OSN:  "Highest-volume lead channel. Proof of results, educational content, and transformations compound into credibility and inbound leads.",
-  BNWK: "Business and professional networks. Offline referrals remain a high-trust, high-conversion lead source — especially for premium clients.",
+  BNWK: "Business and professional networks. Offline referrals remain a high-trust, high-conversion lead source, especially for premium clients.",
   NCF:  "A client's close friends are the single strongest referral source. 'Bring a friend for a free class' is the classic activation mechanic.",
   CTST: "Client testimonials fuel social proof, power the content engine, and reduce friction for new prospects.",
   TCON: "Training content builds an audience and creates the 'I should join a gym' impulse. Gateway to memberships and PT inquiries.",
-  HAB:  "Daily habits are both the battlefield and the outcome. Sweat, sleep, diet, stress, social support, substances — a PT's real job is shifting these sustainably.",
+  HAB:  "Daily habits are both the battlefield and the outcome. Sweat, sleep, diet, stress, social support, substances: a PT's real job is shifting these sustainably.",
   TSUP: "Adjacent spend clients make in parallel. Gear, equipment, and supplements are affiliate and referral opportunities for PTs.",
   AHP:  "Both referral sources and collaborators. A PT with strong relationships here gets a steady stream of warm referrals.",
   STR:  "The emotional triggers that convert a 'maybe someday' prospect into a paying client. Understanding these is the foundation of all effective PT marketing.",
@@ -1294,14 +1291,14 @@ setTimeout(fitView, 80);
 
 <div class="beat">
   <p class="large-statement">The principle: the product exists to nourish the relationship.</p>
-  <p class="body-text">Every design decision flows from one question — does this make the client feel more cared for and the trainer more effective at demonstrating progress?</p>
+  <p class="body-text">Every design decision flows from one question: does this make the client feel more cared for and the trainer more effective at demonstrating progress?</p>
 
   <div class="chain">
     <p class="chain-header">Who wins if you win</p>
     <div class="chain-step">
       <div class="chain-dot"></div>
       <div>
-        <p><strong>Client feels cared for.</strong> The app opens to coach chat. Meals, workouts logged in conversation — creating a sense of sharing. Progress is visible, not buried in dashboards.</p>
+        <p><strong>Client feels cared for.</strong> The app opens to coach chat. Meals, workouts logged in conversation, creating a sense of sharing. Progress is visible, not buried in dashboards.</p>
         <span class="chain-arrow">↓ therefore</span>
       </div>
     </div>
@@ -1315,7 +1312,7 @@ setTimeout(fitView, 80);
     <div class="chain-step">
       <div class="chain-dot"></div>
       <div>
-        <p><strong>Bridge becomes irreplaceable.</strong> Not because of features. Because it's the layer where the relationship lives — the communication hub, the source of truth, the thing neither side wants to leave.</p>
+        <p><strong>Bridge becomes irreplaceable.</strong> Not because of features. Because it's the layer where the relationship lives: the communication hub, the source of truth, the thing neither side wants to leave.</p>
       </div>
     </div>
     <div class="chain-outcome"><p>The product doesn't serve the trainer. It serves the relationship. The trainer's success is a byproduct.</p></div>
@@ -1402,10 +1399,10 @@ setTimeout(fitView, 80);
 
 <div class="beat">
   <p class="large-statement">The AI assistant that never talks to the client.</p>
-  <p class="body-text">The assistant coach — visible only to the trainer — surfaces insights, suggests messages, prepares pre-session briefs. It makes the coach more effective.</p>
+  <p class="body-text">The assistant coach, visible only to the trainer, surfaces insights, suggests messages, prepares pre-session briefs. It makes the coach more effective.</p>
   <p class="body-text">But it <strong>never speaks directly to the client.</strong></p>
   <p class="body-text">The relationship between coach and client is what makes progress happen. AI as intermediary would dilute the very thing that makes the product work.</p>
-  <div class="insight-line"><p>In a market where progress depends on one person feeling genuinely cared for by another, the role of technology is to make the caring more visible — not to automate it.</p></div>
+  <div class="insight-line"><p>In a market where progress depends on one person feeling genuinely cared for by another, the role of technology is to make the caring more visible, not to automate it.</p></div>
 </div>
 
 
@@ -1415,7 +1412,7 @@ setTimeout(fitView, 80);
   <p class="small-label">Bridge Network</p>
   <p class="large-statement">If Bridge Engage works, it unlocks something much larger.</p>
   <p class="body-text">Trainers' clients also work with nutritionists, physiotherapists, mental health professionals, doctors. Today, each works in their own silo.</p>
-  <p class="body-text">If Bridge becomes the communication hub, it could expand into a <strong>market network</strong> — allied health professionals collaborating around a single client's health.</p>
+  <p class="body-text">If Bridge becomes the communication hub, it could expand into a <strong>market network</strong>: allied health professionals collaborating around a single client's health.</p>
   <!-- Interactive Network Map -->
   <div class="eco-map" style="margin-top:2rem;">
     <div id="net-interactive" style="position:relative; background:#FAFAFA; border:1px solid rgba(0,0,0,0.08); border-radius:6px; overflow:hidden; height:500px;">
@@ -1488,12 +1485,12 @@ const NET_EDGES = [
 
 const NET_DESC = {
   PT:   "The primary user. Bridge helps them acquire clients, run their business, and deliver a care experience that drives retention and referrals.",
-  CL:   "The person everything is built around. Their health outcomes depend on coordinated care — not siloed professionals.",
+  CL:   "The person everything is built around. Their health outcomes depend on coordinated care, not siloed professionals.",
   BR:   "Communication hub + source of truth + workflow automation + identity layer. The connective tissue between all parties.",
   AHP:  "Professionals who already work with the same clients. Today they operate in silos. Bridge enables non-competitive collaboration.",
-  MHP:  "Mental health professionals. Burnout, stress, anxiety — all affect training outcomes. Warm referrals from PT to MHP increase client retention.",
+  MHP:  "Mental health professionals. Burnout, stress, anxiety: all affect training outcomes. Warm referrals from PT to MHP increase client retention.",
   NUTR: "Nutritionists. Diet is as important as training. Coordinated plans mean better results and stronger loyalty to both professionals.",
-  PHYS: "Physiotherapists. Injury recovery and prevention. When a client gets injured, the PT needs to know — and vice versa.",
+  PHYS: "Physiotherapists. Injury recovery and prevention. When a client gets injured, the PT needs to know, and vice versa.",
   DOC:  "Doctors. Medical clearance, chronic conditions, contraindications. Shared context means safer, more personalised training.",
 };
 
@@ -1737,14 +1734,9 @@ setTimeout(netFitView, 80);
 
 <div class="beat" id="s-open-questions">
   <p class="small-label">Open Questions</p>
-  <p class="large-statement">What's been worked through — and what hasn't.</p>
-  <p class="body-text">Bridge Acquire and Bridge Engage each have a defined problem, a feature direction, and an early product roadmap. Bridge Network is a hypothesis that depends on both succeeding first — it doesn't stand on its own.</p>
-  <p class="body-text">What's still genuinely open: how big are the two segments, and are they big enough to build separate product lines around — or should one come first and the other follow? Whether the GTM goes direct to independent PTs or through gyms changes the acquisition cost, the pricing model, and arguably the product itself. And the one question that sits underneath all of it: is the trainer's willingness to pay strong enough to sustain a direct motion, or does Bridge need institutional distribution before going after independents?</p>
-</div>
-
-<div class="beat" id="s-acknowledgements">
-  <p class="small-label">Acknowledgements</p>
-  <p class="body-text">It was great working on this alongside <a href="https://www.linkedin.com/in/shreya-vyas/" target="_blank" rel="noopener noreferrer">Shreya Vyas (Design)</a> and <a href="https://www.linkedin.com/in/shail-bajpai-55015785/" target="_blank" rel="noopener noreferrer">Shail Bajpai (Engineering)</a>.</p>
+  <p class="large-statement">What's been worked through and what hasn't.</p>
+  <p class="body-text">Bridge Acquire and Bridge Engage each have a defined problem, a feature direction, and an early product roadmap. Bridge Network is a hypothesis that depends on both succeeding first. It doesn't stand on its own.</p>
+  <p class="body-text">What's still genuinely open: how big are the two segments, and are they big enough to build separate product lines around, or should one come first and the other follow? Whether the GTM goes direct to independent PTs or through gyms changes the acquisition cost, the pricing model, and arguably the product itself. And the one question that sits underneath all of it: is the trainer's willingness to pay strong enough to sustain a direct motion, or does Bridge need institutional distribution before going after independents?</p>
 </div>
 
 <div class="cta-section">
@@ -1965,7 +1957,7 @@ const rwObs = new IntersectionObserver(es => { es.forEach(e => { if (e.isInterse
 rwObs.observe(rwGrid);
 
 // === Sidebar scroll-spy ===
-const sectionIds = ['s-problem','s-bluf','s-reality','s-segmentation','s-acquire','s-engage','s-network','s-open-questions','s-acknowledgements'];
+const sectionIds = ['s-problem','s-bluf','s-reality','s-segmentation','s-acquire','s-engage','s-network','s-open-questions'];
 const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
 
 function updateSidebar() {
