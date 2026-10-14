@@ -457,6 +457,7 @@ body {
 // ─────────────────────────────────────────────
 const WORK = [
   { type:'work', image:'img-blinctrip-strategy', photo:'images/blinctrip-strategy.png', caption:'Zero to $1M/mo. Acquired.',              url:'work/building-blinctrip.html' },
+  { type:'work', image:'img-blinctrip-notifications', photo:'images/blinctrip_notifications_thumbnail.png', caption:'Agentic AI for travel disruptions', url:'work/blinctrip-notification-engine.html' },
   { type:'work', image:'img-calo',               photo:'images/calo.png',               caption:'Meal Subscriptions → On-demand', url:'work/calo.html' },
   { type:'work', image:'img-bridge',             photo:'images/bridge.png',             caption:'From elite sports to personal training', url:'work/bridge.html' },
 ];
@@ -532,26 +533,19 @@ function renderGrid(filter) {
   });
   const desktop = cols.map((c) => `<div class="masonry-col">${c.join('')}</div>`).join('');
 
-  /* Mobile: two strips so each column alternates W/T down the strip (not grid row-major).
-     For interleaved FEED of 6, left = indices 0,3,2 → W,T,W · right = 1,4,5 → T,W,T */
-  let mobileInner;
-  let mobileExtraClass = '';
-  if (FEED.length === 6) {
-    const left = [0, 3, 2].map((i) => itemHtml(FEED[i])).join('');
-    const right = [1, 4, 5].map((i) => itemHtml(FEED[i])).join('');
-    mobileInner =
-      `<div class="masonry-strips">` +
-      `<div class="masonry-strip">${left}</div>` +
-      `<div class="masonry-strip">${right}</div>` +
-      `</div>`;
-  } else {
-    mobileInner = FEED.map(itemHtml).join('');
-    mobileExtraClass = ' masonry--mobile--grid';
+  // Alternate work and thoughts in both mobile strips as the collection grows.
+  const strips = [[], []];
+  for (let i = 0; i < Math.max(WORK.length, THOUGHTS.length); i++) {
+    if (WORK[i]) strips[i % 2].push(itemHtml(WORK[i]));
+    if (THOUGHTS[i]) strips[1 - (i % 2)].push(itemHtml(THOUGHTS[i]));
   }
+  const mobileInner = `<div class="masonry-strips">` +
+    strips.map(items => `<div class="masonry-strip">${items.join('')}</div>`).join('') +
+    `</div>`;
 
   document.getElementById('masonry-grid').innerHTML =
     `<div class="masonry masonry--desktop">${desktop}</div>` +
-    `<div class="masonry masonry--mobile${mobileExtraClass}">${mobileInner}</div>`;
+    `<div class="masonry masonry--mobile">${mobileInner}</div>`;
 }
 
 document.querySelectorAll('.filter-btn').forEach(btn => {

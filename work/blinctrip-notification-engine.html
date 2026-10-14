@@ -3,108 +3,134 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Designing Blinctrip’s agentic notification engine: traveller context, journey dependencies, and simulated recovery plans when travel goes wrong.">
+<meta name="robots" content="noindex">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <title>Blinctrip — Notification Engine — Rishabh Sethi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #F5F5F3; --surface: #FFFFFF; --ink: #111111;
-  --mid: #555555; --muted: #7A7F86; --faint: #BBBBBB;
-  --rule: rgba(0,0,0,0.07);
-  --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --mono: 'IBM Plex Mono', 'SF Mono', monospace;
-}
-html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
-::selection { background: var(--ink); color: var(--bg); }
-.page { max-width: 620px; margin: 0 auto; padding: 4rem 2.5rem 6rem; }
-.back-link {
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  font-family: var(--mono); font-size: 11px; color: var(--muted);
-  text-decoration: none; margin-bottom: 4rem;
-  opacity: 0; animation: fadeUp 0.5s ease forwards;
-  transition: color 0.15s ease;
-}
-.back-link:hover { color: var(--ink); }
-.cover {
-  width: 100%; height: 260px; border-radius: 12px;
-  background: linear-gradient(160deg, #1E3448 0%, #3A5C78 50%, #6A8FA8 100%);
-  margin-bottom: 2.5rem;
-  opacity: 0; animation: fadeUp 0.5s ease 0.05s forwards;
-}
-.post-meta {
-  font-family: var(--mono); font-size: 11px; color: var(--light);
-  letter-spacing: 0.04em; margin-bottom: 0.75rem;
-  opacity: 0; animation: fadeUp 0.5s ease 0.1s forwards;
-}
-.post-title {
-  font-size: 26px; font-weight: 600; line-height: 1.25;
-  letter-spacing: -0.02em; color: var(--ink); margin-bottom: 1rem;
-  opacity: 0; animation: fadeUp 0.5s ease 0.13s forwards;
-}
-.post-caption {
-  font-family: var(--mono); font-size: 13px; color: var(--muted);
-  line-height: 1.5; margin-bottom: 3rem;
-  opacity: 0; animation: fadeUp 0.5s ease 0.16s forwards;
-}
-.coming-soon {
-  padding: 2rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
-  font-size: 13px; color: var(--muted); line-height: 1.75;
-  opacity: 0; animation: fadeUp 0.5s ease 0.2s forwards;
-}
-.cta-section { margin-bottom: 4rem; }
-.cta-question { font-size: 17px; font-weight: 500; color: var(--ink); margin-bottom: 1.75rem; letter-spacing: -0.01em; }
-.cta-row { display: flex; align-items: baseline; justify-content: space-between; padding: 0.75rem 0; border-top: 1px solid var(--rule); }
-.cta-row:last-child { border-bottom: 1px solid var(--rule); }
-.cta-label { font-size: 12px; color: var(--muted); }
-.cta-link { font-size: 12px; color: var(--mid); text-decoration: none; transition: color 0.15s ease; }
-.cta-link:hover { color: var(--ink); }
-.cta-arrow { display: inline-block; margin-left: 0.25rem; transition: transform 0.15s ease; }
-.cta-link:hover .cta-arrow { transform: translateX(3px); }
-.footer {
-  display: flex; justify-content: space-between; align-items: baseline;
-  font-size: 11px; color: var(--faint); padding-top: 2rem;
-  border-top: 1px solid var(--rule); margin-top: 6rem;
-  opacity: 0; animation: fadeUp 0.5s ease 0.25s forwards;
-}
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@media (max-width: 620px) {
-  .page { padding: 3rem 1.5rem 4.5rem; }
-  .post-title { font-size: 21px; }
-  .cover { height: 180px; }
-  .cta-row { flex-direction: column; gap: 0.3rem; padding: 0.85rem 0; }
-  .footer { flex-direction: column; gap: 0.3rem; }
-}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="assets/blinctrip-case-study.css" rel="stylesheet">
 </head>
 <body>
-<div class="page">
-  <a class="back-link" href="../index.html">← Rishabh Sethi</a>
-  <div class="cover"></div>
-  <p class="post-meta">Work</p>
-  <h1 class="post-title">Blinctrip — Notification Engine</h1>
-  <p class="post-caption">Post-booking engagement at 2× industry.</p>
-  <div class="coming-soon">
-    This case study is being written. Check back soon, or <a href="mailto:hello@rishabhsethi.com" style="color:var(--ink);">get in touch</a> if you'd like to hear about it directly.
-  </div>
-  <div class="cta-section">
-  <p class="cta-question">What are you working on?</p>
-  <div class="cta-row">
-    <span class="cta-label">Email</span>
-    <a class="cta-link" href="mailto:hello@rishabhsethi.com">hello@rishabhsethi.com <span class="cta-arrow">→</span></a>
-  </div>
+<a href="#main" class="skip-link">Skip to case study</a>
+<nav class="sidebar-nav" aria-label="Case study sections">
+<a href="#brief">The brief</a><a href="#problem">The problem</a><a href="#context">The journey</a><a href="#engine">The engine</a><a href="#recovery">Recovery</a><a href="#decisions">Design decisions</a><a href="#reflection">Reflection</a>
+</nav>
+<main class="page" id="main">
+<a class="back-link" href="../index.html"><span class="ba">←</span> Rishabh Sethi</a>
+<div class="case-cover"><img src="../images/blinctrip-notification-engine/cover.png" width="1200" height="600" alt="Blinctrip wordmark with a notification badge on a purple and blue background." fetchpriority="high"></div>
+<section class="beat" id="brief">
+<p class="small-label">Blinctrip / Notification engine</p>
+<h1 class="headline">Helping travellers respond when their plans change.</h1>
+<p class="body-text">In early 2023, I led Blinctrip’s move from rule-based notifications to an AI-driven engine. The brief was to understand how a change affected the whole journey and help the traveller respond.</p>
+<p class="body-text">We were confident that models would become more capable, faster, and cheaper. That trajectory made the approach worth pursuing while the technology was still developing.</p>
+<div class="context-strip">
+<div class="context-item"><p class="small-label">Role</p><p class="context-value">Head of Product &amp; Design</p></div>
+<div class="context-item"><p class="small-label">Scope</p><p class="context-value">Journey intelligence &amp; recovery</p></div>
+<div class="context-item"><p class="small-label">Context</p><p class="context-value">AI transition, early 2023</p></div>
+<div class="context-item"><p class="small-label">Domain</p><p class="context-value">Travel tech · Consumer</p></div>
 </div>
-
-<div class="footer">
-  <span>Rishabh Sethi · 2026</span>
-  <span>Dubai, UAE</span>
+</section>
+<section class="beat" id="problem">
+<p class="small-label">The problem</p>
+<h2 class="headline">The alert was only the beginning of the work.</h2>
+<p class="body-text">A flight-status update tells you what changed. It leaves you to find out what that means for the rest of your trip.</p>
+<p class="body-text">You check another booking, open a map, compare timings, and call a provider. By the time you have a new plan, the information may have changed again.</p>
+<figure class="case-img archive-figure">
+<a href="../images/building-blinctrip/v1-trips.jpg" target="_blank" rel="noopener" aria-label="Open the original Blinctrip Trips screens at full size"><img src="../images/building-blinctrip/v1-trips.jpg" width="1440" height="1331" alt="Original Blinctrip Trips screens showing itinerary information, gate updates, check-in reminders, and weather advice." loading="lazy"></a>
+<figcaption class="case-img-cap">The earlier Trips experience brought bookings and timely updates into one place.</figcaption>
+</figure>
+</section>
+<section class="beat" id="context">
+<p class="small-label">The design shift</p>
+<h2 class="headline">Make the journey the unit of reasoning.</h2>
+<p class="body-text">A flight delay matters because of what follows it. The same delay can be harmless for one traveller and cause another to miss a connection, a booking, or a fixed commitment.</p>
+<p class="body-text">That required a shared view of the traveller’s commitments, the services they depended on, and conditions on the ground.</p>
+<figure class="context-overview" aria-labelledby="overview-title">
+<div class="overview-body">
+<h3 id="overview-title">Blinctrip, with AI at its centre.</h3>
+<p class="overview-intro">Bring the traveller, the destination, and the service providers into one view.</p>
+<div class="overview-venn" role="img" aria-label="Three overlapping circles: destination data, service provider data, and personal data. Blinctrip’s AI assessment sits at their intersection.">
+<svg viewBox="0 0 400 320" aria-hidden="true" focusable="false">
+<circle class="overview-destination" cx="200" cy="111" r="100"/>
+<circle class="overview-provider" cx="145" cy="205" r="100"/>
+<circle class="overview-personal" cx="255" cy="205" r="100"/>
+</svg>
+<span class="overview-label overview-label-destination" aria-hidden="true">Destination</span>
+<span class="overview-label overview-label-provider" aria-hidden="true">Service providers</span>
+<span class="overview-label overview-label-personal" aria-hidden="true">Personal</span>
+<span class="overview-core" aria-hidden="true"><strong>Blinctrip</strong><span>AI assessment</span></span>
 </div>
+<dl class="overview-sources">
+<div><dt><span class="overview-dot destination-dot" aria-hidden="true"></span>Destination data</dt><dd>Weather, traffic, local updates, and events.</dd></div>
+<div><dt><span class="overview-dot provider-dot" aria-hidden="true"></span>Service provider data</dt><dd>Flights, hotels, cabs, airports, and restaurants.</dd></div>
+<div><dt><span class="overview-dot personal-dot" aria-hidden="true"></span>Personal data</dt><dd>Email, calendar, travel history, location, interests, and preferences.</dd></div>
+</dl>
 </div>
+<figcaption class="case-img-cap">Combined context helps the engine decide what matters to this traveller, at this moment.</figcaption>
+</figure>
+<p class="body-text">FlightStats supplied flight estimates, gate changes, and baggage information. Google Maps, weather data, and SITATA added routes, traffic, and local disruption information.</p>
+<p class="body-text">Blinctrip data, calendar, and email supplied the trip context. Ground partners such as Savaari provided driver status and transport options.</p>
+<p class="body-text">There were still gaps. We knew the traveller’s location and could detect a home-geofence exit. We could not reliably know whether they had checked in or dropped their bags.</p>
+<aside class="insight-line"><p><strong>A deadline and a completed action are different facts.</strong> A published check-in deadline did not confirm that the airline had closed the counter.</p></aside>
+</section>
+<section class="beat" id="engine">
+<p class="small-label">Inside the engine</p>
+<h2 class="headline">Assess. Recalculate when needed. Then assess again.</h2>
+<p class="body-text">For each event, the AI assessed whether the current plan still worked and whether recalculation was needed. It could send inputs to relevant APIs and use their responses to simulate revised itineraries.</p>
+<p class="body-text">A directed acyclic graph (DAG) describes the dependencies between journey steps. Travel times, deadlines, and provider policies constrain which revised plans are feasible.</p>
+<p class="body-text">The candidates returned to the AI for assessment: which commitments could still be met, what would the traveller give up, and what remained unresolved?</p>
+<div class="engine-map" data-engine-map></div>
+<p class="rw-caption">Select a circle to explore. Choose Journey dependencies to compare the delayed and revised plans.</p>
+<p class="rw-caption">This map reconstructs the reasoning model. It does not specify a graph database or claim a persistent DAG implementation.</p>
+</section>
+<section class="beat" id="recovery">
+<p class="small-label">From information to a decision</p>
+<h2 class="headline">Let the traveller compare possible versions of their day.</h2>
+<p class="body-text">In the prototype, a one-hour flight delay puts a trail booking, car pickup, and hostel arrival at risk. The traveller can remove two stops, compare alternative flights, or seek more information.</p>
+<figure class="prototype">
+<div class="prototype-bar"><p>Disruption recovery</p><div class="prototype-actions"><button type="button" data-prototype-restart>Restart</button><a href="blinctrip-recovery-prototype.html" target="_blank" rel="noopener">Open in new tab ↗</a></div></div>
+<div class="prototype-host" data-recovery-prototype><p class="prototype-loading">Loading the interactive prototype…</p></div>
+<p class="prototype-notice" data-prototype-notice role="status" hidden></p>
+<figcaption class="case-img-cap">Tap the notification, review the impacts, and compare recovery options. This is a demonstration; its timings, prices, and booking actions are illustrative.</figcaption>
+</figure>
+<p class="body-text">Skipping two stops restores the trail timing and improves the hostel arrival. The rental pickup still needs attention: the traveller must confirm that the provider will hold the car.</p>
+</section>
+<section class="beat" id="decisions">
+<p class="small-label">The product decisions</p>
+<h2 class="headline">Decide when to interrupt and when to ask.</h2>
+<div class="design-decisions">
+<article><h3>When to interrupt</h3><p>The aim was fewer, more useful notifications. The system needed to consider the consequence for the traveller, alongside what had already been communicated.</p></article>
+<article><h3>When to involve the traveller</h3><p>Feasibility did not settle the choice. Paying more, skipping an attraction, or leaving earlier required the traveller to review and confirm a plan.</p></article>
+</div>
+</section>
+<section class="beat" id="reflection">
+<p class="small-label">Reflection</p>
+<h2 class="headline">Useful advice depended on knowing the limits.</h2>
+<p class="body-text">The difficult part was deciding what the system knew, what it needed to check, and when the traveller needed to take over. The quality of that judgement determined whether a notification felt useful.</p>
+<a class="related-link" href="building-blinctrip.html"><span><span class="rl-label">The wider story</span><span class="rl-title">Building Blinctrip</span></span><span class="rl-arrow" aria-hidden="true">→</span></a>
+</section>
+<div class="cta-section">
+<p class="cta-question">What are you working on?</p>
+<div class="cta-row"><span class="cta-label">Email</span><a class="cta-link" href="mailto:hello@rishabhsethi.com">hello@rishabhsethi.com <span class="cta-arrow">→</span></a></div>
+</div>
+<footer class="footer"><span>Rishabh Sethi · 2026</span><span>Dubai, UAE</span></footer>
+</main>
+<script src="assets/blinctrip-engine.js" defer></script>
+<script type="module" src="assets/blinctrip-prototype.js?v=blinctrip-icon"></script>
+<script>
+const links = [...document.querySelectorAll('.sidebar-nav a')];
+const observer = new IntersectionObserver(entries => {
+  const current = entries.find(entry => entry.isIntersecting);
+  if (!current) return;
+  links.forEach(link => {
+    const active = link.hash === '#' + current.target.id;
+    link.classList.toggle('active', active);
+    if (active) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current');
+  });
+}, {rootMargin:'-15% 0px -65% 0px'});
+document.querySelectorAll('.beat').forEach(section => observer.observe(section));
+</script>
 </body>
 </html>
