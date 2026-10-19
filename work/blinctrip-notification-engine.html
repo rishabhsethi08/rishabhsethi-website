@@ -38,9 +38,11 @@
 <div class="case-cover"><img src="../images/blinctrip-notification-engine/cover.png" width="1200" height="600" alt="Blinctrip wordmark with a notification badge on a purple and blue background." fetchpriority="high"></div>
 <section class="beat" id="brief">
 <p class="small-label">Blinctrip / Notification engine</p>
-<h1 class="headline">Helping travellers respond when their plans change.</h1>
-<p class="body-text">In early 2023, I led Blinctrip’s move from rule-based notifications to an AI-driven engine. The brief was to understand how a change affected the whole journey and help the traveller respond.</p>
-<p class="body-text">We were confident that models would become more capable, faster, and cheaper. That trajectory made the approach worth pursuing while the technology was still developing.</p>
+<h1 class="headline">Helping travellers have a better trip.</h1>
+<p class="body-text">In early 2023, I led Blinctrip’s move from rule-based notifications to an AI-driven engine.</p>
+<p class="body-text">Our strategic bet had always been simple: if we could help people have a better trip, we could become their default travel app. That meant being useful throughout the journey. Booking a ticket was one part of it. Getting to the airport, making a connection, and knowing what to do when something changed were all part of the same trip.</p>
+<p class="body-text">When GPT-4 launched in March, it became clear to us that we could pursue this ambition in a completely new way. We expected models to become more capable, faster, and cheaper. We’d have to rethink how the product worked, and the notification engine became our starting point.</p>
+<p class="body-text">It already brought together information about the trip. The next step was to help the traveller act on it.</p>
 <div class="context-strip">
 <div class="context-item"><p class="small-label">Role</p><p class="context-value">Head of Product &amp; Design</p></div>
 <div class="context-item"><p class="small-label">Scope</p><p class="context-value">Journey intelligence &amp; recovery</p></div>
@@ -50,19 +52,30 @@
 </section>
 <section class="beat" id="problem">
 <p class="small-label">The problem</p>
-<h2 class="headline">The alert was only the beginning of the work.</h2>
-<p class="body-text">A flight-status update tells you what changed. It leaves you to find out what that means for the rest of your trip.</p>
-<p class="body-text">You check another booking, open a map, compare timings, and call a provider. By the time you have a new plan, the information may have changed again.</p>
+<h2 class="headline">The alert is just the beginning.</h2>
+<p class="body-text">When a flight is delayed, the update tells you what changed, often in unclear language. It leaves you to work out what that means for the rest of your trip.</p>
+<p class="body-text">And a trip can go off schedule even when the flight leaves on time. Your meeting runs over. Traffic is worse than expected. Your Uber driver accepts the ride, then decides he’s not coming.</p>
+<p class="body-text">Each change can affect what comes next. You check your bookings, open maps, compare timings, and call your hotel. By the time you have a new plan, something has changed again.</p>
+<p class="body-text">This was the work we wanted Blinctrip to take on. Travel involves many different companies, each responsible for its own service. The traveller is the person who has to make everything work together.</p>
+<p class="body-text">Our earlier Trips experience brought bookings and timely updates into one place. But even with all the information in front of them, travellers still had to figure out what to do.</p>
 <figure class="case-img archive-figure">
 <a href="../images/building-blinctrip/v1-trips.jpg" target="_blank" rel="noopener" aria-label="Open the original Blinctrip Trips screens at full size"><img src="../images/building-blinctrip/v1-trips.jpg" width="1440" height="1331" alt="Original Blinctrip Trips screens showing itinerary information, gate updates, check-in reminders, and weather advice." loading="lazy"></a>
 <figcaption class="case-img-cap">The earlier Trips experience brought bookings and timely updates into one place.</figcaption>
 </figure>
 </section>
 <section class="beat" id="context">
-<p class="small-label">The design shift</p>
-<h2 class="headline">Make the journey the unit of reasoning.</h2>
-<p class="body-text">A flight delay matters because of what follows it. The same delay can be harmless for one traveller and cause another to miss a connection, a booking, or a fixed commitment.</p>
-<p class="body-text">That required a shared view of the traveller’s commitments, the services they depended on, and conditions on the ground.</p>
+<p class="small-label">Understanding the journey</p>
+<h2 class="headline">The same delay can mean very different things.</h2>
+<p class="body-text">Imagine two people on the same delayed flight. One has a free afternoon when they land. The other has a rental car to collect, a trail booking, and a hostel expecting them that evening.</p>
+<p class="body-text">They receive the same flight update. But they have different problems.</p>
+<p class="body-text">For the second traveller, knowing the new arrival time is only the beginning. Can they still collect the car? Will they make the trail booking? If they skip something along the way, does the rest of the day still work?</p>
+<p class="body-text">To help, Blinctrip needed to understand how the parts of the trip depended on each other. It needed to connect what the traveller planned to do with what was happening around them.</p>
+<p class="body-text">We brought together three kinds of information:</p>
+<ul class="body-text" style="padding-left:1.25rem">
+<li>Personal context, including plans, location, calendar, email, and preferences.</li>
+<li>Service provider information from flights, hotels, airports, and ground transport.</li>
+<li>Destination information, including traffic, weather, and local disruptions.</li>
+</ul>
 <figure class="context-overview" aria-labelledby="overview-title">
 <div class="overview-body">
 <h3 id="overview-title">Blinctrip, with AI at its centre.</h3>
@@ -86,45 +99,64 @@
 </div>
 <figcaption class="case-img-cap">Combined context helps the engine decide what matters to this traveller, at this moment.</figcaption>
 </figure>
-<p class="body-text">FlightStats supplied flight estimates, gate changes, and baggage information. Google Maps, weather data, and SITATA added routes, traffic, and local disruption information.</p>
-<p class="body-text">Blinctrip data, calendar, and email supplied the trip context. Ground partners such as Savaari provided driver status and transport options.</p>
-<p class="body-text">There were still gaps. We knew the traveller’s location and could detect a home-geofence exit. We could not reliably know whether they had checked in or dropped their bags.</p>
-<aside class="insight-line"><p><strong>A deadline and a completed action are different facts.</strong> A published check-in deadline did not confirm that the airline had closed the counter.</p></aside>
+<p class="body-text">FlightStats supplied flight estimates, gate changes, and baggage information. Google Maps, weather data, and SITATA helped us understand conditions on the ground. Blinctrip, calendar, and email data supplied the trip context. Partners such as Savaari provided driver status and transport options.</p>
+<p class="body-text">Each source helped answer a part of the question. Together, they could help us understand whether the traveller’s plan still worked.</p>
+<h3 class="large-statement" style="margin-top:2rem">We also had to understand what we didn’t know.</h3>
+<p class="body-text">There were gaps in this picture. We could detect when someone left their home area. We could not reliably know whether they had checked in or dropped their bags.</p>
+<p class="body-text">That distinction could change the advice we gave them. A traveller who had already dropped their bags had different options from someone still on the way to the airport.</p>
+<aside class="insight-line"><p>Even a published deadline had limits. Knowing when check-in was scheduled to close did not tell us whether the airline had actually closed the counter.</p></aside>
+<p class="body-text">If we were going to help people make decisions, these gaps had to remain visible. The system needed to know when it had enough information to recommend a plan and when something still needed checking.</p>
 </section>
 <section class="beat" id="engine">
 <p class="small-label">Inside the engine</p>
-<h2 class="headline">Assess. Recalculate when needed. Then assess again.</h2>
-<p class="body-text">For each event, the AI assessed whether the current plan still worked and whether recalculation was needed. It could send inputs to relevant APIs and use their responses to simulate revised itineraries.</p>
-<p class="body-text">A directed acyclic graph (DAG) describes the dependencies between journey steps. Travel times, deadlines, and provider policies constrain which revised plans are feasible.</p>
-<p class="body-text">The candidates returned to the AI for assessment: which commitments could still be met, what would the traveller give up, and what remained unresolved?</p>
+<h2 class="headline">If the plan no longer works, what can change?</h2>
+<p class="body-text">For each event, the AI assessed whether the current plan still worked. If it did, there might be no reason to recalculate it. If it didn’t, the engine could explore alternatives.</p>
+<p class="body-text">A revised plan had to work beyond the first change. An alternative flight might get someone to their destination, but too late to collect their car. Removing a stop might save enough time to preserve the rest of the day.</p>
+<p class="body-text">The AI could send inputs to relevant APIs and use their responses to simulate revised itineraries. Travel times, deadlines, and provider policies constrained which plans were feasible.</p>
+<p class="body-text">The options then returned for assessment. Which commitments could still be met? What would the traveller have to give up? What remained unresolved?</p>
+<p class="body-text">The map below reconstructs these dependencies using a directed acyclic graph, or DAG. It describes the reasoning model rather than a specific graph database implementation.</p>
+<p class="body-text">Following the dependencies was essential. If one part of the trip changed, we needed to understand how far that change travelled.</p>
 <div class="engine-map" data-engine-map></div>
 <p class="rw-caption">Select a circle to explore. Choose Journey dependencies to compare the delayed and revised plans.</p>
-<p class="rw-caption">This map reconstructs the reasoning model. It does not specify a graph database or claim a persistent DAG implementation.</p>
 </section>
 <section class="beat" id="recovery">
-<p class="small-label">From information to a decision</p>
-<h2 class="headline">Let the traveller compare possible versions of their day.</h2>
-<p class="body-text">In the prototype, a one-hour flight delay puts a trail booking, car pickup, and hostel arrival at risk. The traveller can remove two stops, compare alternative flights, or seek more information.</p>
+<p class="small-label">The prototype</p>
+<h2 class="headline">Help me work out what to do next.</h2>
+<p class="body-text">The prototype follows the traveller whose one-hour flight delay puts a car pickup, a trail booking, and a hostel arrival at risk.</p>
+<p class="body-text">The notification opens into an explanation of what the delay affects. From there, the traveller can compare alternative flights, remove two stops from the day, or seek more information.</p>
 <figure class="prototype">
 <div class="prototype-bar"><p>Disruption Prototype</p><div class="prototype-actions"><button type="button" data-prototype-restart>Restart</button><a href="blinctrip-recovery-prototype.html" target="_blank" rel="noopener">Open in new tab ↗</a></div></div>
 <div class="prototype-host" data-recovery-prototype><p class="prototype-loading">Loading the interactive prototype…</p></div>
 <p class="prototype-notice" data-prototype-notice role="status" hidden></p>
 <figcaption class="case-img-cap">Tap the notification, review the impacts, and compare recovery options. This is a demonstration; its timings, prices, and booking actions are illustrative.</figcaption>
 </figure>
-<p class="body-text">Skipping two stops restores the trail timing and improves the hostel arrival. The rental pickup still needs attention: the traveller must confirm that the provider will hold the car.</p>
+<p class="body-text">Removing the stops restores the trail timing and improves the hostel arrival. The traveller can see what they would miss and what they would preserve.</p>
+<p class="body-text">But the car pickup still needs attention. They must confirm that the provider will hold the car.</p>
+<p class="body-text">That is an important part of the experience. A revised plan can solve several problems while leaving another unresolved. The traveller needs to see that before relying on it.</p>
+<p class="body-text">The prototype demonstrates this interaction. Its timings, prices, and booking actions are illustrative.</p>
 </section>
 <section class="beat" id="decisions">
 <p class="small-label">The product decisions</p>
-<h2 class="headline">Decide when to interrupt and when to ask.</h2>
+<h2 class="headline">More information can also mean more work.</h2>
+<p class="body-text">Once we could assess more of the journey, we had to decide when to interrupt the traveller.</p>
+<p class="body-text">A flight estimate can change without affecting anything they need to do. Sending another notification may simply give them another thing to check.</p>
+<p class="body-text">The aim was fewer, more useful notifications. That meant considering the consequence of a change and what we had already communicated. The system needed to establish whether the traveller’s situation required their attention.</p>
+<p class="body-text">The purpose was to reduce how much of the trip they had to keep in their head. Every interruption had to earn its place.</p>
 <div class="design-decisions">
-<article><h3>When to interrupt</h3><p>The aim was fewer, more useful notifications. The system needed to consider the consequence for the traveller, alongside what had already been communicated.</p></article>
-<article><h3>When to involve the traveller</h3><p>Feasibility did not settle the choice. Paying more, skipping an attraction, or leaving earlier required the traveller to review and confirm a plan.</p></article>
+<article><h3>A plan can work and still be the wrong choice for you.</h3>
+<p class="body-text">Feasibility only takes us so far. Another flight might cost more. Leaving earlier might cut short a meeting. Skipping an attraction might mean missing the reason someone planned the trip.</p>
+<p class="body-text">These were decisions for the traveller.</p>
+<p class="body-text">Our job was to help them understand their options: what each plan made possible, what it required them to give up, and what still needed to be confirmed. They could then choose a plan with those consequences in front of them.</p>
+</article>
 </div>
 </section>
 <section class="beat" id="reflection">
 <p class="small-label">Reflection</p>
-<h2 class="headline">Useful advice depended on knowing the limits.</h2>
-<p class="body-text">The difficult part was deciding what the system knew, what it needed to check, and when the traveller needed to take over. The quality of that judgement determined whether a notification felt useful.</p>
+<h2 class="headline">We were still trying to help people have a great trip.</h2>
+<p class="body-text">In 2020, I wrote an <a href="https://rishabhsethi.notion.site/Thoughts-on-the-brand-experience-496094a7466944bdbdccae79104fd914?source=copy_link" target="_blank" rel="noopener">internal memo</a> that we would be successful to the extent that we helped people have a great trip. That belief shaped what we built and how we thought about the business.</p>
+<p class="body-text">The notification engine was another step towards it. A change in the trip gave us a moment to be useful. We could tell someone what happened, help them understand the consequences, and work through what to do next.</p>
+<p class="body-text">Doing that well required more than a capable model. We needed enough context to understand the trip, reliable information to assess the options, and a clear account of what we still didn’t know.</p>
+<p class="body-text">If we could consistently take some of that work off the traveller’s hands, we would give them a reason to rely on Blinctrip throughout their journey. That was how we hoped to become their default travel app.</p>
 <a class="related-link" href="building-blinctrip.html"><span><span class="rl-label">The wider story</span><span class="rl-title">Building Blinctrip</span></span><span class="rl-arrow" aria-hidden="true">→</span></a>
 </section>
 <div class="cta-section">
